@@ -1,0 +1,73 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+global $db;
+global $content;
+$content->add_dict($_SESSION["mwclang"],"voteadm");
+ob_start();
+$content->set("|msg|","");
+$content->out_content("theme/".$config["theme"]."/them/vote_h.html");
+if ($_GET["top"])
+{
+// if (level_check()==1)
+ //{
+  $knowip = $_SERVER['REMOTE_ADDR'];
+  $topnum = checknum(substr($_GET["top"],0,2));
+  $dealtime = time()-86400;
+  
+  $checkip = $db->numrows("SELECT memb___id FROM mwc_vote_top WHERE ip='".$knowip."' and top_id='".$topnum."' and last_voted > '".$dealtime."'"); // проверка на 24 часа по ИП
+  if ($checkip > 0)
+  {
+   $content->set("|msg|",$content->lng["to_early_vote"]);
+  }
+  else
+  {
+   
+   $topinfo = $db->fetchrow("SELECT flag, credits,top_addres,top_name FROM mwc_vote_list WHERE id='".$topnum."'");
+   $knowresults = $db->fetchrow("SELECT last_voted FROM mwc_vote_top WHERE memb___id='".$_SESSION["user"]."' and top_id='".$topnum."'");
+   if ($knowresults[0]<= $dealtime)//если прошло ровно 24 часа или больше
+   {
+    if($knowresults[0]>0) //если человек уже хоть раз голосовал
+      $aded = $db->query("UPDATE mwc_vote_top SET last_voted='".time()."',clicks=clicks+1 WHERE memb___id='".$_SESSION["user"]."'and top_id='".$topnum."'");
+    else // если ниразу не голосовал
+      $aded = $db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,ip)VALUES('".$_SESSION["user"]."','".$topnum."','".time()."','1','".$knowip."')");
+      
+    if ($topinfo[0]==1) $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".$topinfo[1]." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'");
+	
+    $topinfo[2] = unhtmlentities($topinfo[2]);
+    if (substr($topinfo[2],0,4)!='http')
+       $topinfo[2] = "http://".$topinfo[2];
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: ".$topinfo[2]);
+    WriteLogs (htmlspecialchars($topinfo[3]),"Аккаунт ".$_SESSION["user"]." был перекинут на сайт топа для голосования. голос засчитан");
+    die("press <a href = '".$topinfo[2]."'>here</a> to redirect");
+   }
+   else
+    {
+     $content->set("|msg|",$content->lng["to_early_vote"]);
+     WriteLogs (htmlspecialchars($topinfo[3]),"Аккаунт ".$_SESSION["user"]." попытка проголдосовать раньше времени");
+    }
+  }
+ //}
+// else $content->set("|msg|",$content->$lng["error1"]);
+}
+else
+{
+ $colvo = $db->numrows("SELECT * FROM mwc_vote_list");
+ if ($colvo>0)
+ {
+  $wats_v = $db->query("SELECT * FROM mwc_vote_list");
+  while($result = $db->fetcharray($wats_v))
+  {
+   $result["top_pic"]=unhtmlentities($result["top_pic"]);
+   if (substr($result["top_pic"],0,7)!='http://')$result["top_pic"]= "http://".$result["top_pic"];
+   $result["top_pic"]="<a href='".$config["siteaddress"]."/?up=vote&top=".$result["id"]."'><img src='".$result["top_pic"]."' border='0'></a>";
+   $content->set("|top_pic|","<a href='".$config["siteaddress"]."/?up=vote&top=".$result["id"]."'>".$result["top_pic"]."</a>");
+   $content->set("|vtname|",$result["top_name"]);
+   $content->out_content("theme/".$config["theme"]."/them/vote_c.html");
+  }
+ }
+ else  $content->set("|msg|","No items.");
+}
+$content->out_content("theme/".$config["theme"]."/them/vote_f.html");
+$temp = ob_get_contents();
+ob_end_clean(); 

@@ -1,0 +1,82 @@
+$mid = 3;
+$message="";
+@unlink("theme/".$config["theme"]."/them/vote_h.html");
+$message.="удаление шаблона theme/".$config["theme"]."/them/vote_h.html; ";
+@unlink("theme/".$config["theme"]."/them/vote_c.html");
+$message.="Установка шаблона theme/".$config["theme"]."/them/vote_c.html; ";
+@unlink("theme/".$config["theme"]."/them/vote_f.html");
+$message.="Установка шаблона theme/".$config["theme"]."/them/vote_f.html; ";
+@unlink("_sysvol/_a/theme/voteadm_button.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_button.html; ";
+@unlink("_sysvol/_a/theme/voteadm_f.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_f.html; ";
+@unlink("_sysvol/_a/theme/voteadm_form.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_form.html; ";
+@unlink("_sysvol/_a/theme/voteadm_h_c.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_c.html; ";
+@unlink("_sysvol/_a/theme/voteadm_h_f.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_f.html; ";
+@unlink("_sysvol/_a/theme/voteadm_h_h.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_h.html; ";
+@unlink("_sysvol/_a/theme/voteadm_top_box.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_box.html; ";
+@unlink("_sysvol/_a/theme/voteadm_top_c.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_c.html; ";
+@unlink("_sysvol/_a/theme/voteadm_top_h.html");
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_h.html; ";
+@unlink("_usr/vote.php");
+$message.="Установка  _usr/vote.php; ";
+@unlink("_sysvol/_a/voteadm.php");
+$message.="Установка  _sysvol/_a/voteadm.php; ";
+@unlink("lang/rus/rus_voteadm.php");
+$message.="Установка  lang/rus/rus_voteadm.php; ";
+
+$file = file("_dat/amenu.dat");
+$handle = fopen("_dat/amenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,7)!="voteadm") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из меню; ";
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,4)!="vote") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из меню; ";
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,4)!="vote") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из меню; ";
+
+$file = file("lang/rus/rus_cfg.php");
+$handle = fopen("lang/rus/rus_cfg.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,19)!='$lang["mmotoplink"]' && substr($v,0,13)!='$lang["tnum"]' && strlen(trim($v))>4 && trim($v)!="") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)substr($v,0,1)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+$message.="модуль удален из списка установленных; ";
+@unlink("_dat/menus/rus_admmenu");
+@unlink("_dat/menus/rus_usermenu");
+@unlink("configs/voteadm_cfg.php");
+
+WriteLogs("Uninstall",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

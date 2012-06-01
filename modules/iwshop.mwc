@@ -1,0 +1,119 @@
+$mid = 1;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/webshop.mwc");
+$handle = fopen("lang/rus/webshop.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wsell.mwc");
+$handle = fopen("_usr/wsell.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wshop.mwc");
+$handle = fopen("pages/wshop.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wshop_cfg.mwc");
+$handle = fopen("configs/wshop_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$handle = fopen("_dat/pm.dat","a+");
+fwrite($handle,"wshop||1\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"wsell::title_wsell\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+
+$handle = fopen("_dat/menu.dat","a+");
+fwrite($handle,"wshop::title_wshop\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"wsell||1\r\n");
+fclose($handle);
+
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,"\r\n".'$lang["title_wsell"]="Выставить на продажу";');
+fclose($handle);
+
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wshop_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/wshop_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wshop_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/wshop_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/top5_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/top5_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/top5_h.html");
+$handle = fopen("theme/".$config["theme"]."/them/top5_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/top5items_cfg.mwc");
+$handle = fopen("configs/top5items_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/top5items.mwc");
+$handle = fopen("_sysvol/top5items.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/top5_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/top5_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/wshop_h.html");
+$handle = fopen("theme/".$config["theme"]."/them/wshop_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/sell_i.html");
+$handle = fopen("theme/".$config["theme"]."/them/sell_i.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/webshop/sell_iform.html");
+$handle = fopen("theme/".$config["theme"]."/them/sell_iform.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+
+$handle = fopen("lang/rus/rus_cfg.php","a+");
+fwrite($handle,"\r\n".'$lang["allow_lvl"]="Уровень, с которого можно продавтаь вещи";');
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_site.php","a+");
+fwrite($handle,"\r\n".'$lang["linshp"]="Последнее в продаже:";');
+fclose($handle);
+
+@unlink("_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+@unlink("_dat/menus/".$_SESSION["mwclang"]."_usermenu");
+WriteLogs("Install","модуль веб-магазина установлен");
+
+
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

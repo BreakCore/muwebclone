@@ -1,0 +1,77 @@
+$mid = 7;
+global $db;
+
+$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex.html");
+$handle = fopen("theme/".$config["theme"]."/them/hourex.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex.mwc");
+$handle = fopen("_usr/hourex.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex_cfg.mwc");
+$handle = fopen("configs/hourex_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/rus_hourex.mwc");
+$handle = fopen("lang/rus/rus_hourex.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="загрузка файлов завершена; ";
+
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"hourex||1\r\n");
+fclose($handle);
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_hourex"]="Обмен онлайн часов";'."\r\n");
+fclose($handle);
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"hourex::title_hourex\r\n");
+fclose($handle);
+@unlink("_dat/menus/rus_usermenu");
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("lang/rus/rus_cfg.php","a+");
+fwrite($handle,"\r\n".'$lang["hourrate"]="за 1 час единиц награды";');
+fwrite($handle,"\r\n".'$lang["ctable"]="Название таблицы награды";');
+fwrite($handle,"\r\n".'$lang["ccolumn"]="Название столбца награды";');
+fwrite($handle,"\r\n".'$lang["cacolumn"]="Название столбца аккаунта в таблице награды";');
+fclose($handle);
+$message.="добавление в rus_cfg.php; ";
+
+
+$db->query("DROP PROCEDURE [dbo].[WZ_DISCONNECT_MEMB]");
+$db->query("CREATE PROCEDURE [dbo].[WZ_DISCONNECT_MEMB]
+@memb___id varchar(10)
+ AS
+Begin    
+set nocount on
+    Declare  @find_id varchar(10)    
+    Declare @ConnectStat tinyint
+    Set @ConnectStat = 0     
+    Set @find_id = 'NOT'
+    select @find_id = S.memb___id from MEMB_STAT S INNER JOIN MEMB_INFO I ON S.memb___id = I.memb___id 
+           where I.memb___id = @memb___id
+    if( @find_id <> 'NOT' )    
+    begin        
+        update MEMB_STAT set ConnectStat = @ConnectStat, DisConnectTM = getdate(), onlinetm = onlinetm+(DATEDIFF(mi,ConnectTM,getdate()))
+         where memb___id = @memb___id
+    end
+end ");
+@$db->query("alter table dbo.memb_stat add onlinetm int not null default 0");
+
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+WriteLogs("Install",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

@@ -1,0 +1,41 @@
+$mid = 6;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/greset.html");
+$handle = fopen("theme/".$config["theme"]."/them/greset.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message ="шаблон дл€ gресета установлен; ";
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/gres.mwc");
+$handle = fopen("_usr/gres.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="модуль gres установлен; ";
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/gres_cfg.mwc");
+$handle = fopen("configs/gres_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="модуль €зыка gres_cfg установлен; ";
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"gres||1\r\n");
+fclose($handle);
+$message.="добавление в меню модулей; ";
+
+$handle = fopen("_dat/cmenu.dat","a+");
+fwrite($handle,"gres::title_gres\r\n");
+fclose($handle);
+$message.="добавление в меню модулей; ";
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_gres"] ="√ранд–есет";'."\r\n");
+fclose($handle);
+$message.="добавление в меню модулей; ”становка завершена";
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+WriteLogs("Install",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

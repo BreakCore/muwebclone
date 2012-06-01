@@ -1,0 +1,60 @@
+$mid = 8;
+
+@unlink("_usr/donate.php");
+@unlink("_usr/qiwi.php");
+@unlink("_usr/yan.php");
+@unlink("configs/donate_cfg.php");
+@unlink("lang/rus/rus_donate.php");
+@unlink("theme/".$config["theme"]."/them/donate_c.html");
+@unlink("theme/".$config["theme"]."/them/donate_f.html");
+@unlink("theme/".$config["theme"]."/them/donate_h.html");
+@unlink("theme/".$config["theme"]."/them/qiwi.html");
+@unlink("theme/".$config["theme"]."/them/yandex.html");
+@unlink("_dat/menus/rus_usermenu");
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="donate" && substr($v,0,3)!="yan" && substr($v,0,4)!="qiwi") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,8)!="donate::") fwrite($handle,$v);
+}
+fclose($handle);
+
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,19)!='$lang["title_qiwi"]' && substr($v,0,21)!='$lang["title_donate"]' && substr($v,0,18)!='$lang["title_yan"]') fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("lang/rus/rus_cfg.php");
+$handle = fopen("lang/rus/rus_cfg.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,17)!='$lang["payments"]' && substr($v,0,16)!='$lang["qiwinum"]' && substr($v,0,14)!='$lang["yanid"]' && substr($v,0,15)!='$lang["yansum"]') fwrite($handle,$v);
+}
+fclose($handle);
+
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)$v!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+
+
+WriteLogs("Uninstall","Donate был удален");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

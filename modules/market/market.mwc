@@ -1,0 +1,100 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+global $content;
+$content->add_dict($_SESSION["mwclang"],"market");
+$content->set('|market_msg|', "");
+global $db;
+$market_db = @file("_dat/market.db");
+ob_start();
+$content->out_content("theme/".$config["theme"]."/them/market_h.html");
+if ($market_db)
+{
+ require "imgs/items.php"; 
+ if ($_GET["state"]=="ok")$content->set('|market_msg|', $content->lng["market_msg"]); 
+ if ($_GET["item"])
+ {
+  $iid = checknum($_GET["item"]);
+  $needit =explode(",",$market_db[$iid]); 
+  $kred = know_kredits();
+  $back = $kred-$needit[7];
+	
+  if ($back>=0)
+  {
+   $getserial = $db->fetchrow($db->query("exec WZ_GetItemSerial"));	
+   $needit[2]*=8;// level
+		
+   if ($needit[3]==1) $needit[2]+=128; //skill
+   if ($needit[4]==1) $needit[2]+=4; //luck
+   if ($needit[5]>0 and $needit[5]<4) $needit[2]+=3; //+16% add
+		 
+   $git["id"] = sprintf("%02X", $needit[1],00); 
+   $git["group"] = sprintf("%02X", $needit[0],00); 
+   $git["opt"]= sprintf("%02X", ($needit[2]),00);
+   $git["exopt"]=sprintf("%02X", $needit[6],00);
+   $git["serial"] = sprintf("%08X",$getserial[0],00);
+   $newitem = $git["id"].$git["opt"]."00".$git["serial"].$git["exopt"]."0".$git["group"]."000"."0000000000"; //generaton new item hex-code
+		
+   $x= substr($itembd[$needit[0]][$needit[1]][1],0,1);
+   $y= substr($itembd[$needit[0]][$needit[1]][1],1,1);
+		
+   if ($config["ctype"]=="ODBC"){	$Wquery = $db->fetchrow($db->query("SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'")); }
+   else
+   {
+    $Wquer = $db->query("declare @inv varbinary(1920); set @inv = (SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'); print @inv");
+	$Wquery[0]= $db->lastmsg();
+   }
+   $plase = smartsearch($Wquery[0],$x,$y);
+		
+  if ($plase!= -1)
+  {
+    $out_nitems="";
+
+    if ($config["ctype"]=="ODBC") $Wquery[0]=strtoupper(urlencode(bin2hex($Wquery[0])));
+    else $Wquery[0] = substr($Wquery[0],2);
+    $out_nitems = substr_replace($Wquery[0],$newitem,($plase*32),32);
+
+    if($db->query("UPDATE warehouse SET Items= 0x".$out_nitems." WHERE AccountID='".validate($_SESSION["user"])."'"))
+    {
+     $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$back." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'");
+	 WriteLogs("Market_","куплена вещь ".$newitem." , аккаунт ".$_SESSION["user"]);	
+     header("Location:".$config["siteaddress"]."/?up=market&state=ok");	
+    }
+
+   }
+   else $content->set('|market_msg|', $content->lng["market_аш"]); 
+  }
+  else $content->set('|market_msg|', $content->lng["market_ne"]);
+ }
+
+ for ($i=0;$i< count($market_db); $i++)
+ {
+  if (substr($market_db[$i],0,2)!="//" && $market_db[$i]!="" && strlen($market_db[$i])>2 )
+  {
+   $item_i = explode(",",$market_db[$i]);
+	
+   $item_i[2]*=8;
+   if ($item_i[3]==1) $item_i[2]+=128; //skill
+   if ($item_i[4]==1) $item_i[2]+=4; //luck
+   if ($item_i[5]>0 and $item_i[5]<4) $item_i[2]+=3; //+16% add
+		
+   $git["id"] = sprintf("%02X", $item_i[1],00); 
+   $git["group"] = sprintf("%02X", $item_i[0],00); 
+   $git["opt"]= sprintf("%02X", $item_i[2],00);
+   $git["exopt"]=sprintf("%02X", $item_i[6],00); 
+   $newitem = $git["id"].$git["opt"]."0000000000".$git["exopt"]."0".$git["group"]."0000000000000"; 
+		
+   ob_start();
+   echo show_items($newitem,3);
+   $item = ob_get_contents();
+   ob_end_clean(); 
+   $content->set('|num|', $i);
+   $content->set('|item|', $item);
+   $content->set('|price|', $item_i[7]);
+   $content->out_content("theme/".$config["theme"]."/them/market_c.html");
+  }
+ }
+} 
+else $content->set('|market_msg|', "No items!");
+$content->out_content("theme/".$config["theme"]."/them/market_f.html");
+$temp = ob_get_contents();
+ob_end_clean(); 

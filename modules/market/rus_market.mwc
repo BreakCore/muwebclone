@@ -1,0 +1,1 @@
+<?php if (!defined('insite')){die();} $lang["market_title"]="Магазинчик GM'a";$lang["market_it"]="Вещь";$lang["market_pr"]="Стоимость";$lang["market_notice"]="*Чтобы приобрести вещь, достаточно на неё нажать";$lang["market_msg"]="Вещь продана";$lang["market_ne"]="Недостаточно кредитов";$lang["market_аш"]="Нет места в сундуке";

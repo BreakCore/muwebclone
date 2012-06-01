@@ -1,0 +1,52 @@
+<?php  if (!defined('insite')) die("no access"); 
+global $config;
+global $content;
+global $db;
+require "configs/hourex_cfg.php";
+$content->add_dict($_SESSION["mwclang"],"hourex");
+$perem = validate($_SESSION["user"]);
+ob_start();
+
+if(chck_online($perem)==0)
+{
+ $totalH = $db->fetchrow("SELECT onlinetm FROM MEMB_STAT WHERE memb___id='".$perem."'");
+ $hours = floor($totalH[0]/60);
+ $mins = $totalH[0]%60;
+ $tpoints=$hourex["hourrate"]*$hours;
+ 
+ if ($_REQUEST["okk"] && $tpoints>0)
+ {
+  if($db->query("UPDATE MEMB_STAT SET onlinetm='".$mins."' WHERE memb___id='".$perem."'  UPDATE ".$hourex["ctable"]." SET ".$hourex["ccolumn"]." = ".$hourex["ccolumn"]."+". $tpoints."  WHERE ".$hourex["cacolumn"]."='".$perem."'"))
+  {
+   WriteLogs("Hours_",$perem." обменял онлайн часы(".$hours.")");
+    header("Location: ".$config["siteaddress"]."/?p=not&error=13");
+	die();
+  }
+  else
+  {
+   WriteLogs("Hours_",$perem." не обменял онлайн часы(".$hours.") не прошел запрос, возможно, мухлеж");
+   header("Location: ".$config["siteaddress"]."/?p=not&error=19");
+   die();
+  }
+ }
+  
+ if($tpoints>0)
+  $content->set("|button|","<input type='submit' class='t-button' name='okk' value='".$content->lng["tpoints"]."'>");
+ else 
+  $content->set("|button|","");
+ 
+ 
+ $content->set("|value|",$tpoints);
+ $content->set("|hvalue|",$hours);
+ $content->set("|mvalue|",$mins);
+}
+else
+{
+ header("Location: ".$config["siteaddress"]."/?p=not&error=20");
+ die();
+}
+
+$content->out_content("theme/".$config["theme"]."/them/hourex.html");
+
+$temp = ob_get_contents();
+ob_end_clean();

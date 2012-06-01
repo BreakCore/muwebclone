@@ -1,0 +1,51 @@
+$mid = 9;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/rus_market.mwc");
+$handle = fopen("lang/rus/rus_market.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market.mwc");
+$handle = fopen("_usr/market.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market.db");
+$handle = fopen("_dat/market.db","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_h.html");
+$handle = fopen("theme/".$config["theme"]."/them/market_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/market_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/market_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"market||1\r\n");
+fclose($handle);
+$message.="добавление в меню модулей; ";
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"market::title_market\r\n");
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_market"]="Магазин GM";'."\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+
+
+WriteLogs("Install","модуль Market установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

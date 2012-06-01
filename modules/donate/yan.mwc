@@ -1,0 +1,14 @@
+<?php if (!defined('insite')) die("no access"); 
+require "configs/donate_cfg.php";
+
+global $content;
+global $config;
+$content->add_dict($_SESSION["mwclang"],"donate");
+ob_start();
+
+$content->set('|depid|', $donate["yanid"]);
+$content->set('|login|', $_SESSION["user"]);
+$content->set('|sum|', $donate["yansum"]);
+$content->out_content("theme/".$config["theme"]."/them/yandex.html");
+$temp = ob_get_contents();
+ob_end_clean();
