@@ -1,0 +1,34 @@
+<?php if (!defined('insite')) die("no access"); 
+$nowitime = time();
+$topitem = @filemtime("_dat/cach/top_5items"); 
+require "configs/top5items_cfg.php";
+
+global $db;
+global $content;
+global $config;
+
+if(!$topitem || ($nowitime-$topitem>$top5items["cach"]))
+{	
+ ob_start();
+ $content->out_content("theme/".$config["theme"]."/them/top5_h.html");
+ $item_hex_q = $db->query("SELECT  top 3 item,code FROM web_shop WHERE  was_dropd ='0' ORDER BY code DESC");
+ $items_count= $db->numrows($item_hex_q);
+ if ($items_count>0)
+ {
+   while ($item_hex = $db->fetcharray($item_hex_q))
+   {
+    ob_start();
+	echo "<a href='".$config["siteaddress"]."/?p=wshop&itemid=".$item_hex["code"]."'>".show_items($item_hex["item"],2)."</a>";
+	$item = ob_get_contents();
+	ob_end_clean(); 
+    $content->set("|item|",$item);
+    $content->out_content("theme/".$config["theme"]."/them/top5_c.html");
+   }
+ }
+ $content->out_content("theme/".$config["theme"]."/them/top5_f.html");
+ $bufer = ob_get_contents();
+ write_catch("_dat/cach/top_5items",$bufer);
+ ob_end_clean(); 
+ $temp = $bufer;
+}
+else $temp=file_get_contents("_dat/cach/top_5items");

@@ -1,0 +1,344 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+global $content;
+global $db;
+require "lang/".$_SESSION["mwclang"]."/webshop.php";
+
+ob_start();
+if(isset($_SESSION["user"]) && level_check()==1)
+{ 
+ $isuser=1;
+ if ($_SESSION["adm"]==1) $itsadm=1; 
+ else $itsadm=0;	
+}
+else $isuser=0;
+
+if ($_REQUEST["filteron"])
+{
+if ($_POST["chosetype"] || isset($_POST["chlvl"])|| $_POST["isexcel"]==1)
+	{ 
+	 $Ifilter="Where ";  
+	if (isset($_POST["chosetype"]))
+	 {
+			$ftype= checknum(substr($_POST["chosetype"],0,2));
+			switch ($ftype) //фильтр по вещам
+			{
+				case "0" :$Ifilter.="igroup='0'";break;
+				case "1" :$Ifilter.="igroup='1'";break;
+				case "2" :$Ifilter.="igroup='2'";break;
+				case "3" :$Ifilter.="igroup='3'";break;
+				case "4" :$Ifilter.="igroup='4'";break;
+				case "5" :$Ifilter.="igroup='5'";break;
+				case "6" :$Ifilter.="igroup='6'";break;
+				case "7" :$Ifilter.="igroup='7'";break;
+				case "8" :$Ifilter.="igroup='8'";break;
+				case "9" :$Ifilter.="igroup='9'";break;
+				case "10" :$Ifilter.="igroup='10'";break;
+				case "11" :$Ifilter.="igroup='11'";break;
+				case "12" :$Ifilter.="igroup='12' and iid >='0' and iid <='6' or igroup='12' and iid >='36' and iid<='43' or igroup='13' and iid=30";break;
+				case "15" : $Ifilter.="igroup='15' or igroup='12' and iid>=21 and iid<=25 and iid=35 and iid=48";break;
+				case "13" :$Ifilter.="igroup = 12 and iid>6 and iid<36 and iid>43 or igroup=13 and iid !=30 or igroup=14 ";break;
+				case "16" :$Ifilter.="igroup='12' and iid = '7' or igroup = '12' and iid >= '9' and iid <= '14' or igroup='12' and iid >= '16' and iid <= '19' or igroup='12' and iid >= '44' and iid <= '47'";break;
+				
+			}
+		}
+		if ($_POST["chlvl"]!=20)
+		{
+		  $ftype= checknum(substr($_POST["chlvl"],0,2));
+		  if(strlen($ftype)>0)	
+		  {
+		    if ($Ifilter != "Where ") $Ifilter.=" and ";
+		     
+		     switch ($ftype) //фильтр по уровню
+				{
+					case "0":$Ifilter.="ilevel='0'";break;
+					case "1":$Ifilter.="ilevel='1'";break;
+					case "2":$Ifilter.="ilevel='2'";break;
+					case "3" :$Ifilter.="ilevel='3'";break;
+					case "4" :$Ifilter.="ilevel='4'";break;
+					case "5" :$Ifilter.="ilevel='5'";break;
+					case "6" :$Ifilter.="ilevel='6'";break;
+					case "7" :$Ifilter.="ilevel='7'";break;
+					case "8" :$Ifilter.="ilevel='8'";break;
+					case "9" :$Ifilter.="ilevel='9'";break;
+					case "10" :$Ifilter.="ilevel='10'";break;
+					case "11" :$Ifilter.="ilevel='11'";break;
+					case "12" :$Ifilter.="ilevel='12'";break;
+					case "13" :$Ifilter.="ilevel='13'";break;
+					//default : $Ifilter.="ilevel='0'";
+				}
+		  }	
+		}
+		if ($_POST["isexcel"]==1)
+		{
+			if ($Ifilter != "Where ") $Ifilter.=" and ";
+			$Ifilter.="iexc='1'";
+		}
+	}else $Ifilter=" Where was_dropd ='0' ORDER BY code desc";
+	
+	if ($Ifilter=="Where ")$Ifilter.=" was_dropd ='0' ORDER BY code desc"; 
+	else $Ifilter.=" and was_dropd ='0' ORDER BY code desc"; 
+}else $Ifilter=" Where was_dropd ='0' ORDER BY code desc";
+	
+ 
+
+if ($_GET["act"]==1)
+ $Ifilter= "Where memb___id='".$_SESSION["user"]."' order by was_dropd desc,code desc";
+if (isset($_GET["itemid"]))
+{
+  $itid= checknum(substr($_GET["itemid"],0,10));
+ $Ifilter= "Where code='".$itid."'";
+}
+
+
+
+ $content->set('|wsh_all_itm|', $lang["wsh_all_itm"]);
+ $content->set('|wsh_all_cls|', $lang["wsh_all_cls"]);
+ $content->set('|wsh_dtn_fl|', $lang["wsh_dtn_fl"]);
+ $content->set('|wsh_itnaqmes|', $lang["wsh_itnaqmes"]);
+
+ if($isuser==1)
+ {
+ $content->set('|personal|', "<a href='".$config["siteaddress"]."/?p=wshop&act=1'>".$lang["own_items"]."</a>");
+ }
+ else
+   $content->set('|personal|', "");
+ $content->out_content("theme/".$config["theme"]."/them/wshop_h.html");
+
+
+if (isset($_GET["bid"]))
+{
+	if(chck_online($_SESSION["user"])==1) echo "<div align='center' valign='center' style='color:red;font-weight:bold;'>".$lang["login_online"]."</div>";
+	else 
+	{
+	 if (is_wh()>0)
+	 {
+		$item_id = checknum(substr($_GET["bid"],0,12));
+		$item_from = $db->fetchrow($db->query("SELECT  price,sdate,item, memb___id,cprice FROM web_shop WHERE code='".$item_id."'"));
+		if ($item_from[2]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($item_from[2])==32)	
+		{
+			if ($item_from[0]>0 || $item_from[4]>0)
+			{
+				if ($item_from[0]>0) 
+				{
+				  $bank_zen = $db->fetchrow($db->query("Select bankZ FROM memb_info Where memb___id='".$_SESSION["user"]."'"));
+				  $newzen = $bank_zen[0]-$item_from[0];
+				}
+				else {$bank_zen[0] =know_kredits($_SESSION["user"]);$newzen = $bank_zen[0]-$item_from[4];}
+				
+				if($newzen>=0 && $isuser==1)
+				{
+					$itemtemp["id"] = hexdec(substr($item_from[2],0,2)); // ID
+					$itemtemp["group"] = hexdec(substr($item_from[2],18,2))/16; // group
+					
+					require 'imgs/items.php';
+					if ($itemtemp["group"] == 7 || ($itemtemp["group"]>=9 && $itemtemp["group"]<=11 && $itemtemp["id"]!=128) || $itemtemp["group"]==15)
+					{
+						$x = substr($itembd[$itemtemp["group"]][0][1],0,1);
+						$y = substr($itembd[$itemtemp["group"]][0][1],1,1);
+					}
+					else
+					{
+						$x = substr($itembd[$itemtemp["group"]][$itemtemp["id"]][1],0,1);
+						$y = substr($itembd[$itemtemp["group"]][$itemtemp["id"]][1],1,1);
+					}
+						if ($x && $y)
+							{
+								if ($config["ctype"]=="ODBC"){
+								$Wquery = $db->fetchrow($db->query("SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
+								}
+								else{
+								$Wquer = $db->query("declare @inv varbinary(1920); set @inv = (SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'); print @inv");
+								$Wquery[0]= $db->lastmsg();			
+								}
+
+								$plase = smartsearch($Wquery[0],$x,$y);
+
+								if ($plase!= -1)
+								{
+									if ($config["ctype"]=="ODBC") $Wquery[0]=strtoupper(urlencode(bin2hex($Wquery[0])));
+									else $Wquery[0] = substr($Wquery[0],2);
+
+									if (strtoupper($item_from[2])!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+									    $out_nitems = substr_replace($Wquery[0],$item_from[2],($plase*32),32);
+									else
+									   $out_nitems = $Wquery[0];
+			
+									if ($db->query(" DELETE FROM web_shop WHERE item ='".$item_from[2]."' UPDATE warehouse SET Items=0x".$out_nitems." WHERE AccountID='".validate($_SESSION["user"])."'"))
+									{
+										if ($item_from[0]>0 && $item_from[4]==0)
+										{
+											if($db->query("UPDATE MEMB_INFO SET bankZ ='".(string)$newzen."' WHERE memb___id='".$_SESSION["user"]."' UPDATE MEMB_INFO SET bankZ = bankz + '".$item_from[0]."' WHERE memb___id='".$item_from[3]."'"))
+											 WriteLogs("WebShop_","Аккаунт ".$_SESSION["user"]." купил ".$item_from[2]." у ".$item_from[3]." за ".$item_from[0]." Zen осталось ".$newzen );	
+											else
+											 riteLogs("WebShop_","Аккаунт ".$_SESSION["user"]." НЕ(!!!) купил ".$item_from[2]." у ".$item_from[3]." за ".$item_from[0]." Zen осталось ".$newzen );	
+										}
+										else
+										{
+											if($db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." =".$newzen." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."' "))
+											 {
+											  
+											  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]." + ".$item_from[4]." WHERE ".$config["cr_acc"]."='".$item_from[3]."'");
+											  $db->query("DELETE FROM web_shop WHERE item ='".$item_from[2]."'");
+											  WriteLogs ("WebShop_","Аккаунт ".$_SESSION["user"]." купил ".$item_from[2]." у ".$item_from[3]." за ".$item_from[4]." кредитов осталось ".$newzen);	
+											 }
+											else
+											 {
+											  while (!$db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." =".$newzen." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."' "))
+											  {}									
+											  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]." + ".$item_from[4]." WHERE ".$config["cr_acc"]."='".$item_from[3]."'");
+											  $db->query("DELETE FROM web_shop WHERE item ='".$item_from[2]."'");
+					                         }
+											// WriteLogs ("WebShop_","Аккаунт ".$_SESSION["user"]." НЕ (!!!) купил ".$item_from[2]." у ".$item_from[3]." за ".$item_from[4]." кредитов осталось ".$newzen);	
+										}
+										unset ($item_from,$newzen,$newh,$setzen,$out_nitems);
+										echo "<div align='center' class='succes'>".$lang["wsh_bought"]."</div>";
+									}else echo "<div align='center' class='warnms'>".$lang["wsh_nobought"]."</div>";
+								}else echo "<div align='center' class='warns'>".$lang["wsh_inv_full"]."</div>";
+							}
+							else echo "error! coord no found!";
+				}else echo "<div align='center' class='warnms'>".$lang["wsh_not_money"]."</div>";
+			}else echo "<div align='center' class='warnms'>".$lang["wsh_btn_buy_e"]."</div>";
+		}else echo "<div align='center' class='warnms'>".$lang["wsh_not_be"]."</div>";	
+	  }else  echo "<div align='center' class='warnms'>".$lang["no_inv"]."</div>";	
+	}
+}
+elseif (isset($_GET["aid"]) && $itsadm==1)
+{
+ $did = checknum(substr($_GET["aid"],0,10));
+ $db->query("UPDATE web_shop SET was_dropd='1' WHERE code='".$did."'");
+ WriteLogs("WebShop_","Администратор ".$_SESSION["sadmin"]." убрал вещь с продажи");
+}
+elseif (isset($_GET["did"]))
+		{
+			$item_id = checknum(substr($_GET["did"],0,12));
+			$item_from = $db->fetchrow($db->query("SELECT  price,sdate,item, memb___id FROM web_shop WHERE code='".$item_id."'"));
+			
+			if (strlen($item_from[2])==32 && ($item_from[3]==$_SESSION["user"] || $itsadm==1))
+			{
+				$itemtemp["id"] = hexdec(substr($item_from[2],0,2)); // ID
+				$itemtemp["group"] = hexdec(substr($item_from[2],18,2))/16; // group
+				require 'imgs/items.php';
+				if ($itemtemp["group"] == 7 || ($itemtemp["group"]>=9 && $itemtemp["group"]<=11 && $itemtemp["id"]!=128) || $itemtemp["group"]==15)
+				{
+					$x = substr($itembd[$itemtemp["group"]][0][1],0,1);
+					$y = substr($itembd[$itemtemp["group"]][0][1],1,1);
+				}
+				else
+				{
+					$x = substr($itembd[$itemtemp["group"]][$itemtemp["id"]][1],0,1);
+					$y = substr($itembd[$itemtemp["group"]][$itemtemp["id"]][1],1,1);
+				}
+				if ($x && $y)
+				{
+					if ($config["ctype"]=="ODBC"){
+					$Wquery = $db->fetchrow($db->query("SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
+				
+					}
+					else{
+					$Wquer = $db->query("declare @inv varbinary(1920); set @inv = (SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'); print @inv");
+					$Wquery[0]=$db->lastmsg();			
+					}
+
+					$plase = smartsearch($Wquery[0],$x,$y);
+					
+				}
+				if ($plase!=-1)
+				{
+					if ($config["ctype"]=="ODBC") $Wquery[0]=strtoupper(urlencode(bin2hex($Wquery[0])));
+					else $Wquery[0] = substr($Wquery[0],2);
+
+					if (strtoupper($item_from[2])!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF") $out_nitems = substr_replace($Wquery[0],$item_from[2],($plase*32),32);
+					else $out_nitems=$Wquery[0];
+					if ($db->query("UPDATE warehouse SET Items=0x".$out_nitems." WHERE AccountID='".validate($_SESSION["user"])."'"))
+					{
+						$setzen = $db->query("DELETE FROM web_shop WHERE item ='".$item_from[2]."'");
+						if ($setzen)
+                        {
+                         if ($itsadm==1)  WriteLogs ("WebShop_","Аккаунт ".$_SESSION["user"]." убрал ".$item_from[2]." c правами администратора и учетной записи админа ".$_SESSION["sadmin"]);	
+                         else  WriteLogs ("WebShop_","Аккаунт ".$_SESSION["user"]." убрал ".$item_from[2]);	
+						}
+						unset ($item_from); unset ($newh); unset ($setzen);
+						echo "<div align='center' class='succes'>".$lang["wsh_droped"]."</div>";
+
+					}else echo "<div align='center' class='warnms'>".$lang["wsh_inv_full"]."</div>";
+				}else echo "<div align='center' class='succes'>".$lang["wsh_inv_full"]."</div>";
+			}
+			else echo "<div align='center' class='warnms'>".$lang["wsh_not_be"]."</div>";
+		}
+	//echo "Select Top 100 code, memb___id,price,sdate,item,cprice,was_dropd From web_shop $Ifilter";
+	$wintems_q = $db->query("Select Top 100 code, memb___id,price,sdate,item,cprice,was_dropd From web_shop $Ifilter");
+	//unset($Ifilter);
+	$nums = $db->numrows($wintems_q);
+	if ($isuser==1)
+	{	
+		$know_zen = $db->fetchrow($db->query("SELECT bankZ FROM MEMB_INFO WHERE memb___id='".$_SESSION["user"]."'"));
+		$know_zen[1]=know_kredits(); 
+	}	
+	if ($nums>0)
+	{
+	$content->set("|wsh_no_items|","");
+		
+		for ($i=0;$i<$nums;$i++)
+		{ 
+			//if ($i==0 && $nums>0) echo "<tr>";
+			$wintems_s = $db->fetchrow($wintems_q);
+			if ($wintems_s[5]>0){ $shitprice=pod_price($wintems_s[5])." <span class='credits'>credits</span>";$unicchr =$know_zen[1] - $wintems_s[5];}
+			elseif ($wintems_s[2]>0){ $shitprice=pod_price($wintems_s[2])." <span class='price'>Zen</span>";$unicchr =$know_zen[0] - $wintems_s[2];}
+			//if ($i%2==0 && $i>0) echo "</tr><tr>";
+			if($wintems_s[6]==1) $content->set("|d|","d");
+			else $content->set("|d|","");
+			
+			ob_start();
+			echo show_items($wintems_s[4], 0);
+			$itm = ob_get_contents();
+			ob_end_clean();
+			
+			$content->set("|items|",$itm);
+			$content->set("|date|",@date("Y-m-d G:i",$wintems_s[3]));
+			$content->set("|prise|",$shitprice);
+			//$content->set("|number|","");
+			$content->set("|drop|","");
+			$content->set("|ahref|","");
+			$content->set("|wsh_not_money|","");
+			$content->set("|ikey|","");
+			 $content->set("|number|","<a href='".$config["siteaddress"]."/?p=wshop&itemid=".$wintems_s[0]."'>#".$wintems_s[0]."</a>");
+			if ($isuser==1 or $itsadm==1) 
+			{
+			 if ($itsadm==1) $content->set("|ikey|","<b>#".strtoupper(substr($wintems_s[4],6,8))."</b>");
+			 if ($_SESSION["user"] != $wintems_s[1] && $unicchr>=0)$content->set("|ahref|", "<a href='".$config["siteaddress"]."/?p=wshop&bid=".$wintems_s[0]."' class='buyst'>".$lang["wsh_item_buy"]."</a>");
+			 else if ($_SESSION["user"] != $wintems_s[1]) $content->set("|wsh_not_money|",$lang["wsh_not_money"]);
+
+			 if ($_SESSION["user"] == $wintems_s[1] ) $content->set("|drop|","<a href='".$config["siteaddress"]."/?p=wshop&did=".$wintems_s[0]."' class='buyst'>".$lang["wsh_drop_item"]."</a>"); 
+			 else if ($itsadm==1) $content->set("|drop|","<a href='".$config["siteaddress"]."/?p=wshop&aid=".$wintems_s[0]."' class='buyst'>".$lang["wsh_drop_item"]."</a>"); 
+			}
+			$content->out_content("theme/".$config["theme"]."/them/wshop_c.html");
+		}
+	}
+	else
+      $content->set("|wsh_no_items|",$lang["wsh_no_items"]);
+
+$content->out_content("theme/".$config["theme"]."/them/wshop_f.html");
+if($t<$NewsCount)
+{
+  $content->out_content("theme/".$config["theme"]."/them/paginator_h.html");	
+  $pnum=ceil($NewsCount/(int)$t);
+ 
+  for ($i=0;$i<$pnum;$i++)
+  {
+   if ((!$_GET["n"] && $i==0) || $i==$_GET["n"])
+   {
+    $content->set("|i|",($i+1));
+	$content->set("|ccl|","pgenum");
+   }							
+   else 
+   {
+    $content->set("|i|","<a href='".$config["siteaddress"]."/?n=".$i."'>".($i+1)."</a>");
+	$content->set("|ccl|","pgnum");
+   }
+   $content->out_content("theme/".$config["theme"]."/them/paginator_push.html");	
+  }
+  $content->out_content("theme/".$config["theme"]."/them/paginator_f.html");	
+}
+$temp = ob_get_contents();
+ob_end_clean();

@@ -1,0 +1,7 @@
+<?php if (!defined("insite")){die("no access");}
+$lang["htitle"]="Обменять онлайн часы";
+$lang["htotal"]="Всего часов:";
+$lang["mtotal"]="Всего минут:";
+$lang["alltotal"]="Обменять на";
+$lang["hpoint"]="кредиты";
+$lang["tpoints"]="Обменять";

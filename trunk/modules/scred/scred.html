@@ -1,0 +1,26 @@
+<script>
+function calc(elem)
+{
+	var cont = parseInt(elem.value);
+	if(cont<0) cont=0;
+	document.getElementById("hm").innerHTML="(+"+(cont* |cnums| )+" Zen)";
+}
+</script>
+
+<form method="POST" action="">
+<table border="0" width="99%" vAlign="Top">
+<tr>
+ <td>|phrase_rate||cnum| Zen</td>
+</tr>
+<tr>
+ <td>|phrase_t| &nbsp; <input type="text" name="cr_sum" id="cr_sum" onKeyUp="calc(this)"> <span id="hm"></span></td>
+</tr>
+<tr>
+ <td><input type="submit" name="ok_Ad" class="t-button"></td>
+</tr>
+<tr>
+ <td>|error_msg|</td>
+</tr>
+
+</table>
+</form>

@@ -1,0 +1,44 @@
+$mid = 10;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred.mwc");
+$handle = fopen("_usr/scred.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred_cfg.mwc");
+$handle = fopen("configs/scred_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred.html");
+$handle = fopen("theme/".$config["theme"]."/them/scred.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/rus_scred.mwc");
+$handle = fopen("lang/rus/rus_scred.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"scred||1\r\n");
+fclose($handle);
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"scred::title_scred\r\n");
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_scred"] ="Кредиты на зен";'."\r\n");
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_cfg.php","a+");
+fwrite($handle,'$lang["crate"] ="за 1 кредит зен";'."\r\n");
+fclose($handle);
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+@unlink("_dat/menus/rus_usermenu");
+WriteLogs("Install","scred установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

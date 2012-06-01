@@ -1,0 +1,156 @@
+$mid = 3;
+$message="";
+global $db;
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_cfg.mwc");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_cfg.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("configs/voteadm_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_h.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("theme/".$config["theme"]."/them/vote_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона theme/".$config["theme"]."/them/vote_h.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_c.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("theme/".$config["theme"]."/them/vote_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона theme/".$config["theme"]."/them/vote_c.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_f.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("theme/".$config["theme"]."/them/vote_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона theme/".$config["theme"]."/them/vote_f.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_button.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_button.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_button.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_button.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_f.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_f.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_form.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_form.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_form.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_form.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_c.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_h_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_c.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_f.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_h_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_f.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_h.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_h_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_h_h.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_box.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_box.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_top_box.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_box.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_c.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_top_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_c.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_h.html");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/theme/voteadm_top_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка шаблона _sysvol/_a/theme/voteadm_top_h.html; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote.mwc");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_usr/vote.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка  _usr/vote.php; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm.mwc");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("_sysvol/_a/voteadm.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка  _sysvol/_a/voteadm.php; ";
+
+if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/rus_voteadm.mwc");
+else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/rus_voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+$handle = fopen("lang/rus/rus_voteadm.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$message.="Установка  lang/rus/rus_voteadm.php; ";
+
+$handle = fopen("_dat/amenu.dat","a+");
+fwrite($handle,"voteadm::title_voteadm\r\n");
+fclose($handle);
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"vote||1\r\n");
+fclose($handle);
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"vote::title_vote\r\n");
+fclose($handle);
+$message.="добавление в меню модуля; ";
+
+$handle = fopen("lang/rus/rus_cfg.php","a+");
+fwrite($handle,"\r\n".'$lang["mmotoplink"]="Линк та ммо топ статистику";');
+fwrite($handle,"\r\n".'$lang["tnum"]="номер ммо топа в списке";');
+fclose($handle);
+$message.="добавление в rus_cfg.php; ";
+
+$db->query("IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MWC_chartoacc]') AND type in (N'P', N'PC'))DROP PROCEDURE [dbo].[MWC_chartoacc]");
+$db->query("CREATE PROCEDURE [dbo].[MWC_chartoacc] @Name varchar(10) AS BEGIN
+ SET NOCOUNT ON;
+ declare @AccountID as varchar(10)
+ Set @AccountID = '0'
+ select @AccountID = AccountID FROM Character Where Name=@Name
+ SELECT @AccountID
+END ");
+$db->query("IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mwc_vote_top]') AND type in (N'U')) DROP TABLE [dbo].[mwc_vote_top]");
+$db->query("CREATE TABLE [dbo].[mwc_vote_top]( [id] [int] IDENTITY (1, 1) NOT NULL, [memb___id] [varchar](10) NOT NULL,[top_id] [int] NULL,[ip] [varchar](15) NOT NULL,[last_voted] [varchar](12) NULL,[realvotes] [int] NULL default('0'),[clicks] [int] NULL) ON [PRIMARY]");
+
+@unlink("_dat/menus/rus_admmenu");
+@unlink("_dat/menus/rus_usermenu");
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+WriteLogs("Install",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

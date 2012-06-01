@@ -1,0 +1,205 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+global $db;
+global $content;
+$content->add_dict($_SESSION["mwclang"],"voteadm");
+require ("configs/voteadm_cfg.php");
+
+
+
+ob_start();
+if($_GET["del"])
+{
+ $dell = checknum(substr($_GET["del"],0,2));
+ $db->query("DELETE  FROM mwc_vote_list WHERE id='".$dell."'");
+}
+// если добавляем или изменяем
+if ($_REQUEST["addvote"] or $_GET["edit"])
+{
+ $b_name = "addvt";
+ $b_value = "add";
+ $num = checknum(substr($_GET["edit"],0,2));
+ if ($num>0 && !$_REQUEST["addvote"])
+ {
+  $res=$db->fetcharray($db->query("SELECT * FROM mwc_vote_list WHERE id='".$num."'"));
+  $b_name = "eddvt";
+  $b_value = "edit";
+  $content->set('|idtop_name|', $res["id"].".".$res["top_name"]);
+ } 
+ else $content->set('|idtop_name|',"");
+
+ 
+ $content->set('|top_addres|', $res["top_addres"]);
+ $content->set('|top_pic|', $res["top_pic"]);
+ $content->set('|flag|', $res["flag"]);
+ $content->set('|credits|', $res["credits"]);
+ $content->set('|num|', $num);
+ $content->set('|b_name|', $b_name);
+ $content->set('|b_value|', $b_value);
+ $content->out_content("_sysvol/_a/theme/voteadm_form.html");
+}
+
+if ($_REQUEST["giveaprize"])
+{
+ $query ="";
+ $num = checknum(substr($_POST["hval"],0,4)); // узнаем, сколько было пользователей
+ for($i=0;$i<$num;$i++)
+ {
+   if($_POST["chkbox".$i])
+   {
+    $query.=" UPDATE mwc_vote_top SET clicks=0,realvotes=realvotes+1 WHERE id='".checknum($_POST["chkbox".$i])."'";
+    $nick = $db->fetchrow("SELECT memb___id,top_id FROM mwc_vote_top WHERE id = '".checknum($_POST["chkbox".$i])."'");
+    $topinfo = $db->fetchrow("SELECT credits FROM mwc_vote_list WHERE id ='".$nick[1]."' ");
+    $query.=" UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+".$topinfo[0]." WHERE ".$config["cr_acc"]."= '".$nick[0]."'";
+   }
+ }
+ if (strlen($query)>10)
+ {
+  $db->query($query);
+  WriteLogs ("voteAdm_","админ ".$_SESSION["user"]." выдал призы за голосование");
+  header("Location: ".$config["siteaddress"]."/control.php?page=voteadm");
+ }
+ else
+  echo "error!";
+
+}
+if ($_REQUEST["mmochk"])
+{
+
+ $topinfo = $db->fetchrow("SELECT flag, credits,top_addres,top_name FROM mwc_vote_list WHERE id='".$voteadm["tnum"]."'");
+ $query = $db->query("SELECT * FROM mwc_vote_top WHERE clicks > '0' and top_id='".$voteadm["tnum"]."'");
+
+ $i=0;
+ while($temp = $db->fetchrow($query))
+ {
+  $votequery[$i][0]=$temp[1];//memb id
+  $votequery[$i][1]=$temp[4];//date
+  $i++;
+ }
+
+ function findmatch($value,$votequery)
+ {
+ foreach ($votequery as $id=>$oa)
+ {
+  if ($oa[0]==$value) return $id;
+ }
+ return "no";
+ }
+ $contentZ = @file_get_contents($voteadm["mmotoplink"]);
+
+ $massive=explode("\n", $contentZ);
+ foreach($massive as $id=>$value)
+ {
+  $asd=explode("	",$value);
+  /*  0 - voter id  1 - date  2 - ip 3 - nick    4 - count votes  */
+  $asd[3]=trim($asd[3]);
+  if (strlen($asd[3])>2)
+  { 
+   $account = $db->fetchrow("exec MWC_chartoacc '".$asd[3]."'"); //получааем ак
+   if(strlen($account[0])>2 || trim($account)!="")
+   {
+    $isright = $db->numrows("SELECT memb___id FROM MEMB_INFO WHERE memb___id='".$asd[3]."'");
+	($isright>0)? $account[0] = $asd[3]: $account[0]=0;
+   }
+   else 
+     $account[0]=$asd[3];// если был вписан акк изначально
+   
+   if(strlen($account[0])>2) //если перс существует
+   {
+   
+    $num = findmatch($account[0],$votequery);
+    if ($num!="no")//если в базе голосов этот акк есть
+    {
+	 
+     if($votequery[$num][1]<= strtotime($asd[1])) // если человек голосовал через сайт
+     {
+      if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+1, clicks=0 WHERE memb___id='".$account[0]."'and top_id='".$voteadm["tnum"]."'  UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".$topinfo[1]." WHERE ".$config["cr_acc"]."='".$account[0]."'"))
+      WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$account[0]." начисленны кредиты");
+     }
+    }
+	//else
+	 // WriteLogs($topinfo[3]."_voters(auto)",$account[0]." голосовал, перехожду к следующему");
+   }
+  }
+ }
+ header("Location: ".$config["siteaddress"]."/control.php?page=voteadm");
+}
+
+$content->out_content("_sysvol/_a/theme/voteadm_h_h.html");
+
+$wats_v = $db->query("SELECT * FROM mwc_vote_list");
+
+while($result = $db->fetcharray($wats_v))
+{
+ $content->set('|id|', $result["id"]);
+ $content->set('|top_name|', $result["top_name"]);
+ $content->set('|top_addres|', $result["top_addres"]);
+ $content->out_content("_sysvol/_a/theme/voteadm_h_c.html");
+}
+	
+if (!$_REQUEST["addvote"])
+{
+ $content->out_content("_sysvol/_a/theme/voteadm_h_f.html");
+ if ($_REQUEST["addvt"])
+ {
+  $t_name = validate(substr($_POST["topname"],0,15));
+  $t_addr = htmlspecialchars(substr($_POST["topadress"],0,100));
+  $t_pict = htmlspecialchars(substr($_POST["picadress"],0,100));
+  $t_flag = checknum(substr($_POST["voteflag"],0,1));
+  $t_cred = checknum(substr($_POST["votecred"],0,10));
+  if (strlen($t_name)>2 && strlen($t_addr)>5)	$db->query("INSERT INTO mwc_vote_list (top_name,top_addres,top_pic,flag,credits) VALUES('".$t_name."','".$t_addr."','".$t_pict."','".$t_flag."','".$t_cred."')");
+  header("Location: ".$config["siteaddress"]."/control.php?page=voteadm");
+ }
+ elseif($_REQUEST["eddvt"])
+ {
+  $t_num = checknum(substr($_POST["hvalue"],0,2));
+  $t_name = validate(substr($_POST["topname"],0,15));
+  $t_addr = htmlspecialchars(substr($_POST["topadress"],0,100));
+  $t_pict = htmlspecialchars(substr($_POST["picadress"],0,100));
+  $t_flag = checknum(substr($_POST["voteflag"],0,1));
+  $t_cred = checknum(substr($_POST["votecred"],0,10));
+  if (strlen($t_name)>2 && strlen($t_addr)>5)	$db->query("UPDATE mwc_vote_list SET top_name='".$t_name."',top_addres='".$t_addr."',top_pic='".$t_pict."',flag='".$t_flag."',credits='".$t_cred."' WHERE id='".$t_num."'");
+  header("Location: ".$config["siteaddress"]."/control.php?page=voteadm");
+ }
+ $content->out_content("_sysvol/_a/theme/voteadm_button.html");
+}
+
+
+
+$top_list = $db->query("SELECT id,top_name FROM mwc_vote_list");
+$opt="";
+while($result = $db->fetchrow($top_list))
+{
+ $content->set('|result0|', $result[0]);
+ $content->set('|result1|', $result[1]);
+ $opt.=$content->out_content("_sysvol/_a/theme/voteadm_top_box.html",1);
+}
+$content->set('|optionZ|', $opt);
+$content->out_content("_sysvol/_a/theme/voteadm_top_h.html");
+if ($_REQUEST["chsn_top"])
+{
+ $top_num = checknum(substr($_POST["chsn_top"],0,2));
+ $bonus="";
+ if($top_num!=99) $bonus.="Where top_id='".$top_num."'";
+
+ $acc_list = $db->query("SELECT memb___id,clicks,realvotes,id FROM mwc_vote_top ".$bonus);
+ $i=0;
+  while($result = $db->fetcharray($acc_list))
+  {
+   $content->set('|memb___id|', $result["memb___id"]);
+   $content->set('|clicks|', $result["clicks"]."(".$result["realvotes"].")");
+   $content->set('|tnum|', $result["id"]);
+    if($result["clicks"]>0) $content->set('|chname|', "chkbox".$i);
+    else $content->set('|chname|', "\" disabled=\"disabled");
+   $content->out_content("_sysvol/_a/theme/voteadm_top_c.html");
+   $i++;
+  }
+  $content->set('|hnum|', $i);
+  $content->set('|gbutton|', "<input type='submit' class='button' name='giveaprize'>");
+  
+}
+else $content->set('|gbutton|', "There is nothing ;(");
+$content->out_content("_sysvol/_a/theme/voteadm_f.html");
+
+$temp = ob_get_contents();
+ob_end_clean(); 

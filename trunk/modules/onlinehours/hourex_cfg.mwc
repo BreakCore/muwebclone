@@ -1,0 +1,5 @@
+<?php if (!defined("insite")) die("no access");
+$hourex["hourrate"]=4;
+$hourex["ctable"]="MEMB_INFO";
+$hourex["ccolumn"]="credits";
+$hourex["cacolumn"]="memb___id";

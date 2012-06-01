@@ -1,0 +1,40 @@
+$mid = 2;
+$message="";
+$message.="Удаление шаблона _sysvol/_a/theme/conv.html; ";
+@unlink("_sysvol/_a/theme/conv.html");
+@unlink("_sysvol/_a/conv.php");
+
+$message.="Удаление модуля _sysvol/_a/conv.php; ";
+
+$file = file("_dat/amenu.dat");
+$handle = fopen("_dat/amenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,4)!="conv") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалено из меню; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,19)!='$lang["title_conv"]' && strlen(trim($v))>4 && trim($v)!="") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удален заголовок; ";
+
+@unlink("_dat/menus/rus_admmenu");
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)substr($v,0,1)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+$message.="модуль удален из списка установленных; ";
+
+
+WriteLogs("Uninstall",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

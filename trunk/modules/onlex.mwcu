@@ -1,0 +1,59 @@
+$mid = 7;
+
+@unlink("theme/".$config["theme"]."/them/hourex.html");
+@unlink("_usr/hourex.php");
+@unlink("configs/hourex_cfg.php");
+@unlink("lang/rus/rus_hourex.php");
+
+$message ="удаление файлов; ";
+
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="hourex") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из меню; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,21)!='$lang["title_hourex"]' ) fwrite($handle,$v);
+}
+fclose($handle);
+
+
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="hourex") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из меню; ";
+
+$file = file("lang/rus/rus_cfg.php");
+$handle = fopen("lang/rus/rus_cfg.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,17)!='$lang["hourrate"]' && substr($v,0,15)!='$lang["ctable"]' && substr($v,0,16)!='$lang["ccolumn"]' && substr($v,0,17)!='$lang["cacolumn"]' && trim($v)!="") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)$v!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+
+$message.="модуль удален из списка установленных; ";
+@unlink("_dat/menus/rus_usermenu");
+WriteLogs("Uninstall",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

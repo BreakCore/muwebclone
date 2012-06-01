@@ -1,0 +1,79 @@
+$mid = 8;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/donate.mwc");
+$handle = fopen("_usr/donate.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/qiwi.mwc");
+$handle = fopen("_usr/qiwi.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/yan.mwc");
+$handle = fopen("_usr/yan.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/donate_cfg.mwc");
+$handle = fopen("configs/donate_cfg.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/rus_donate.mwc");
+$handle = fopen("lang/rus/rus_donate.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/donate_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/donate_c.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/donate_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/donate_f.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/donate_h.html");
+$handle = fopen("theme/".$config["theme"]."/them/donate_h.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/qiwi.html");
+$handle = fopen("theme/".$config["theme"]."/them/qiwi.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/donate/yandex.html");
+$handle = fopen("theme/".$config["theme"]."/them/yandex.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"donate||1\r\n");
+fwrite($handle,"yan||1\r\n");
+fwrite($handle,"qiwi||1\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"donate::title_donate\r\n");
+fclose($handle);
+
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_qiwi"]="qiwi-касса";'."\r\n");
+fwrite($handle,'$lang["title_donate"]="Помощь серверу";'."\r\n");
+fwrite($handle,'$lang["title_yan"]="Яндекс";'."\r\n");
+fclose($handle);
+
+
+$handle = fopen("lang/rus/rus_cfg.php","a+");
+fwrite($handle,'$lang["payments"]="Список доступных сервисов(по названию скриптов через ,)";'."\r\n");
+fwrite($handle,'$lang["qiwinum"]="Номер счета киви";'."\r\n");
+fwrite($handle,'$lang["yanid"]="Номер счета яндекс";'."\r\n");
+fwrite($handle,'$lang["yansum"]="Сумма пополнения на яндекс";'."\r\n");
+fclose($handle);
+
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+WriteLogs("Install","Установка модуля Donate завершена");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

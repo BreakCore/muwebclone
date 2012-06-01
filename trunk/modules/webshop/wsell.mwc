@@ -1,0 +1,112 @@
+<?php if (!defined('insite')) die("no access"); 
+ob_start();
+if(chck_online($_SESSION["user"])==1) echo "<div align='center' valign='center' class='warnms'>".login_online."</div>";
+else
+{
+ global $config;
+ global $content;
+ global $db;
+
+ require "imgs/items.php";
+ require "lang/".$_SESSION["mwclang"]."/webshop.php";
+ 
+  
+if ($_REQUEST["sellitmok"] && isset($_SESSION["itemID"]) && level_check()==1)
+{
+ $pricei = checknum(valute(substr($_POST["Iprice"],0,12)));
+ if ($pricei>0)
+ {
+  $out_items="0x";
+  $i_target="";
+  if ($config["ctype"]=="ODBC")
+  {
+	$Wquery = $db->fetchrow($db->query("SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
+	$wareg = strtoupper(urlencode(bin2hex($Wquery[0])));
+  }
+  else
+  {
+	$Wquery = $db->query("declare @inv varbinary(1920); set @inv = (SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'); print @inv");
+	$wareg = substr($db->lastmsg(),2);			
+  }
+  
+  $i_target = substr($wareg,($_SESSION["itemID"]*32),32);
+  $out_items = substr_replace($wareg,"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",($_SESSION["itemID"]*32),32);
+				
+  if ($i_target!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($i_target)==32)
+  {
+   $itgroup= hexdec(substr($i_target,18,2))/16;
+   $itgroup=floor($itgroup);
+   $itid= hexdec(substr($i_target,0,2));
+   $itop = hexdec(substr($i_target,2,2));
+   $itex = hexdec(substr($i_target,14,2));//exel + add
+   /****/
+   $itanc = 0;
+   $itpvp = 0;
+   $ithar = 0;
+   $itsock = 0;//sockets 
+   $icals = 0;
+   /****/
+   if($itop>=128) $itop-=128;
+   $ilvl = (integer) ($itop/8);
+   if ($itex>=64) $itex-=64;
+   if ($itex>0) $exc=1; else $exc=0;
+   $update_inv = $db->query("UPDATE warehouse SET Items=0x".$out_items." WHERE AccountID='".validate($_SESSION["user"])."'");
+   if ($update_inv)
+   {
+	$typeprice = checknum($_POST["typepay"],0,1);
+	switch ($typeprice)
+	{								
+	 case 1:$into_web=$db->query("INSERT INTO web_shop (memb___id,price,sdate,item,igroup,iid,ilevel,iexc,ianc,ipvp,ihar,item_name,isock,class)VALUES('".validate($_SESSION["user"])."','".$pricei."','".time()."','".$i_target."','".$itgroup."','".$itid."','".$ilvl."','".$exc."','".$itanc."','".$itpvp."','".$ithar."','name','".$itsock."','".$icals."')");break;
+	 case 2:$into_web=$db->query("INSERT INTO web_shop (memb___id,cprice,sdate,item,igroup,iid,ilevel,iexc,ianc,ipvp,ihar,item_name,isock,class)VALUES('".validate($_SESSION["user"])."','".$pricei."','".time()."','".$i_target."','".$itgroup."','".$itid."','".$ilvl."','".$exc."','".$itanc."','".$itpvp."','".$ithar."','name','".$itsock."','".$icals."')");break;
+	 default: die("error!");
+	}
+   }
+   WriteLogs ("WebShop_","Аккаунт ".$_SESSION["user"]." Выставил на продажу ".$i_target." за ".$pricei);
+   unset($i_target,$_SESSION["itemID"]);
+   echo "<div align='center' class='succes'>".$lang["sell_n"]." ".print_price($pricei);
+   if ($typeprice == 1) echo " Zen</div>";
+   else echo " Credits</div>";
+  }				
+ }
+ else echo "<div align='center' valign='center' class='warnms'>".$lang["price_er"]."</div>";
+}
+
+if (!isset($_GET["si"]) && level_check()==1)
+{
+ if ($config["ctype"]=="ODBC")
+ {
+  $Wquery = $db->fetchrow($db->query("SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
+  $wareg = urlencode(bin2hex($Wquery[0]));
+ }
+ else
+ {
+  $Wquery = $db->query("declare @inv varbinary(1920); set @inv = (SELECT Items FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'); print @inv");
+  $wareg = substr($db->lastmsg(),2);	
+ }
+ 
+ ob_start();
+ show_items($wareg);
+ $invt = ob_get_contents();
+ ob_end_clean();
+}
+else if (level_check()==1)
+{
+$si_= checknum(substr($_GET["si"],0,10));
+ if($si_>=0)$_SESSION["itemID"] = $si_;
+ $content->set("|wsh_lchoz|",$lang["wsh_lchoz"]);
+ $content->set("|wsh_chZ|",$lang["wsh_chZ"]);
+ $content->set("|wsh_chC|",$lang["wsh_chC"]);
+ $content->set("|item_price|",$lang["item_price"]);
+ $invt = $content->out_content("theme/".$config["theme"]."/them/sell_iform.html",1);	
+}
+
+ $content->set("|content|", $invt);
+ $content->set("|info_main|",$lang["info_main"]);
+ $content->set("|info_first|",$lang["info_first"]);
+ $content->set("|info_second|",$lang["info_second"]);
+ $content->set("|info_third|",$lang["info_third"]);
+ $content->set("|info_fouth|",$lang["info_fouth"]);
+ $content->out_content("theme/".$config["theme"]."/them/sell_i.html");	
+}
+$temp = ob_get_contents();
+ob_end_clean();

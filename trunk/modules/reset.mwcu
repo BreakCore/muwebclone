@@ -1,0 +1,50 @@
+$mid = 5;
+
+@unlink("theme/".$config["theme"]."/them/res.html");
+@unlink("_usr/res.php");
+@unlink("configs/res_cfg.php");
+$message="Удаление файлов; ";
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,3)!="res") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+$file = file("_dat/cmenu.dat");
+$handle = fopen("_dat/cmenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,5)!="res::") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,18)!='$lang["title_res"]') fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+
+
+
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)trim($v)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+$message.="модуль удален из списка установленных; ";
+
+WriteLogs("Uninstall",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

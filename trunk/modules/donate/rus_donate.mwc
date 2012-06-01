@@ -1,0 +1,4 @@
+<?php if (!defined('insite')){die('11');} 
+$lang["choose_donate"] = "Доступные способы пополнения";
+$lang["yourprice"] = "Сумма на пожертвования";
+$lang["yourtnum"] = "Ваш номер телефона";

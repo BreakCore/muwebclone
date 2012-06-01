@@ -1,0 +1,51 @@
+$mid = 6;
+
+@unlink("theme/".$config["theme"]."/them/greset.html");
+@unlink("_usr/gres.php");
+@unlink("configs/gres_cfg.php");
+$message="Удаление файлов; ";
+
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,4)!="gres") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+$file = file("_dat/cmenu.dat");
+$handle = fopen("_dat/cmenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="gres::") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,19)!='$lang["title_gres"]') fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+
+
+
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)trim($v)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+$message.="модуль удален из списка установленных; ";
+
+WriteLogs("Uninstall",$message);
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

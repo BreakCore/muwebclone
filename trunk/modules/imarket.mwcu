@@ -1,0 +1,50 @@
+$mid = 9;
+
+@unlink("lang/rus/rus_market.php");
+@unlink("_usr/market.php");
+@unlink("_dat/market.db");
+@unlink("theme/".$config["theme"]."/them/market_h.html");
+@unlink("theme/".$config["theme"]."/them/market_c.html");
+@unlink("theme/".$config["theme"]."/them/market_f.html");
+
+
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="market") fwrite($handle,$v);
+}
+fclose($handle);
+
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,8)!="market::") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,21)!='$lang["title_market"]') fwrite($handle,$v);
+}
+fclose($handle);
+
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)trim($v)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+
+
+WriteLogs("Uninstall","модуль Market был удален");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

@@ -1,0 +1,5 @@
+<?php if (!defined("insite")) die("no access");
+$donate["payments"]="qiwi,yan";
+$donate["qiwinum"]=12345;
+$donate["yanid"]=1234567;
+$donate["yansum"]=5;

@@ -1,0 +1,2 @@
+<?php if (!defined("insite")) die("no access");
+$scred["crate"]=15000000;

@@ -1,0 +1,19 @@
+<?php if (!defined('insite')) die("no access"); 
+require "configs/donate_cfg.php";
+require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+global $content;
+global $config;
+$content->add_dict($_SESSION["mwclang"],"donate");
+ob_start();
+$content->out_content("theme/".$config["theme"]."/them/donate_h.html");
+
+$mods = explode(",",$donate["payments"]); // список способов оплаты
+foreach ($mods as $v)
+{
+ $content->set('|titlemodul|', $lang["title_".$v]);
+ $content->set('|modul|', $v);
+ $content->out_content("theme/".$config["theme"]."/them/donate_c.html");
+}
+$content->out_content("theme/".$config["theme"]."/them/donate_f.html");
+$temp = ob_get_contents();
+ob_end_clean();

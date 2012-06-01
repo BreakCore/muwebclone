@@ -1,0 +1,93 @@
+@unlink("lang/rus/webshop.php");
+@unlink("_usr/wsell.php");
+@unlink("pages/wshop.php");
+@unlink("configs/wshop_cfg.php");
+@unlink("configs/top5items_cfg.php");
+@unlink("_sysvol/top5items.php");
+
+@unlink("theme/".$config["theme"]."/them/top5_h.html");
+@unlink("theme/".$config["theme"]."/them/top5_c.html");
+@unlink("theme/".$config["theme"]."/them/top5_f.html");
+@unlink("theme/".$config["theme"]."/them/wshop_f.html");
+@unlink("theme/".$config["theme"]."/them/wshop_c.html");
+@unlink("theme/".$config["theme"]."/them/wshop_h.html");
+@unlink("theme/".$config["theme"]."/them/sell_i.html");
+@unlink("theme/".$config["theme"]."/them/sell_iform.html");
+@unlink("_dat/menus/".$_SESSION["mwclang"]."_usermenu");
+@unlink("_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+
+
+$file = file("_dat/pm.dat");
+$handle = fopen("_dat/pm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,5)!="wshop") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалены разрешения из ПМ; ";
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,5)!="wsell") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из пользовательсеого меню для веб-магазина; ";
+
+$file = file("_dat/menu.dat");
+$handle = fopen("_dat/menu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,5)!="wshop") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалена ссылка из главного меню для веб-магазина; ";
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,5)!="wsell") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удалено разрешение из УПМ; ";
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,20)!='$lang["title_wsell"]' && strlen(trim($v))>4 && $v!="") fwrite($handle,$v);
+}
+fclose($handle);
+$message.="Удален заголовок; ";
+
+
+
+$file = file("lang/rus/rus_cfg.php");
+$handle = fopen("lang/rus/rus_cfg.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,18)!='$lang["allow_lvl"]' && strlen(trim($v))>4 && trim($v)!="") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("lang/rus/rus_site.php");
+$handle = fopen("lang/rus/rus_site.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,15)!='$lang["linshp"]' && strlen(trim($v))>4 && trim($v)!="") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,1)!="1") fwrite($handle,$v);
+}
+fclose($handle);
+
+
+WriteLogs("Uninstall","Удаление web-shop'a завершено.");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");

@@ -1,0 +1,13 @@
+<?php if (!defined('insite')) die("no access"); 
+require "configs/donate_cfg.php";
+//require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+global $content;
+global $config;
+$content->add_dict($_SESSION["mwclang"],"donate");
+ob_start();
+
+$content->set('|yourqnum|', $donate["qiwinum"]);
+$content->set('|login|', $_SESSION["user"]);
+$content->out_content("theme/".$config["theme"]."/them/qiwi.html");
+$temp = ob_get_contents();
+ob_end_clean();
