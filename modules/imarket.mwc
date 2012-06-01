@@ -1,28 +1,28 @@
 $mid = 9;
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/rus_market.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/rus_market.mwc");
 $handle = fopen("lang/rus/rus_market.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/market.mwc");
 $handle = fopen("_usr/market.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market.db");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/market.db");
 $handle = fopen("_dat/market.db","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_h.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/market_h.html");
 $handle = fopen("theme/".$config["theme"]."/them/market_h.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_c.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/market_c.html");
 $handle = fopen("theme/".$config["theme"]."/them/market_c.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/market/market_f.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/market/market_f.html");
 $handle = fopen("theme/".$config["theme"]."/them/market_f.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
