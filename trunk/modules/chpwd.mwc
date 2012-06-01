@@ -1,11 +1,11 @@
 $mid = 11;
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/npwd/npwd.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/npwd/npwd.mwc");
 $handle = fopen("_usr/npwd.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/npwd/npwd.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/npwd/npwd.html");
 $handle = fopen("theme/".$config["theme"]."/them/npwd.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);

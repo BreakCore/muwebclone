@@ -1,18 +1,18 @@
 $mid = 5;
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/reset/res.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/reset/res.html");
 $handle = fopen("theme/".$config["theme"]."/them/res.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message ="шаблон для ресета установлен; ";
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/reset/res.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/reset/res.mwc");
 $handle = fopen("_usr/res.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="модуль res установлен; ";
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/reset/res_cfg.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/reset/res_cfg.mwc");
 $handle = fopen("configs/res_cfg.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);

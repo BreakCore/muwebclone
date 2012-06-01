@@ -1,7 +1,7 @@
 $mid = 2;
 $message="";
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/conv/conv.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/conv/conv.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/conv/conv.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/conv/conv.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 
 $handle = fopen("_sysvol/_a/theme/conv.html","w+");
 fwrite($handle,$onexecute);
@@ -9,8 +9,8 @@ fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/conv.html; ";
 
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/conv/conv.mwc");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/conv/conv.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/conv/conv.mwc");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/conv/conv.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 
 $handle = fopen("_sysvol/_a/conv.php","w+");
 fwrite($handle,$onexecute);

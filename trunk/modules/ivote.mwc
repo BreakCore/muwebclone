@@ -2,112 +2,112 @@ $mid = 3;
 $message="";
 global $db;
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_cfg.mwc");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_cfg.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_cfg.mwc");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_cfg.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("configs/voteadm_cfg.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_h.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_h.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("theme/".$config["theme"]."/them/vote_h.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона theme/".$config["theme"]."/them/vote_h.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_c.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_c.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("theme/".$config["theme"]."/them/vote_c.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона theme/".$config["theme"]."/them/vote_c.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote_f.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_f.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("theme/".$config["theme"]."/them/vote_f.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона theme/".$config["theme"]."/them/vote_f.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_button.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_button.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_button.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_button.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_button.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_button.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_f.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_f.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_f.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_f.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_form.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_form.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_form.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_form.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_form.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_form.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_c.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_c.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_h_c.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_h_c.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_f.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_f.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_f.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_h_f.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_h_f.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_h.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_h_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_h.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_h_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_h_h.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_h_h.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_box.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_box.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_box.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_box.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_top_box.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_top_box.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_c.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_c.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_c.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_top_c.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_top_c.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_h.html");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm_top_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_h.html");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm_top_h.html",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/theme/voteadm_top_h.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка шаблона _sysvol/_a/theme/voteadm_top_h.html; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/vote.mwc");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/vote.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote.mwc");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/vote.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_usr/vote.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка  _usr/vote.php; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm.mwc");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm.mwc");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("_sysvol/_a/voteadm.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="Установка  _sysvol/_a/voteadm.php; ";
 
-if (function_exists('curl_init')) $onexecute = get_content("http://www.p4f.ru/mwc/nmod/modules/vote/rus_voteadm.mwc");
-else   $onexecute = EmulBrowser("http://www.p4f.ru/mwc/nmod/modules/vote/rus_voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
+if (function_exists('curl_init')) $onexecute = get_content("http://muwebclone.googlecode.com/svn/trunk/modules/vote/rus_voteadm.mwc");
+else   $onexecute = EmulBrowser("http://muwebclone.googlecode.com/svn/trunk/modules/vote/rus_voteadm.mwc",2,2,NULL,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)",Null,NULL);
 $handle = fopen("lang/rus/rus_voteadm.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);

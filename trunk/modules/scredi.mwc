@@ -1,20 +1,20 @@
 $mid = 10;
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/scred/scred.mwc");
 $handle = fopen("_usr/scred.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred_cfg.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/scred/scred_cfg.mwc");
 $handle = fopen("configs/scred_cfg.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/scred.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/scred/scred.html");
 $handle = fopen("theme/".$config["theme"]."/them/scred.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/scred/rus_scred.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/scred/rus_scred.mwc");
 $handle = fopen("lang/rus/rus_scred.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);

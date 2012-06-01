@@ -1,22 +1,22 @@
 $mid = 7;
 global $db;
 
-$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex.html");
+$onexecute=unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/onlinehours/hourex.html");
 $handle = fopen("theme/".$config["theme"]."/them/hourex.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex.mwc");
+$onexecute=unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/onlinehours/hourex.mwc");
 $handle = fopen("_usr/hourex.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/hourex_cfg.mwc");
+$onexecute=unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/onlinehours/hourex_cfg.mwc");
 $handle = fopen("configs/hourex_cfg.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute=unicontent("http://www.p4f.ru/mwc/nmod/modules/onlinehours/rus_hourex.mwc");
+$onexecute=unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/onlinehours/rus_hourex.mwc");
 $handle = fopen("lang/rus/rus_hourex.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);

@@ -1,18 +1,18 @@
 $mid = 6;
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/greset.html");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/greset/greset.html");
 $handle = fopen("theme/".$config["theme"]."/them/greset.html","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message ="шаблон для gресета установлен; ";
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/gres.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/greset/gres.mwc");
 $handle = fopen("_usr/gres.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
 $message.="модуль gres установлен; ";
 
-$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/greset/gres_cfg.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/greset/gres_cfg.mwc");
 $handle = fopen("configs/gres_cfg.php","w+");
 fwrite($handle,$onexecute);
 fclose($handle);
