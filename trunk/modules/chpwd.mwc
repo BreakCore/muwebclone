@@ -1,0 +1,35 @@
+$mid = 11;
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/npwd/npwd.mwc");
+$handle = fopen("_usr/npwd.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://www.p4f.ru/mwc/nmod/modules/npwd/npwd.html");
+$handle = fopen("theme/".$config["theme"]."/them/npwd.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$handle = fopen("_dat/upm.dat","a+");
+fwrite($handle,"npwd||1\r\n");
+fclose($handle);
+
+$handle = fopen("_dat/umenu.dat","a+");
+fwrite($handle,"npwd::title_npwd\r\n");
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_titles.php","a+");
+fwrite($handle,'$lang["title_npwd"] ="Сменить пароль";'."\r\n");
+fclose($handle);
+
+$handle = fopen("lang/rus/rus_site.php","a+");
+fwrite($handle,'$lang["old_pwd"]="Старый пароль";'."\r\n");
+fwrite($handle,'$lang["new_pwd"]="Новый пароль";'."\r\n");
+fclose($handle);
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+@unlink("_dat/menus/rus_usermenu");
+WriteLogs("Install","npwd установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");
