@@ -1,0 +1,49 @@
+$mid = 11;
+
+@unlink("_usr/npwd.php");
+@unlink("theme/".$config["theme"]."/them/npwd.html");
+
+
+$file = file("_dat/upm.dat");
+$handle = fopen("_dat/upm.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,4)!="npwd") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/umenu.dat");
+$handle = fopen("_dat/umenu.dat","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,6)!="npwd::") fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("lang/rus/rus_titles.php");
+$handle = fopen("lang/rus/rus_titles.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,19)!='$lang["title_npwd"]') fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("lang/rus/rus_site.php");
+$handle = fopen("lang/rus/rus_site.php","w");
+foreach($file as $id=>$v)
+{
+ if (substr($v,0,16)!='$lang["old_pwd"]' && substr($v,0,16)!='$lang["new_pwd"]') fwrite($handle,$v);
+}
+fclose($handle);
+
+$file = file("_dat/modules.dat");
+$handle = fopen("_dat/modules.dat","w");
+foreach($file as $id=>$v)
+{
+ if ((int)trim($v)!=$mid) fwrite($handle,$v);
+}
+fclose($handle);
+
+@unlink("_dat/menus/rus_usermenu");
+WriteLogs("Uninstall","npwd удален");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");
