@@ -1,1 +1,11 @@
 echo "patch 0 executed!";
+$updaid=0;
+$version = 1512;
+
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle); 
+
+WriteLogs("Update","Патч №".$updaid." установлен");
+//header("Location: ".$config["siteaddress"]."/control.php?page=update");
