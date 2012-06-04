@@ -121,7 +121,7 @@ if($gres["greset"]==1)
   }
   elseif($gres["greset_reward"]==2)
   {
-   if ($db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+ '".$gres["credits_reward"]."' WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'"))
+   if ($db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+ ".$gres["credits_reward"]." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'"))
    WriteLogs ("GReset_","Аккаунт ".$_SESSION["user"]." персонаж: ".$_SESSION["character"]." сейчас делает гресет, награда ".$gres["credits_reward"]." credits");
   }
 	
