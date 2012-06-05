@@ -1,0 +1,33 @@
+</table>
+<br>
+<div align="center"><form method="POST" action=""><input type="submit" name="clear_m" value="|mm_modul_clear|" class="button"></form></div>
+<br>
+<table class='tableMain' align='center' vAlign='top' border='0' width="80%">
+<tr>
+ <td colspan="2" class="trstyle"><div class="zagstyle">|mm_modul_add|</div></td>
+</tr>
+<form action="" method="POST">
+<tr>
+ <td>|mm_modul_add_n|</td><td><input type="text" class="texbx" maxlength="20" id="mod_name" onKeyUp='addtitle();' name="mod_name"></td>
+</tr>
+<tr>
+ <td>|mm_modul_add_d|</td><td><input type="text" class="texbx" maxlength="20" name="mod_define" id="mod_define"></td>
+</tr>
+<tr>
+ <td colspan="2" align="center"><input type="submit" class="button" name="add2menu" value="|mm_modul_add_btn|"></td>
+</tr>
+</form>
+</table>
+</form>
+<script>
+ function addtitle()
+ {
+   var name= document.getElementById('mod_name').value;
+   
+   if (name.length>0)
+    document.getElementById('mod_define').value = "title_" + name;
+   
+   else
+    document.getElementById('mod_define').value="";
+ }
+</script>

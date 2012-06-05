@@ -1,0 +1,106 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+global $db;
+global $content;
+require "configs/top100_cfg.php";
+require "configs/topguild_cfg.php";
+if ($_GET["guild"])
+{
+ 
+ $content->add_dict($_SESSION["mwclang"],"guildtop");
+ $nedd_g = validate(substr($_GET["guild"],0,10));
+ $g_result = $db->fetcharray($db->query("SELECT G_Name,G_Score,G_Mark,G_Master,G_Union, number FROM guild Where G_Name='". $nedd_g."'"));
+
+ if ( $g_result["G_Name"]!="")
+ {
+  $g_result["G_Mark"] = GuildLogo($g_result["G_Mark"],$g_result["G_Name"],64,$topguild["topgcache"]);
+ 
+  $content->set('|G_Name|', $g_result["G_Name"]);
+  $content->set('|G_Mark|', $g_result["G_Mark"]);
+  $content->set('|G_Score|', $g_result["G_Score"]);
+
+  $temp = $content->out_content("theme/".$config["theme"]."/them/search_h.html",1);
+ 
+  $m_result = $db->query("SELECT Name,G_Status FROM GuildMember WHERE G_Name= '".$g_result["G_Name"]."' ORDER BY G_Status DESC, Name DESC");
+
+  while ($gmember = $db->fetchrow($m_result))
+  {
+	$content->set('|guild_stat|', $topguild[$gmember[1]]);
+	$content->set('|gmname|', $gmember[0]);
+	$temp.=$content->out_content("theme/".$config["theme"]."/them/search_c.html",1);
+  }
+ 
+  $aliance="";
+  if ($g_result["G_Union"]!=0)
+  {
+   $guilds = $db->query("SELECT G_Name FROM Guild WHERE G_Union='".$row4[4]."' or number='".$row4[4]."' or G_Union='".$row4[5]."'");
+   while ($g_data = $db->fetcharray($guilds))
+   if($g_data["G_Name"]!=$row4[0])$aliance .= "<div><a href='#".$g_data["G_Name"]."'>".$g_data["G_Name"]."</a></div>";
+  }
+  $content->set('|aliance|', $aliance);
+  $temp.= $content->out_content("theme/".$config["theme"]."/them/search_f.html",1);		
+ }		
+}
+elseif($_GET["caracter"])
+{
+	$show_ch = validate(substr($_GET["caracter"],0,10));
+	$array = $db->fetchrow($db->query("select inventory, class , cLevel,".$top100["t100res_colum"].",gr_res,Strength,Dexterity,Vitality,Energy,AccountID,Leadership from character where name='".$show_ch."'"));
+	$inguild = $db->fetchrow("SELECT G_name FROM GuildMember WHERE Name='".$show_ch."'");
+	(strlen($inguild[0])>1)? $guild=$inguild[0]:$guild="-";
+	if (strlen($array[1])>0)
+	{
+		//center
+		$hideronot = $db->fetchrow($db->query("SELECT opt_inv FROM MEMB_INFO WHERE memb___id='$array[9]'"));
+		
+		$content->set('|name|', $show_ch);
+		$content->set('|level|', $array[2]);
+		$content->set('|res|', $array[3]);
+		$content->set('|grres|', $array[4]);
+		if ($hideronot[0]==0)
+		{
+		 $content->set('|str|', stats65($array[5]));
+		 $content->set('|agi|', stats65($array[6]));
+		 $content->set('|vit|', stats65($array[7]));
+		 $content->set('|ene|', stats65($array[8]));
+		 $content->set('|cmd|', stats65($array[10]));
+    
+	     $ff=$db->fetchrow("SELECT AccountID FROM Character Where Name='".$show_ch."'");
+		 
+	     $only = $db->fetchrow("Select ConnectStat FROM MEMB_STAT WHERE ConnectStat =1 and  memb___id='".$ff[0]."'");
+	 
+         if($only[0]==1)  $state="<span style='color:green;'>Online</span>"; 
+		 else $state="<span style='color:red;'>Offline</span>";
+         $content->set('|onlin|', $state);
+		}
+		else
+		{
+		 $content->set('|str|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		 $content->set('|agi|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		 $content->set('|vit|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		 $content->set('|ene|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		 $content->set('|cmd|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		 $content->set('|onlin|', "<img src='imgs/lock.png' border='0' alt='hide'>");
+		}
+		$content->set('|guild|',$guild);
+		$content->set('|classname|', classname($array[1]));
+		$temp.=$content->out_content("theme/".$config["theme"]."/them/search_ch_c.html",1);
+		
+		//footer
+		$temp.=$content->out_content("theme/".$config["theme"]."/them/search_ch_f.html",1);
+
+	}
+}
+else 
+{
+ if (!$_REQUEST["ok"])
+   $temp.=$content->out_content("theme/".$config["theme"]."/them/search.html",1);
+ else 
+ {
+  switch($_POST["sertype"])
+  {
+   case 1: header("location:".$config["siteaddress"]."/?p=search&caracter=".substr($_POST["choosed"],0,10));break;
+   case 2: header("location:".$config["siteaddress"]."/?p=search&guild=".substr($_POST["choosed"],0,10));break;
+   default:die("wrong text!");
+  }
+ }
+}

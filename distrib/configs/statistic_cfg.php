@@ -1,0 +1,11 @@
+<?php if (!defined("insite")) die("no access");
+$statistic["cach"]=7200;
+$statistic["version"]="1.07V";
+$statistic["exprate"]="x1";
+$statistic["drop"]=1;
+$statistic["bgcolR"]=253;
+$statistic["bgcolG"]=249;
+$statistic["bgcolB"]=240;
+$statistic["sizex"]=300;
+$statistic["sizey"]=500;
+$statistic["showgraph"]=1;

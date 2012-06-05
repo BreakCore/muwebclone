@@ -1,0 +1,24 @@
+<form name='loginform' method='POST' action=''>
+<table align='center' valign='center' border='0'  cellpadding='0' cellspacing='0' width='250'>
+<tr align='center'><td colspan="2" style="color:red;font-weight:bold;font-style:italic">|lang_under_contr|</td></tr>
+<tr align='center'>
+	<td style="font-weight:bold;">|lang_nav_loginw|</td>
+	<td><input type="text" class='texbx' name='usrlogin' maxlength="10"></td>
+</tr>
+<tr align='center'>
+	<td style="font-weight:bold;">|lang_nav_loginpw|</td>
+	<td ><input type="password" class='texbx' name='usrpwd' maxlength="10"></td>
+</tr>
+  <tr>
+     <td ></td>
+     <td align="center"><img onclick="this.src='kcaptcha/index.php?|session_name|=|session_id|'+Math.random()" src='kcaptcha/index.php?|session_name|=|session_id|'></td>
+  </tr>
+  <tr>
+  <td ></td>
+     <td  align="center"><input type="text" name='uscpt' class="login_field" value="" maxlength="12" size="16" OnClick="this.value=''"></td>
+  </tr>
+<tr height='30' align='center'>
+	<td colspan="2" align="center"><input type="submit" class='t-button' name='loginbtn' value='|lang_nav_loginbtn|'></td>
+</tr>
+</table>
+</form>

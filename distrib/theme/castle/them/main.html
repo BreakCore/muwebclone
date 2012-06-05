@@ -1,0 +1,363 @@
+<!-- This is beta CSS and HTML default Themplate ! -->
+<!-- By HappyRabbit -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta name="description" content="|description|">
+<meta name="keywords" content="|keywords|">
+<link rel="alternate" type="application/rss+xml" href="|siteaddress|/rss.php" />
+<title>|titles|</title>
+<link href="|siteaddress|/theme/|theme|/favicon.ico" rel="shortcut icon">
+<link rel="shortcut icon" href="|siteaddress|/theme/|theme|/favicon.ico">
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.js"></script>
+
+ 
+<script src="|siteaddress|/theme/|theme|/js/core_global.js" language="javascript" type="text/javascript"></script>
+<link href="|siteaddress|/theme/|theme|/m2.css" type="text/css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" media="all" href="|siteaddress|/scripts/toolbox.css">
+<link href="|siteaddress|/theme/|theme|/engine.css" type="text/css" rel="stylesheet">
+
+<!-- Clocks Script -->
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/clock.js"></script>
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/smithy.js" ></script>
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/events.js" ></script>
+<!-- Flash Download button Scripts -->
+<script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsGetHttp.js" ></script>
+<script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsMenuLink.js" ></script>
+ <script type="text/javascript">  			
+			var blnSSL = (location.href.toLowerCase().split("://", 1)[0] == 'https');
+var blnLocal = (location.href.indexOf("http://local-") == 0 || location.href.indexOf("https://local-") == 0);
+var blnDev = (location.href.indexOf("http://dev-") == 0 || location.href.indexOf("https://dev-") == 0);
+var blnAlpha = (location.href.indexOf("http://alpha-") == 0);
+var blnBeta = (location.href.indexOf("http://beta-") == 0);
+var blnLive = false;
+
+var strProtocol = "http://";
+var strTopDomain = "|siteaddress|";
+
+if (blnLocal) {
+    strHostPrefix = "local-";
+    strProtocol = "https://";
+}
+else if (blnDev) {
+    strHostPrefix = "dev-";
+    strProtocol = "https://";
+}
+else if (blnAlpha)
+    strHostPrefix = "alpha-";
+else if (blnBeta)
+    strHostPrefix = "beta-";
+else {
+    blnLive = true;
+    strProtocol = "https://";
+    strHostPrefix = "";
+}
+
+var strHttpContentDir =  strHostPrefix  + strTopDomain + "/";
+var strHttpBlueDir =  strHostPrefix + "blue." + strTopDomain + "/";
+var strHttpImageDir = "http://image.webzen.kr/mu/";
+var strHttpClubDir =  strHostPrefix + "club." + strTopDomain + "/";
+var strHttpMemberDir = strProtocol + strHostPrefix + "member." + strTopDomain + "/";
+var strHttpSearchDir =  strHostPrefix + "search." + strTopDomain + "/";
+var strHttpEventDir =  strHostPrefix + "event." + strTopDomain + "/";
+var strHttpPaymentDir = "http://payment." + strTopDomain + "/";
+var strHttpBlueShopDir = "http://blueshop." + strTopDomain + "/";
+var strHttpUploadDir =  strHostPrefix + "upload." + strTopDomain + "/";
+
+// Http Url
+var Http = {
+    Content:  strHostPrefix  + strTopDomain + "/",
+    Blue:  strHostPrefix + "blue." + strTopDomain + "/",
+    Image: "http://image.webzen.kr/mu/",
+    SSL: strProtocol + "ssl.webzen.co.kr/mu/",
+    Club:  strHostPrefix + "club." + strTopDomain + "/",
+    Member: strProtocol + strHostPrefix + "member." + strTopDomain + "/",
+    Search:  strHostPrefix + "search." + strTopDomain + "/",
+    Event:  strHostPrefix + "event." + strTopDomain + "/",
+    Payment: "http://payment." + strTopDomain + "/",
+    BlueShop: "http://blueshop." + strTopDomain + "/",
+    Upload:  strHostPrefix + "upload." + strTopDomain + "/"
+}
+
+</script>
+<script type="text/javascript">Embed.Flash('theme/|theme|/Battle/images/startbtn.swf', '304', '195', 'transparent', 'GameDownload', 'GameDownload', '');</script>
+
+
+<!-- Standart Scripts SITEADRESS -->
+
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/toolbox.js"></script>
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.tooltip.js"></script>
+<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/apprise-1.5.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="|siteaddress|/scripts/apprise.min.css">
+<script type="text/javascript" >
+$(function() {
+$("[title]").tooltip({
+track: true,
+delay: 0,
+showURL: false,
+fade: 200
+});
+});
+var ct = '|dateZtm|';
+var sd = new Date(ct);
+setInterval('srvtime()', 1000);
+</script>
+
+
+
+<body>
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td style="background-image:url(|siteaddress|/theme/|theme|/Battle/images/bg_buttons_left.jpg); background-repeat:no-repeat; background-position:right;" >&nbsp;</td>
+<td width="1008" height="119"><div id="menu">
+  <div class="nav">
+    <table width="0" border="0" cellspacing="0" cellpadding="0" >
+      <tr >
+        <td width="118"><a class="navi" href="|siteaddress|/?p=main">Home</a></td>
+        <td width="135"><a class="navi" href="|siteaddress|/?p=register">Register</a></td>
+        <td width="110"><a class="navi" href="|siteaddress|/?p=download">Download</a></td>
+        <td width="109">&nbsp;</td>
+        <td width="130" align="center"><a class="navi" href="|siteaddress|/?p=top100">Rankings</a></td>
+        <td width="166" align="center"><a class="navi" href="|siteaddress|/?p=rules">Rules</a></td>
+        <td width="149"><a class="navi" href="|siteaddress|/?p=forum">Forum</a></td>
+      </tr>
+  </table>
+  </div></div></td>
+<td style="background-image:url(theme/|theme|/Battle/images/bg_buttons_right.jpg); background-repeat:no-repeat; background-position:left;">&nbsp;</td>
+</tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="background-image:url(theme/|theme|/Battle/images/bg.jpg); background-repeat:no-repeat; background-position:center top; ">
+    <table width="1144" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 130px; ">
+        <tr>
+          <td width="220" align="center" valign="bottom">
+          
+         <!-- <table width="216" height="55" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-bottom: 10px; ">
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/bg_servertime.png); background-repeat:repeat; "><div align="center" class="t_date" style="margin-top: 16px; "><font color="#DED394"><script language="JavaScript" src="theme/|theme|/time.js" type="text/javascript" ></script></div></td>
+            </tr>
+          </table>-->
+          </td>
+          <td>&nbsp;</td>
+          <td width="220" valign="bottom">         
+          <table width="214" height="123" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td valign="bottom" style="background-image:url(theme/|theme|/Battle/images/bg_sub_login_top.gif); background-position:bottom; background-repeat:no-repeat;" align="center">
+           <div  style="position:relative; top:50px;">
+           <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="204" height="161" id="GameDownload" class="GameDownload">
+<param name="movie" value="theme/|theme|/Battle/images/startbtn.swf">
+<param name="quality" value="high">
+<param name="menu" value="0">
+<param name="allowScriptAccess" value="always">
+<param name="allowFullScreen" value="true">
+<param name="wmode" value="transparent">
+<!--[if !IE]> <-->
+<object type="application/x-shockwave-flash" allowscriptaccess="always" data="theme/|theme|/Battle/images/startbtn.swf" width="204" height="161" id="GameDownload" wmode="transparent" class="GameDownload"></object>
+<!----> <!--[endif]---->
+</object> 
+              
+            </div>
+             
+              </td>
+            </tr>
+          </table>
+          
+          </td>
+        </tr>
+      </table>
+      <table width="1144" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="220" valign="top">
+		  
+          
+          
+            <table width="214" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td height="44" style="background-image:url(theme/|theme|/Battle/images/stit_bg.gif) "><div class="m_title">|lang_nav_loginarea|</div></td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_snbmid.gif); background-repeat:repeat-y; ">
+            <div class="login_vxod">|login| |loginin|</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_snbbtm.gif); background-repeat:no-repeat; height:14px; ">&nbsp;</td>
+          </tr>
+        </table>
+
+		  <table width="214" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px; ">
+          <tr>
+            <td height="44" style="background-image:url(theme/|theme|/Battle/images/stit_bg.gif) "><div class="m_title">|lang_nav_menu|</div></td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_snbmid.gif); background-repeat:repeat-y; ">
+		<ul class="snb_1dep">
+		 
+         |getmenutitles|
+		 |lang_menu|
+		 </ul>
+         
+		</td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_snbbtm.gif); background-repeat:no-repeat; height:14px; ">&nbsp;</td>
+          </tr>
+        </table>
+          <table width="214" height="54" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px; ">
+            <tr>
+              <td><a href="|siteaddress|/?up=donate"><img src="theme/|theme|/Battle/images/bt_sub_download.jpg" width="214" height="54" border="0" usemap="#Map"></a></td>
+            </tr>
+          </table>
+          <table width="214" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px; ">
+            <tr>
+              <td class="banners"><h1>Banners</h1></td>
+            </tr>
+            <tr>
+              <td>
+			  <ul class="quicklink"><!--<li><b><a href="something">Something else</a></b></li>-->|baners|</ul>
+			  </td>
+            </tr>
+          </table></td>
+        <td valign="top">
+
+         
+
+        
+
+        <table width="680" border="0" align="center" cellpadding="0" cellspacing="0">
+        
+
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_right.gif); background-repeat:no-repeat; height:10px; "></td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub.gif); background-repeat:repeat-y; ">
+		<div class="titles" align="center">|m_titles| </div> </td>   
+		<tr>
+	    <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_bottom.gif); background-repeat:no-repeat; height:10px; "></td>
+         </tr>
+       
+        
+       <td height="15"></td> 
+        
+        
+    
+        
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_right.gif); background-repeat:no-repeat; height:10px; "></td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub.gif); background-repeat:repeat-y; ">
+                  <div class="where_nav">
+		<div class="center">|pages|</div>	      
+ 		
+		<tr>
+		 <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_bottom.gif); background-repeat:no-repeat; height:10px; ">	
+           </td>
+          </tr>
+          
+      <td height="15"></td>
+      
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_right.gif); background-repeat:no-repeat; height:10px; "></td>
+          </tr>
+          <tr>
+            <td style="background-image:url(theme/|theme|/Battle/images/bg_sub.gif); background-repeat:repeat-y; ">
+		    <div class="titles" align="center">|top5items|</div></td>
+		    <tr>
+	        <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_bottom.gif); background-repeat:no-repeat; height:10px; "></td>
+         </tr>   
+          
+        </table>
+		
+		
+        
+          </td>
+        <td width="220" valign="top"><div align="center">
+        
+        <table width="214"  border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/bg_sub_login.gif); height:130px; padding-right: 10px;" valign="top">
+<div align="center" class="language_select" style="text-align: center; ">
+<h1 style="padding-left:30px; ">&nbsp;</h1>
+ <div class="blocks">|qinfo|</div></div>
+
+	 </td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bottom.gif); height:9px; "></td>
+            </tr>
+          </table>
+          
+          <table width="214" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
+            <tr>
+              <td height="37" style="background-image:url(theme/|theme|/Battle/images/right_box_top.gif); "><h1 style="padding-left:30px; ">|lang_nav_top_strongest|</h1></td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bg.jpg); text-align: center;">
+			  
+			    |strongest|
+			    </td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bottom.gif); height:9px; "></td>
+            </tr>
+          </table>
+
+          <table width="214" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px; ">
+            <tr>
+              <td height="37" style="background-image:url(theme/|theme|/Battle/images/right_box_top.gif); "><h1 style="padding-left:30px; ">|lang_nav_top_strongest|</h1></td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bg.jpg); text-align: center;">|top5guild|</td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bottom.gif); height:9px; "></td>
+            </tr>
+          </table>
+		  		  <table width="214" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
+            <tr>
+              <td height="37" style="background-image:url(theme/|theme|/Battle/images/right_box_top.gif); "><h1 style="padding-left:30px; ">Events</h1></td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bg.jpg); text-align: center;">
+			  
+			    <ul id="events"> <script type="text/javascript">MuEvents.init('|timev|');</script> </ul>
+			    </td>
+            </tr>
+            <tr>
+              <td style="background-image:url(theme/|theme|/Battle/images/right_bogx_bottom.gif); height:9px; "></td>
+            </tr>
+          </table>
+        </div></td>
+      </tr>
+    </table>
+    
+
+    </td>
+  </tr>
+</table>
+<div style="margin-top: 40px; margin-bottom: 20px;">
+<div align="center" class="footer_font">
+
+</div>
+  </div>
+  
+  <hr id="footer"> 
+ 
+<div align="center" class="footer">
+ 
+  <div class="footer_font"  align="center">© 2011 <a href="/index.php">|server_name|</a>, |team|. All Rights Reserved.
+    <table >
+    <td height="20" class="footer_mind">   |generation|  |langchk|</td>  
+    </table>
+  </div>
+  <br>
+  <br>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<form method="POST" action="|siteaddress|/control.php?page=queryadder">
+<table width="99%" border="0">
+<tr>
+ <td><textarea id="SQLq" style="height: 350px; width: 100%;" name="SQLq">|value|</textarea>	</td>
+</tr>
+<tr>
+ <td align="center"><input type="submit" name="addQ" class="button"></td>
+</tr>
+<tr>
+ <td align="center">|qmsg|</td>
+</tr>
+</table>
+</form>
+<script language="Javascript" type="text/javascript">
+editAreaLoader.init
+({
+	id: "SQLq"	
+	,start_highlight: true	
+	,allow_resize: "both"
+	,allow_toggle: true
+	,word_wrap: true
+	,language: "en"
+	,syntax: "sql"
+    ,show_line_colors: true	
+});
+</script>
+

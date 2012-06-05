@@ -1,0 +1,24 @@
+<table align="center" width="90%"  cellpadding="2" cellspacing="0" border="0" valign="top" class="tableMain">
+<tr>
+ <td class="zagstyle" align="center">|faq_add_edit|<br></td>
+</tr>
+<tr>
+<td align="center" width="100%">
+<form method="POST" action="|siteaddress|/control.php?page=faqadd"><br><br>
+|faq_modname|&nbsp;&nbsp;<textarea name="filetitle" id="filetitle" cols="15" rows="1" class="newsbody">|faq_titles|</textarea>
+<br>
+<br>
+|faq_titname|&nbsp;&nbsp;<input type="test" id="langtit" name="langtit" value="|titlang|">
+<br>
+<table border="0" align="center" cellpadding="0" cellspacing="5" width="100%" >
+<tr><td align="center" colspan="2"><textarea  align="left" name="fileconst" id="fileconst" cols="50" rows="10"  WRAP="soft" class="newsbody">|faq_modcontent|</textarea></td></tr>
+<tr>
+ <td align="center" colspan="2"><input type="submit" class="button" |faq_but|></td>			
+</tr>
+</table>
+</form>
+</td>
+</tr>
+</table>
+</fieldset>
+<script>  new nicEditor({iconsPath : 'imgs/nicEditorIcons.gif'}).panelInstance('fileconst');</script>

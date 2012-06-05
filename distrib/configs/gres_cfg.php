@@ -1,0 +1,16 @@
+<?php if (!defined("insite")) die("no access");
+$gres["greset"]=1;
+$gres["greset_type"]=1;
+$gres["greset_clean"]=1;
+$gres["greset_zen"]=1;
+$gres["greset_res"]=0;
+$gres["greset_lvl"]=1;
+$gres["greset_dw"]=2000;
+$gres["greset_dk"]=2000;
+$gres["greset_mg"]=2000;
+$gres["greset_dl"]=2000;
+$gres["greset_elf"]=2000;
+$gres["greset_s"]=2000;
+$gres["greset_rf"]=2000;
+$gres["greset_reward"]=1;
+$gres["credits_reward"]=200;

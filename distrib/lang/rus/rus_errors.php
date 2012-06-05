@@ -1,0 +1,21 @@
+<?php if (!defined('insite')){die();} 
+$lang["error_no404"]="Страница не найдена";
+$lang["reset_msg1"]="PK не может сделать ресета!"; 
+$lang["reset_msg2"]=" У вас недостаточно зен"; 
+$lang["reset_msg3"]="Ваш уровень слишком мал"; 
+$lang["reset_msg4"]; 
+$lang["reset_msg5"]="У вас есть свободные поинты"; 
+$lang["bank_err1"]="Недостаточно зен для перевода";
+$lang["bank_err2"];
+$lang["upan_err_msg1"]; 
+$lang["upan_err_msg2"]; 
+$lang["no_stats"]="Нет свободных поинтов"; 
+$lang["error_noaccess"]="Нет доступа"; 
+$lang["cred2zen_done"]="Операция прошла успешно"; 
+$lang["cspoints_done"]="Операция прошла успешно"; 
+$lang["ban_account"]="Аккаунт заблокирован"; 
+$lang["enpught_zen"]="недостаточно зен";
+$lang["no_character"]="Нет выбранных персонажей.";
+$lang["register_warr"]="Ошибка регистрации";
+$lang["notdone"]="Ошибка!";
+$lang["online"]="Аккаунт онлайн!";
