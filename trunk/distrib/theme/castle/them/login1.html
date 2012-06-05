@@ -1,0 +1,25 @@
+<form name='loginform' method='POST' action=''>
+ <table width="190" border="0" align="center" cellpadding="0" cellspacing="4">
+  <tr>
+    <td style="height: 25px; padding-left: 2px;  " width="130"><input onfocus="if(this.value=='|lang_nav_loginw|')this.value=''" onblur="if(this.value=='')this.value='|lang_nav_loginw|'" type="text" name='usrlogin' maxlength="10" size="16" class="login_field" value="|lang_nav_loginw|" OnClick="this.value=''"></td>
+    <td rowspan="2">
+    <input type="submit" class='login_b' style="cursor:pointer" name='loginbtn'  value='|lang_nav_loginbtn|'>
+    </td>
+  </tr>
+  <tr>
+    <td style="height: 25px; padding-left: 2px;"><input onfocus="if(this.value=='Password')this.value=''" onblur="if(this.value=='')this.value='Password'" type="password" name='usrpwd' class="login_field" value="Password" maxlength="12" size="16" OnClick="this.value=''"></td>
+   </tr>
+   <tr>
+     <td style="height: 25px; padding-left: 2px;"><img onclick="this.src='kcaptcha/index.php?|session_name|=|session_id|'+Math.random()" src='kcaptcha/index.php?|session_name|=|session_id|'></td>
+  </tr>
+  <tr>
+     <td style="height: 25px; padding-left: 2px;"><input type="text" name='uscpt' class="login_field" value="" maxlength="12" size="16" OnClick="this.value=''"></td>
+  </tr>
+    <tr>
+    <td colspan="2" align="left" class="yellow" style="height: 25px; padding-left: 2px;"><a href='|siteaddress|/?p=forgotpwd'>|forgot_quest|</a></td>
+  </tr>
+     <tr>
+   
+  </tr>
+</table>
+</form>

@@ -1,0 +1,4 @@
+AddDefaultCharset windows-1251
+order allow,deny
+ deny from all
+

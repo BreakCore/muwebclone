@@ -1,0 +1,34 @@
+<script language="Javascript" type="text/javascript">
+editAreaLoader.init
+({
+	id: "SQLq"	
+	,start_highlight: true	
+	,allow_resize: "no"
+	,allow_toggle: true
+	,word_wrap: true
+	,language: "en"
+	,syntax: "php"
+	,syntax_selection_allow: "css,html,js,php,xml,sql"
+    ,show_line_colors: true	
+});
+</script>
+<form method="POST" action="|siteaddress|/control.php?page=moduledit&path=|path|&f=|file|" name="choosedir">
+<table width="99%" border="0">
+ <tr>
+  <td>|list_f| <select name="dirs" onChange="document.choosedir.submit();"><option>Choose path</option>|dnames|</select>
+  <div align="right"><a href="|siteaddress|/control.php?page=moduledit&path=_dat&f=market">Market.db</a></div></td>
+  </tr>
+ <tr>
+  <td align="center">|fnames|</td>
+ </tr>
+ <tr>
+  <td><textarea id="SQLq" style="height: 350px; width: 100%;" name="SQLq">|value|</textarea></td>
+ </tr>
+ <tr>
+  <td align="center"><input type="submit" name="editmodul" class="button"></td>
+ </tr>
+ <tr>
+  <td align="center">|qmsg|</td>
+ </tr>
+</table>
+</form>

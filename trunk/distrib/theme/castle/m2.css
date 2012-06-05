@@ -1,0 +1,303 @@
+<!--
+body {
+	background-image: url(Battle/images/bg_pattern.jpg);
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	font:12px Arial, Verdana, sans-serif; 
+	line-height:20px;
+	color:#5e5c57; }
+
+
+#menu { background:url(Battle/images/bg_buttons_center.jpg) no-repeat; height:119px; width:1008px; }
+.nav { padding-left:70px; padding-top:55px; font-size:18px; color:#d1c6a5; text-shadow:
+        -1px -1px 0 #4d483b,
+        1px -1px 0 #4d483b,
+        -1px 1px 0 #4d483b,
+        1px 1px 0 #4d483b; }
+		.nav:hover { color:#edcf93;
+		cursor:pointer; }
+		.navi { font-size:18px; color:#d1c6a5; text-shadow:
+        -1px -1px 0 #4d483b,
+        1px -1px 0 #4d483b,
+        -1px 1px 0 #4d483b,
+        1px 1px 0 #4d483b; }
+		.navi:hover { color:#edcf93;
+		cursor:pointer; }
+ul, li, ol { list-style-type:none; margin:0; padding:0; }
+
+h1 { color:#cdc099; text-shadow:-1px -1px 0 #26241d, 1px -1px 0 #26241d, -1px 1px 0 #26241d, 1px 1px 0 #26241d; text-align: left; font-size:12px; font-weight:100; }
+
+.tmp_left_menu {  display:block; width:177px; font-size:1px; line-height:1px; margin:-1px auto 0; border-bottom:1px solid #302f28; }
+
+a li { color:#c5c0ad; }
+a li:hover { color:#b66836; text-decoration: none; }
+a { color:#c2b9b0; }
+a:hover { color:#73706e; }
+a:link {text-decoration: none;}
+a:visited {text-decoration: none;}
+a:active {text-decoration: none;}
+.center a { color:#333333; }
+.center a:hover { color: #000; text-decoration:underline; }
+
+
+.tmp_left_menu a { color:#c5c0ad; display:block; font-weight:bold; font-size:11px; line-height:12px; background: url('Battle/images/snb_off.gif') left top no-repeat; padding:5px 0 5px 12px; text-decoration:none;}
+.tmp_left_menu a:hover { font-weight:bold; font-size:11px; line-height:12px; color:#b66836; display:block; background: url('Battle/images/snb_off.gif') left top no-repeat; padding:5px 0 5px 12px; text-decoration:none; }
+.m_title{
+color:#fff; font-size:16pt; padding:12px
+}
+
+ul.snb_1dep li.d2_mnu { display:block; width:177px; font-size:1px; line-height:1px; margin:-1px auto 0; border-bottom:1px solid #302f28; }
+ul.snb_1dep li.d2_mnu a { color:#c5c0ad; display:block; font-weight:bold; font-size:11px; line-height:12px; background: url('Battle/images/snb_off.gif') left top no-repeat; padding:5px 0 5px 12px; text-decoration:none; }
+ul.snb_1dep li.d2_mnu a:hover { font-weight:bold; font-size:11px; line-height:12px; color:#b66836; display:block; background: url('Battle/images/snb_off.gif') left top no-repeat; padding:5px 0 5px 12px; text-decoration:none; }
+.ah1n1 {font-size: 13px; font-family: Tahoma; color: #c5c0ad; text-shadow: #000 1px 3px 2px; }
+
+
+ul.quicklink, #subleft div.quickbnr ul.quicklink { padding:3px 0 0; }
+ul.quicklink li, #subleft div.quickbnr ul.quicklink li { font-size:11px; color:#323232; line-height:14px; background: url('Battle/images/bu_ql.gif') 9px 8px no-repeat; padding:2px 16px 0; }
+ul.quicklink li a, #subleft div.quickbnr ul.quicklink li a { color:#323232; }
+
+
+
+
+
+ul.membermnu { position:relative; clear:both; margin-top:3px; padding:0 0 0 16px; }
+ul.membermnu li { display:block; height:13px; padding:3px 0 0 0; font-size:11px; vertical-align:top; color:#cfb988;}
+ul.membermnu li { display:block; height:13px; padding:3px 0 0 16px; background:url('Battle/images/icon_login_forgot.gif') 0 5px no-repeat; font-size:11px; vertical-align:top; }
+ul.membermnu li a{ font-size:11px; color:#cfb988; text-decoration: underline;}
+ul.membermnu li a:hover{ font-size:11px; color:#cfb988; text-decoration: underline;}
+
+.forgtpwd { background:url('Battle/images/icon_login_forgot.gif') no-repeat; height:12px; width:12px; float:left; margin-left:5px; margin-top:3px; }
+.link_l { float:left; margin-left:2px; color:#FFCC00; }
+.link_l:hover { color:#FFCC99; }
+
+
+
+
+.where_nav{
+margin:4px; padding:2px;
+margin:0 auto; display:block;
+margin-left:20px;
+margin-right:20px;
+font: 11px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
+color: #111111;
+}
+
+
+
+
+.right_page_content { font:normal 12px/24px Arial, Helvetica, sans-serif; color:#375264; margin-left:15px;  margin-bottom: 5px;  width: 647px; }
+.right_page_content a{color:#8c3f67; text-decoration:underline;}
+.right_page_content a:hover{color:#8c3f67; text-decoration:none;}
+
+.tmp_right_content { width: 100%; background-color:#FFFFFF; }
+.tmp_m_content { margin:4px; padding:2px; margin-bottom: 10px; }
+.tmp_m_content .tmp_right_title {background:url('Battle/images/bg_sub_location.gif')  repeat-y; height:29px; font:12px Arial, Verdana, sans-serif;  color:#555555; padding-left:30px; }
+.tmp_page_content { font:normal 12px/24px Arial, Helvetica, sans-serif; color:#5e5c57; margin:5px; }
+.banners { background:url('Battle/images/sub_title_quicklink.gif') no-repeat ; width:214px;height:32px; padding-left:25px; }
+
+
+
+
+
+.msg_success{
+background: #c2ffaf;
+border: 1px solid #cccccc; 
+padding: 4px;
+padding-left: 33px;
+margin-bottom: 6px;
+margin-top: 6px;
+background-image:url(Battle/images/success.gif);
+background-repeat:no-repeat;
+background-position: 10px;
+font-size: 11px;
+font-weight: bold;
+color: #444444;
+}
+
+.msg_error{
+background: #F9F2B9;
+border: 1px solid #cccccc; 
+padding: 4px;
+
+padding-left: 33px;
+margin-bottom: 6px;
+margin-top: 6px;
+background-image:url(Battle/images/warning.gif);
+background-repeat:no-repeat;
+background-position: 10px;
+font-size: 11px;
+font-weight: bold;
+color: #444444;
+}
+	
+
+
+
+
+
+.warehouse_block{ 
+border: 0px;
+text-align: center;
+background: url(Battle/images/warehouse_block.gif);
+}
+
+.warehouse_item_block {
+border: 0px;
+padding: 0px;
+text-align: center;
+background: url(Battle/images/warehouse_item_block.gif);
+}
+
+.warehouse_bg {
+border: 0px;
+padding: 0px;
+text-align: center;
+background: url(Battle/images/warehouse_bg.gif);
+}
+
+.item_name{
+font: 12px Arial, sans-serif; 
+color: #ffffff;
+font-weight: bold;
+}
+
+.item_dur{
+font: 11px Arial, sans-serif; 
+color: #ffffff;
+}
+
+.item_requirement{
+font: 11px Arial, sans-serif; 
+color: #ffffff;
+}
+
+.item_skill{
+font: 11px Arial, sans-serif; 
+color: #ffffff;
+}
+
+.item_options{
+font: 11px Arial, sans-serif; 
+color: #ffffff;
+}
+
+.iD_dashed{
+border-top: #ffffff dashed 1px;
+}
+
+
+
+
+.curent_step{
+background: #FFEF73; border: 1px solid #cccccc; 
+padding: 2px;
+font:bold 11px Arial;
+color:#555555;
+}
+
+.step{
+background: #ECECEC; 
+border: 1px solid #cccccc; 
+padding: 2px;
+font:bold 11px Arial;
+color: #D4D4D4;
+}
+
+.hidden_password{
+border: 1px solid #cccccc; 
+background: #ECECEC; 
+padding: 2px;
+width: 200px;
+color: #ECECEC;
+}
+
+/*Footer */
+.footer_font{font:  normal 11px Tahoma, Calibri, Verdana, Geneva, sans-serif;color: #555555; padding-left:80px; padding-right:80px;}
+.footer_font a{padding-bottom:5px;font: text-decoration: underline; normal 11px Tahoma, Calibri, Verdana, Geneva, sans-serif;color: #333333;text-decoration: none}
+.footer_font a:hover{font:  normal 11px Tahoma, Calibri, Verdana, Geneva, sans-serif;color: #FFFFCC;text-decoration: underline;}
+#footer { width:1100px; }
+.footer_mind { background-color:#FFFFCC; padding-left:5px; padding-right:5px; border:dashed 1px #ff0000;-moz-border-radius: 41px;-webkit-border-radius: 41px;border-radius: 41px; opacity:0.5; }
+.footer_mind:hover { opacity:1; }
+
+.table_list{
+background: #ffffff;
+color: #000000;
+border: outset 1px #DEE0E2;
+}
+
+.table_list .title{
+background: #DFDFFF;
+font: bold 11px tahoma, verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
+padding: 2px;
+padding-left: 4px;
+color: #595959;
+border: outset 1px #555555;
+}
+
+.table_list .even{
+background: #ECECFF;
+}
+
+.table_list .content{
+font: 11px tahoma, verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
+padding: 2px;
+padding-left: 4px;
+}
+
+.usercp_module{
+font-weight:bold;
+background-color:#FF0000;
+color: #ffffff;
+padding: 2px;
+padding-left: 4px;
+width: 140px;
+}
+
+
+
+
+
+
+div.shop_list { float:left; margin-left:-21px; padding:8px 0 30px 0; background:url('../image.webzen.net/Global/SUN/news/tbl_dotline.gif') left bottom repeat-x; }
+div.shop_list div.sl_box { float:left; position:relative; display:inline; width:332px; margin-left:21px; background: url('../image.webzen.net/Global/SUN/shop/bg_item_list.gif') 0 19px no-repeat; }
+div.shop_list div.sl_box a { display:block; position:relative; width:332px; height:110px; margin:19px 0 0 0; }
+div.shop_list div.sl_box a:hover { color:#727171; text-decoration:underline; }
+div.shop_list div.sl_box a:hover strong { text-decoration:underline; }
+div.shop_list div.sl_box a:hover p.coin { text-decoration:underline; }
+div.shop_list div.sl_box a:hover p.text { text-decoration:underline; }
+div.shop_list div.sl_box a span.itemnew { display:block; position:absolute; top:-1px; right:-1px; width:47px; height:36px; background: url('../image.webzen.net/Global/SUN/common/icon/item_new.gif') left top no-repeat; cursor:pointer; }
+div.shop_list div.sl_box a span.itemhot { display:block; position:absolute; top:-1px; right:-1px; width:47px; height:36px; background: url('../image.webzen.net/Global/SUN/common/icon/item_popular.gif') left top no-repeat; cursor:pointer; }
+div.shop_list div.sl_box a span.itemevent { display:block; position:absolute; top:-1px; right:-1px; width:47px; height:36px; background: url('../image.webzen.net/Global/SUN/common/icon/item_event.gif') left top no-repeat; cursor:pointer; }
+div.shop_list div.sl_box a span.itemsale { display:block; position:absolute; top:-1px; right:-1px; width:47px; height:36px; background: url('../image.webzen.net/Global/SUN/common/icon/item_sale.gif') left top no-repeat; cursor:pointer; }
+div.shop_list div.sl_box a span.itemtag span { display:none; }
+div.shop_list div.sl_box a dl { width:320px; overflow:hidden; cursor:pointer; }
+div.shop_list div.sl_box a dl dt { position:relative; float:left; width:66px; height:54px; padding:15px 15px 0 15px; }
+div.shop_list div.sl_box a dl dt img { margin:14px; }
+div.shop_list div.sl_box a dl dt span.frame { display:block; width:66px; height:66px; background: url('../image.webzen.net/Global/SUN/shop/bg_item_frame.gif') no-repeat; }
+div.shop_list div.sl_box a dl dd { float:left; width:221px; padding-top:15px; }
+div.shop_list div.sl_box a dl dd strong { display:block; font:bold 11px/14px arial; color:#5e5c57; }
+div.shop_list div.sl_box a dl dd p.coin { padding:7px 0; border-bottom:1px solid #afaca0; font:10px/11px arial; color:#323232; }
+div.shop_list div.sl_box a dl dd p.coin span { font:11px/11px arial; color:#b66836; }
+div.shop_list div.sl_box a dl dd p.text { width:221px; height:30px; border-top:1px solid #edebe3; font:11px/14px arial; color:#5e5c57; padding:3px 0 0 0; overflow:hidden; }
+.Estilo36 {color: #c5c0ad}
+
+.blocks { color:#c5c0ad; }
+
+
+
+
+.login_b { background:url(Battle/images/login_button.gif) no-repeat; height:36px; width:52px; border:none; color:#ffe1ab; text-transform:uppercase; font-weight:bold; text-shadow:
+        -1px -1px 0 #4d483b,
+        1px -1px 0 #4d483b,
+        -1px 1px 0 #4d483b,
+        1px 1px 0 #4d483b;
+ }
+.login_b:hover { opacity:0.8; }
+
+#news_image { background:url(Battle/images/news_icon.png) no-repeat; width:16px; height:16px; }
+#tt { margin-left:8px;  }
+.titles {padding-left:15px;  }
+.titles a { color:#333333; font-weight:bold; font-style:oblique; }
+.titles a:hover { color:#000000; }
+-->

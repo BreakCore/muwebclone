@@ -1,0 +1,53 @@
+<script language='javascript'>
+<!--
+function check(id_v,i_n,get_t)
+{
+id_v = "#"+id_v;
+document.getElementById(i_n).innerHTML='<img src=\"../imgs/loading.gif \" />';
+$.ajax({
+	url:	 'login.php?'+get_t+'='+$(id_v).val(), 
+	type:	 'GET', 
+//	data: 'text',
+	cache: false,
+	success: function(response,code){ 
+	  document.getElementById(i_n).innerHTML=response;
+	},
+	error:  function(){
+	document.getElementById(i_n).innerHTML="Can't connect to server!";
+	}
+	});
+}
+//-->
+</script>
+   <br><form method='POST' name='regform' action=''>
+     <table width='90%' border='0' align='center' cellpadding='1' cellspacing='10' dwcopytype='CopyTableRow'>
+                <tr>
+                  <td width="20%" align=center valign='top' class='stylesim'>|register_login|</td>
+                  <td width="20%"><input class="texbx" name="ps_loginname" id='ps_loginname' size='20' maxlength="10" onchange='check("ps_loginname","login_response","acc");'></td>
+                  <td width="60%"><div id='login_response'>|symbols|</div></td>
+                </tr>
+                <tr>
+                  <td width="20%" align=center valign='top' class='stylesim'>|register_name|</td>
+                  <td width="20%"><input name="ps_name" id='ps_name' class="texbx" size='20' maxlength=10></td>
+                  <td width="60%"><span class='stylesim1'>|symbols|</span></td>
+                </tr>
+                <tr>
+                  <td width="20%" align="center" valign='top' class='stylesim'>|register_pwd|</td>
+                  <td width="20%"><input name="ps_password" id='ps_password' type="password" class="texbx" size='20' maxlength=10></td>
+                  <td width="60%"><span class='stylesim1'>|symbols1|</span></td>
+                </tr>
+                <tr>
+                  <td width="20%" align='center' class='stylesim'>|register_repwd|</td>
+                  <td width="20%"><input name="ps_repassword" type="password" id='ps_repassword' class="texbx" size='20' maxlength=10></td>
+                  <td width="60%"><span class='stylesim1'>|symbols1| [A-Z], [a-z], [0-9]</span></td>
+                </tr>
+                <tr>
+                  <td width="20%" align='center' class='stylesim'>|register_email|</td>
+                  <td width="20%"><input name="ps_email" class="texbx" id='ps_email' size='20' maxlength="22" onchange= "check('ps_email','email_response','mail')";></td>
+                  <td width="60%"><span class='stylesim1'><div id='email_response'>|mailZ|</div></span></td>
+                </tr>
+                <tr>
+                  <td width="20%" align='center' class='stylesim'>|register_sword|</td>
+                  <td width="20%"><input class="texbx" maxlength="12"  name='secword' id='secword' size='20'></td>
+                  <td width="60%"><span class='stylesim1'>|register_repwd_w|</span></td>
+                </tr>
