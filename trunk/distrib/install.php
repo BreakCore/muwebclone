@@ -118,12 +118,19 @@ else
   
   case 2:
   if (!$_SESSION["ulogin"] or !$_SESSION["upwd"] or !$_SESSION["udb"] or !$_SESSION["uhost"] or !$_SESSION["utype"]) die("reinstall please.");
-  
+
   $db = new Connect ($_SESSION["utype"], $_SESSION["uhost"], $_SESSION["udb"], $_SESSION["ulogin"], $_SESSION["upwd"],"SQL Server",0); 
+  
    $result = $db->fetchrow($db->query("SELECT data_type FROM information_schema.columns WHERE table_name='MEMB_INFO' AND column_name='memb__pwd'"));
+  print "<pre>";
+  print_r($result);
+  print "</pre>";
    $goon = 0;
   switch($result[0])
    {
+    case "varchar":  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>".$lang["inst_nomd5"]."</td></tr>"; $goon=1;  $_SESSION["md5"]="off";break;
+    case "nvarchar":  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>".$lang["inst_nomd5"]."</td></tr>"; $goon=1;  $_SESSION["md5"]="off";break;
+ 
     case "varbinary" or "binary":  
      $on_screen.= "<tr><td style='font-weight:bold;color:green;'>".$lang["inst_md5"]."</td></tr>";  
      $_SESSION["md5"]="on";
@@ -139,9 +146,7 @@ else
      $db->query("exec sp_addextendedproc 'XP_MD5_EncodeKeyVal', 'WZ_MD5_MOD.dll'")or $error["xp_md5"]=1;
 	 $db->query("Use ".$_SESSION["udb"]);
     break;
-    case "varchar":  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>".$lang["inst_nomd5"]."</td></tr>"; $goon=1;  $_SESSION["md5"]="off";break;
-    case "nvarchar":  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>".$lang["inst_nomd5"]."</td></tr>"; $goon=1;  $_SESSION["md5"]="off";break;
-    default:  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>unknown type!(".$result[0].") Check configs! it maybe some errors</td></tr>"; $goon=1;  $_SESSION["md5"]="off";
+   default:  $on_screen.= "<tr><td style='font-weight:bold;color:red;'>unknown type!(".$result[0].") Check configs! it maybe some errors</td></tr>"; $goon=1;  $_SESSION["md5"]="off";
    }
    
    if ($goon==1)
@@ -254,8 +259,9 @@ END ")or $error["mwc_chartoacc"]=1;
 	[message] [text] NULL,
 	[Fromm] [varchar](10) NULL,
 	[isread] [char](1) NULL,
-	[date] [varchar](25) NULL
-       ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]")or $error["MWC_message"]=1;
+	[date] [varchar](25) NULL,
+	[slave_id] [int] NULL default((0))
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]")or $error["MWC_message"]=1;
 
     $db->query("CREATE TABLE [dbo].[MWC_chat](
 	[message] [text] NULL,
