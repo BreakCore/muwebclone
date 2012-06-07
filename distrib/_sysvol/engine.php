@@ -1,6 +1,7 @@
 <?php  if (!defined('insite'))die("no access");
 /**
 * MuWebClone engine script 1.5.x
+* current 1.5.2.1
 * http://p4f.ru
 **/
 

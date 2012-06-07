@@ -47,7 +47,7 @@ if (!$_REQUEST["sendmail"])
 else
 {
  $msg = htmlspecialchars(trim($_POST["Newmsg"]));
- if(strlen($msg)>10)
+ if(strlen($msg)>2)
  {
   if ($_GET["t"])
   { 

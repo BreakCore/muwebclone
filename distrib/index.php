@@ -52,32 +52,7 @@ if (isset($_POST["chsl"]) && $_SESSION["mwclang"]!=$_POST["chsl"])
  if (is_dir("lang/".$fln))$_SESSION["mwclang"]=$fln;
 }
 
-//change lang menu
-$tm=time();
-$fltm = @filemtime("_dat/cach/lang".substr($_SESSION["mwclang"],0,3));
-if (!$fltm  || ($tm-$fltm>3605))
-{
- ob_start();
- $content->out_content("theme/".$config["theme"]."/them/langmenu_h.html");
- $ld=opendir("lang");
- while (false !== ($file = readdir($ld))) 
- { 
-  if (is_dir("lang/".$file) && $file!= "." && $file != "..") 
-  {
-   $content->set('|value|', $file);
-   $content->set('|caption|', $file);
-   if ($_SESSION["mwclang"]==$file) $content->set('|onsel|', "selected");
-   else $content->set('|onsel|', "");
-   $content->out_content("theme/".$config["theme"]."/them/langmenu_c.html");
-  }  
- }
- $content->out_content("theme/".$config["theme"]."/them/langmenu_f.html");
- $tmt = ob_get_contents();
- write_catch("_dat/cach/lang".substr($_SESSION["mwclang"],0,3),$tmt);
- ob_end_clean(); 
-}
-else $tmt = file_get_contents("_dat/cach/lang".substr($_SESSION["mwclang"],0,3));
-//end change menu
+
 
 if ($config["under_rec"]==1)
 {
@@ -114,7 +89,7 @@ if ($allok==1 or $config["under_rec"]==0)
   $content->set('|lang_menu|', $tmt);
   $content->set('|login|', login());
   $content->set('|loginin|', show_login());
-  $content->set('|baners|', file_get_contents("_dat/baners.dat"));
+  //$content->set('|baners|', @file_get_contents("_dat/baners.dat"));
  
  $contacts = @file("_dat/contact.dat");
  $ct="";
