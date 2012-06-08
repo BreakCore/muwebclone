@@ -3,8 +3,6 @@ define ('insite', 1);
 @include "opt.php";
 $version="1.5.2.1";
 require "_sysvol/them.php";
-$isreinsstall=array();
-
 if(!$_SESSION["mwcsaddr"])
 {
  $sname = explode("/", $_SERVER["SCRIPT_NAME"]);
@@ -45,7 +43,6 @@ else
  $count=0;
  $isreinsstall[0]==0;
 }
-
 if ($_REQUEST["finish"])
  {
   $_SESSION["adm"]=1;
