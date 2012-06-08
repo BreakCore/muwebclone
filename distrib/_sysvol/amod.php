@@ -188,6 +188,7 @@ function get_group()
    elseif ($acclevel>10 && $acclevel<=20) return $content->lng["adm_gr2"]; //moders
    elseif ($acclevel>20 && $acclevel<=30) return $content->lng["adm_gr3"]; //adm helpers
    elseif ($acclevel>30 && $acclevel<=50) return $content->lng["adm_gr4"]; //adm 
+   elseif ($acclevel>50 && $acclevel<100) return "helper guy"; //adm ?
    elseif ($acclevel==100) return $content->lng["adm_gr5"]; //main adm 
    else die("access error!");
   }
