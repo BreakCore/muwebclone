@@ -13,7 +13,7 @@ fwrite($handle,$onexecute);
 fclose($handle);
 
 
-$handle = fopen("lang/rus/rus_site","a");
+$handle = fopen("lang/rus/rus_site.php","a");
 fwrite($handle,chr(13).chr(10).'$lang["g_topa"]="Альянс";');
 fclose($handle);
 
