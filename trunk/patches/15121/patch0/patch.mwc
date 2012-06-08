@@ -17,5 +17,9 @@ $handle = fopen("lang/rus/rus_site","a");
 fwrite($handle,chr(13).chr(10).'$lang["g_topa"]="Альянс";');
 fclose($handle);
 
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
 WriteLogs("Update","Патч №$updaid установлен");
 header("Location: ".$config["siteaddress"]."/control.php?page=update");
