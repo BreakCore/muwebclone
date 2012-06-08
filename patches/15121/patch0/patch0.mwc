@@ -1,0 +1,21 @@
+$updaid=0;
+$version = 15121;
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch0/search.mwc");
+$handle = fopen("pages/search.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch0/search_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/search_f.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$handle = fopen("lang/rus/rus_site","a");
+fwrite($handle,chr(13).chr(10).'$lang["g_topa"]="Альянс";');
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
