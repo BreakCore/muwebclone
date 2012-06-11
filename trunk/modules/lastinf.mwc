@@ -1,0 +1,20 @@
+$mid = 12;
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/lastinf/lastinf.mwc");
+$handle = fopen("_sysvol/lastinf.php","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/modules/lastinf/lastinf.html");
+$handle = fopen("theme/".$config["theme"]."/them/lastinf.html","w+");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$handle = fopen("_dat/modules.dat","a+");
+fwrite($handle,$mid.chr(10));
+fclose($handle);
+
+WriteLogs("Install","lastinf установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");
