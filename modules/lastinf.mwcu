@@ -1,0 +1,8 @@
+$mid = 12;
+
+@unlink("_sysvol/lastinf.php");
+@unlink("theme/".$config["theme"]."/them/lastinf.html");
+
+
+WriteLogs("UnInstall","lastinf установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=modules");
