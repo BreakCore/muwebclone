@@ -1,0 +1,26 @@
+$updaid=0;
+$version = 151297;
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/151297/patch0/ainfo.html");
+$handle = fopen("_sysvol/_a/theme/ainfo.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/151297/patch0/lreader.mwc");
+$handle = fopen("_sysvol/_a/lreader.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/151297/patch0/amod.mwc");
+$handle = fopen("_sysvol/amod.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
