@@ -1,0 +1,32 @@
+<style type="text/css">
+#alertid { font-weight:bold;font-size:12px;color:#de1f1f; padding-top:-8px;  } 
+#updid { font-weight:bold;font-size:12px;color: green; padding-top:-8px;  } 
+</style>
+<script>
+ upd="";
+function uslash()
+{
+ if ( upd.length==0)
+ {
+   upd = "1";
+   $("#updid").fadeOut('slow');
+ }
+ else 
+ {
+   $("#updid").fadeIn("slow");
+   upd="";
+ }
+}
+setInterval('uslash()', 600);
+</script>
+<form method="POST" action="|siteaddress|/control.php">
+  <input id="button_line" type="submit" class="button" name='logout' value="|adm_btn_lout|">
+  
+  <div class="text-line1">|adm_login_title|<span title="|adm_group|: |gradm|"><b>|admin|</b></span>
+  &nbsp;&nbsp;<img src="imgs/letter.png" border="0" alt="сообщения" >
+  <a href="|siteaddress|/control.php?page=checkmail">[|lnum|]</a> 
+  &nbsp;&nbsp;<a id="alertid" href="|siteaddress|/control.php?page=lreader&hvd=|numb|"> |alert_msg| </a>
+  &nbsp;&nbsp;<a id="updid" href="|siteaddress|/control.php?page=update"> |upd_msg| </a>
+  &nbsp;&nbsp;<a href="http://www.p4f.ru/forum/37">Click to Help</a>
+  </div> 
+</form>
