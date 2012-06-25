@@ -1,0 +1,15 @@
+$updaid=5;
+$version = 15121;
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch5/item.inc.mwc");
+$handle = fopen("_sysvol/_a/item.inc.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
