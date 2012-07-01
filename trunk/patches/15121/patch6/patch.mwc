@@ -1,0 +1,49 @@
+$updaid=5;
+$version = 15121;
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail.html");
+$handle = fopen("theme/".$config["theme"]."/them/amail.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail_c_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/amail_c_c.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail_f.html");
+$handle = fopen("theme/".$config["theme"]."/them/amail_f.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail_h.html");
+$handle = fopen("theme/".$config["theme"]."/them/amail_h.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail_h_c.html");
+$handle = fopen("theme/".$config["theme"]."/them/amail_h_c.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amail.mwc");
+$handle = fopen("_usr/amail.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/amod.mwc");
+$handle = fopen("_sysvol/amod.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/checkmail.mwc");
+$handle = fopen("_sysvol/_a/checkmail.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/pages.mwc");
+$handle = fopen("_sysvol/pages.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
