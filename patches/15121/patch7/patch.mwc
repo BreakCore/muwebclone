@@ -1,0 +1,29 @@
+$updaid=7;
+$version = 15121;
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch7/bans.mwc");
+$handle = fopen("_sysvol/_a/bans.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch7/forgotpwd.mwc");
+$handle = fopen("pages/forgotpwd.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch7/item.inc.mwc");
+$handle = fopen("_sysvol/item.inc.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/lreader.mwc");
+$handle = fopen("_sysvol/_a/lreader.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
