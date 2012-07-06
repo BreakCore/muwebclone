@@ -45,13 +45,13 @@ WriteLogs("All_","");
 $db = new Connect ($config["ctype"], $config["db_host"], $config["db_name"], $config["db_user"], $config["db_upwd"],$config["odbc_driver"],$config["debug"]); 
 $content = new content("site",substr($_SESSION["mwclang"],0,3),0);
 autobans();
- 
+ /*
 if (isset($_POST["chsl"]) && $_SESSION["mwclang"]!=$_POST["chsl"])
 {
  $fln = substr($_POST["chsl"],0,3);
  if (is_dir("lang/".$fln))$_SESSION["mwclang"]=$fln;
 }
-
+*/
 
 
 if ($config["under_rec"]==1)
@@ -86,7 +86,7 @@ if ($allok==1 or $config["under_rec"]==0)
   $content->set('|siteaddress|', $config["siteaddress"]);
   $content->set('|theme|', $config["theme"]);
   $content->set('|getmenutitles|', getmenutitles());
-  $content->set('|lang_menu|', $tmt);
+  //$content->set('|lang_menu|', $tmt);
   $content->set('|login|', login());
   $content->set('|loginin|', show_login());
   //$content->set('|baners|', @file_get_contents("_dat/baners.dat"));

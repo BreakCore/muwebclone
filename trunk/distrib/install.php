@@ -122,9 +122,6 @@ else
   $db = new Connect ($_SESSION["utype"], $_SESSION["uhost"], $_SESSION["udb"], $_SESSION["ulogin"], $_SESSION["upwd"],"SQL Server",0); 
   
    $result = $db->fetchrow($db->query("SELECT data_type FROM information_schema.columns WHERE table_name='MEMB_INFO' AND column_name='memb__pwd'"));
-  print "<pre>";
-  print_r($result);
-  print "</pre>";
    $goon = 0;
   switch($result[0])
    {

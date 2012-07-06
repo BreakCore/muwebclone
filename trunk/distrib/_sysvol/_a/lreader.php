@@ -4,6 +4,18 @@ global $config;
 ob_start();
 global $content;
 
+if ($_POST["chosen"]=="a") unset($_POST["chosen"]);
+
+if ($_REQUEST["delalog"])
+{
+ $Lhandle = opendir("logZ");
+ while ($file = readdir($Lhandle))
+ {
+  if ($file != "." && $file != ".." && $file !=".htaccess" && substr($file,0,3)!="Adm") unlink("logZ/".$file);
+ }
+ WriteLogs("Adm_",$_SESSION["sadmin"]." удалил все логи");
+
+}
 if($_REQUEST["dellog"] && $_REQUEST["hvd"]) //удалить лог
 {
  if(substr($_REQUEST["hvd"],0,3)=="Adm")
@@ -17,7 +29,7 @@ if($_REQUEST["dellog"] && $_REQUEST["hvd"]) //удалить лог
  }
   header("Location: ".$config["siteaddress"]."/control.php?page=lreader");
 }
-if($_REQUEST["downl"] && $_REQUEST["hvd"])
+if($_REQUEST["downl"] && $_REQUEST["hvd"]) //загрузить лог
 {
  if (file_exists("logZ/".$_REQUEST["hvd"]))
  {
@@ -29,27 +41,40 @@ if($_REQUEST["downl"] && $_REQUEST["hvd"])
      readfile("logZ/".$_REQUEST["hvd"]);
  }
 }
-$shoZ = "<select name=\"chosen\" class=\"texbx\" style='width:120px;height:20px;' onchange=\"document.onsee.submit()\"><option>. . . </option>";
+$shoZ = "<select name=\"chosen\" class=\"texbx\" style='width:120px;height:20px;' onchange=\"document.onsee.submit()\"><option value = \"a\" >. . . </option>";
 $Lhandle = opendir("logZ");
-$id=0;
+
+
 while ($file = readdir($Lhandle))
 {
-if ($file != "." && $file != ".." && $file !=".htaccess" ) 
- {
-  if ($_POST["chosen"]==$id) $seld = "selected";
-  else $seld="";
-  $opnfilz[$id] = $file;
-  $shoZ.= "<option value='".$id."' ".$seld.">".$file."</option>";
- }
-$id++;
+ if ($file != "." && $file != ".." && $file !=".htaccess" ) $opnfilz[] = $file;
 }
+
+if ($_GET["hvd"])
+{
+ $is = array_search ($_GET["hvd"],$opnfilz);
+ if ($is && $id>=0)
+  $_POST["chosen"]=$is;
+}
+$id=0;
+if (!isset($_POST["chosen"]))$select =-1; else $select = $_POST["chosen"];
+foreach($opnfilz as $k)
+{
+
+  if ($select==$id) $seld = "selected";
+  else $seld="";
+  $shoZ.= "<option value='".$id."' ".$seld.">".$k."</option>";
+  $id++;
+}
+
 $shoZ.= "</select>";
 $content->set('|lreader_list|',  $shoZ);
 $content->out_content("_sysvol/_a/theme/logreader_h.html");
 $content->set('|button|', '');
 $content->set('|dbutton|', '');
 
-if ($_POST["chosen"]) 
+
+if (isset($_POST["chosen"])) 
 {
  if (file_exists("logZ/".$opnfilz[$_POST["chosen"]]) && $opnfilz[$_POST["chosen"]]!="")
  {
@@ -81,12 +106,20 @@ if ($_POST["chosen"])
  else
  {
   $content->set('|content|',  "");
-  $content->set('|button|', '');
   $content->set('|dbutton|', '');
+  $content->set('|button|', '');
   $content->set('|hidlog|', "");
   $content->out_content("_sysvol/_a/theme/logreader_c.html");
  }
 }
+else
+{
+ $content->set('|content|',  "");
+ $content->set('|dbutton|', '');
+ $content->set('|hidlog|', "");
+ $content->set('|button|', '<input type="submit" class="button" value="Delete All" name="delalog">');
+ $content->out_content("_sysvol/_a/theme/logreader_c.html");
+ }
 function slogZ($text) 
 {
  $code = array

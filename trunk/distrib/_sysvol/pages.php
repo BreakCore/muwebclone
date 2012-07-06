@@ -11,25 +11,38 @@ function showst($var)
   global $content;
   global $config;  
  //change lang menu
- ob_start();
- $content->out_content("theme/".$config["theme"]."/them/langmenu_h.html");
- $ld=opendir("lang");
- while (false !== ($file = readdir($ld))) 
- { 
-  if (is_dir("lang/".$file) && $file!= "." && $file != "..") 
-  {
-   $content->set('|value|', $file);
-   $content->set('|caption|', $file);
-   if ($_SESSION["mwclang"]==$file) $content->set('|onsel|', "selected");
-   else $content->set('|onsel|', "");
-   $content->out_content("theme/".$config["theme"]."/them/langmenu_c.html");
-  }  
+
+ if ($_REQUEST["chsl"])
+ {
+  $lan = substr($_POST["chsl"],0,3);
+  if ($_SESSION["mwclang"]!=$lan) $_SESSION["mwclang"]=$lan;
+  header('Refresh: 0;');
  }
- $content->out_content("theme/".$config["theme"]."/them/langmenu_f.html");
- $temp = ob_get_contents();
- write_catch("_dat/cach/lang".substr($_SESSION["mwclang"],0,3),$temp);
- ob_end_clean(); 
- $temp = file_get_contents("_dat/cach/lang".substr($_SESSION["mwclang"],0,3));
+ if (file_exists("_dat/cach/lang".substr($_SESSION["mwclang"],0,3))) $temp = file_get_contents("_dat/cach/lang".substr($_SESSION["mwclang"],0,3));
+ else
+ {
+  ob_start();
+  $content->out_content("theme/".$config["theme"]."/them/langmenu_h.html");
+  $ld=opendir("lang");
+  while (false !== ($file = readdir($ld))) 
+  { 
+   if (is_dir("lang/".$file) && $file!= "." && $file != "..") 
+   {
+    $content->set('|value|', $file);
+    $content->set('|caption|', $file);
+    if ( $_SESSION["mwclang"]==$file) $content->set('|onsel|', "selected");
+    else $content->set('|onsel|', "");
+    $content->out_content("theme/".$config["theme"]."/them/langmenu_c.html");
+   }  
+  }
+
+  $content->out_content("theme/".$config["theme"]."/them/langmenu_f.html");
+  $temp = ob_get_contents();
+  write_catch("_dat/cach/lang".substr($_SESSION["mwclang"],0,3),$temp);
+  ob_end_clean(); 
+ }
+ 
+ //
 //end change menu
  }
  else
