@@ -15,7 +15,7 @@ $handle = fopen("_sysvol/item.inc.php","w");
 fwrite($handle,$onexecute);
 fclose($handle);
 
-$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch6/lreader.mwc");
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch7/lreader.mwc");
 $handle = fopen("_sysvol/_a/lreader.php","w");
 fwrite($handle,$onexecute);
 fclose($handle);
