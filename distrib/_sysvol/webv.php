@@ -516,7 +516,6 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 						if (strlen($lvl380)>2) $display.="<tr><td align=\"center\" valign=\"center\" class=\"refinery\">".$lvl380."</td></tr>";
 						if (strlen($harmony)>2) $display.="<tr><td align=\"center\" valign=\"center\" class=\"harmony\">".$harmony."</td></tr>";
 						if (strlen($socket)>2) $display.="<tr><td align=\"center\" valign=\"center\" class=\"socket\">".$socket."</td></tr>";
-						 
 						$display .="</table>";	
 					}
 					else 
@@ -568,15 +567,16 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 				}
 				if ($type==5)
 				{
-					return  "<table cellspacing=\"0\" cellpadding=\"0\">
-							<tr><td class=\"$csstyle\" align=\"center\" >$name$ilevel</td></tr>
-							<tr><td align=center class=\"$csstyle\"><img src=".$img."  align=center style=width:".($x*32)."px; height:".($y*32)."px;></td></tr>
-							<tr><td class=\"$csstyle\">$display</td></tr>
+					return  "<table cellspacing=\"0\" cellpadding=\"0\" width='100%'>
+							<tr><td class=\"$csstyle\" align=\"center\" >$name $ilevel</td></tr>
+							<tr><td align=center ><img src=".$img."  align=center style=width:".($x*32)."px; height:".($y*32)."px;></td></tr>
+							<tr><td >$display</td></tr>
 							</table>";
 					// "<div id='tooltiper' title='$dd' class='$csstyle'>$name$ilevel</div>";		
 				}
 				if (!file_exists($img))$img="<span style='font-size:8px;'>".$item["group"].". ".$item["id"].". ".$item["lopt"].".</span>"; //если нет изображения
 				else $img = "<img title = '".$display."' src='".$img."' id='tooltiper' alt='".$name."' align='center' style='width:".($x*32)."px; height:".($y*32)."px;'>";			
+				
 				$j=$x*$y;
 				$str=$i;
 				$x1=0;

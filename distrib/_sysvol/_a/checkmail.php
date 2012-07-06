@@ -20,7 +20,7 @@ if (get_accesslvl()>49)
  {
     $msg = htmlspecialchars(trim($_POST["answermsg"]));
     $s_id = (int)$_POST["h_valid"];
-	if($db->query("INSERT INTO MWC_messages (memb___id,message,date,slave_id)VALUES('".$_SESSION["sadmin"]."','".cyr_code($msg)."','".time()."','".$s_id."')"))
+	if($db->query("INSERT INTO MWC_messages (memb___id,message,date,slave_id,isread)VALUES('".$_SESSION["sadmin"]."','".cyr_code($msg)."','".time()."','".$s_id."','3')"))
 	header("Location:".$config["siteaddress"]."/control.php?page=checkmail");
  }
  if ($_GET["mid"])
@@ -28,18 +28,20 @@ if (get_accesslvl()>49)
    $n = checknum(substr($_GET["mid"],0,5));
    $array = $db->fetchrow("SELECT * FROM MWC_messages WHERE id='".$n."'");
    $db->query("UPDATE MWC_messages SET isread='1' WHERE id='".$n."'");
+   $content->set('|smail_Date|', @date("H:i d.m.Y",$array[5]));
    $content->set('|mnik|', $array[1]);
    $content->set('|msg|', $array[2]);
-
    $content->out_content("_sysvol/_a/theme/checkmail_form_c.html");
+ 
    
-   $qq= $db->query("Select * FROM MWC_messages WHERE slave_id='".$n."'");
+   $qq= $db->query("Select * FROM MWC_messages WHERE slave_id='".$n."' order by id asc");
    
    While($tar=$db->fetchrow($qq))
    {
     $content->set('|mnik|', $tar[1]);
     $content->set('|msg|', $tar[2]);
     $content->set('|id|', $tar[0]);
+	$content->set('|smail_Date|', @date("H:i d.m.Y",$tar[5]));
     $content->out_content("_sysvol/_a/theme/checkmail_form_c.html");
    }
    $content->set('|id|', (int)$_GET["mid"]);
@@ -53,7 +55,7 @@ if (get_accesslvl()>49)
   while($myrows = $db->fetchrow($query))
   {
    $content->set('|m_name|', $myrows[1]);
-   $content->set('|m_date|', @date("H:i m,Y",$myrows[5]));
+   $content->set('|m_date|', @date("H:i d.m.Y",$myrows[5]));
    $content->set('|id|', $myrows[0]);
    $content->out_content("_sysvol/_a/theme/checkmail_c.html");
    $n++;

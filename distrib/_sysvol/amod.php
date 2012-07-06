@@ -110,7 +110,7 @@ function ainfo()
  global $content;
  $alert=0;
  
- $letters = $db->numrows("SELECT id FROM MWC_messages WHERE slave_id=0 and isread=0");
+ $letters = $db->numrows("SELECT id FROM MWC_messages WHERE slave_id=0 and isread=0 or slave_id=0 and isread=NULL");
  ($letters<1) ? $letters=0 : true;
  $content->set('|lnum|', $letters);
  $content->set('|admin|', $_SESSION["sadmin"]);
@@ -120,6 +120,7 @@ function ainfo()
  $warn = array("Inject","MaybeP","Connec","ALARMA","Pages_");
  $Lhandle = opendir("logZ");
 
+ $gfile="";
  $id=0;
  if (get_accesslvl()>=checacc("lreader"))
  {
@@ -128,6 +129,7 @@ function ainfo()
    if (in_array(substr($file,0,6),$warn))
    {
     $alert=1;
+	$gfile=$file;
     break;
    }
   }
@@ -137,12 +139,15 @@ function ainfo()
   
  if($alert>0)
  {
+
   $content->set('|alert_msg|', "<img src=\"imgs/x.gif\" border=\"0\" alt=\"сообщения\" style=\"position:relative;top:4px;left:0px;\">".$content->lng["adm_warn"]);
  $content->set('|vari|', 1);
+ $content->set('|numb|', $gfile);
  }
  else
  {
   $content->set('|alert_msg|', "");
+  $content->set('|numb|',"");
   $content->set('|vari|', 0);
  }
  //update

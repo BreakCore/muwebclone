@@ -37,9 +37,11 @@ if (!$ntime or time()- $ntime >$qinfo["cach"])
    {
      $maxconnect = $sql;
      $db->query ("UPDATE MWC SET value='".$maxconnect."' WHERE parametr='ovalue'");
-     $connected = "<a href='".$config["siteaddress"]."/?p=online'>".$sql."</a>(".$maxconnect.")";
+    $connected = "<a href='".$config["siteaddress"]."/?p=online'>".$sql."</a>(".$maxconnect.")";
+
    }
-   else $connected = "<a href='".$config["siteaddress"]."/?p=online'>".$sql."</a>(".$maxconnect.")";
+  else $connected = "<a href='".$config["siteaddress"]."/?p=online'>".$sql."</a>(".$maxconnect.")";
+
    unset ($sql);
    $content->set('|write|', $content->lng["online_msg"]);
    $content->set('|value|', $connected);

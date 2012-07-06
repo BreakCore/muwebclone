@@ -26,7 +26,7 @@ if ($_GET["t"])
    $content->set('|dat|', @date("H:i m,Y",$onshow[5]));
    $content->set('|msg|', $array[2]);
    $content->out_content("theme/".$config["theme"]."/them/amail_c_c.html"); 
-   $qq= $db->query("Select * FROM MWC_messages WHERE slave_id='".$n."'");
+   $qq= $db->query("Select * FROM MWC_messages WHERE slave_id='".$n."' order by id asc");
    
    
    While($tar=$db->fetchrow($qq))

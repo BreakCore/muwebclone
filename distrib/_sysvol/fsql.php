@@ -40,7 +40,7 @@ class Connect
      else
      {
       $this->logs("mssql_connect: no connect to tadabase in host: $host and user: $user");
-      echo "no db connect!";
+      //echo "no db connect!";
      }
 	}
 	else
@@ -60,7 +60,7 @@ class Connect
     if (odbc_error())
     {
      $this->logs(@odbc_errormsg($this->res_id)."  no odbc connect!");
-     if ($this->errors==1) echo $this->res_id." no odbc connect!";
+     //if ($this->errors==1) echo $this->res_id." no odbc connect!";
 	  $this->constate = "<div style='font-weight:bold;color:red;'>Connection <u>Not</u> Work!</div>";
 	 unset($this->res_id);
      return false;
