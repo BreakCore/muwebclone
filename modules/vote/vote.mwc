@@ -2,6 +2,7 @@
 global $config;
 global $db;
 global $content;
+require ("configs/voteadm_cfg.php");
 $content->add_dict($_SESSION["mwclang"],"voteadm");
 ob_start();
 $content->set("|msg|","");
@@ -52,10 +53,10 @@ if ($_GET["top"])
 }
 else
 {
- $colvo = $db->numrows("SELECT * FROM mwc_vote_list");
+ $colvo = $db->numrows("SELECT * FROM mwc_vote_list WHERE id!=".$voteadm["tnum"]);
  if ($colvo>0)
  {
-  $wats_v = $db->query("SELECT * FROM mwc_vote_list");
+  $wats_v = $db->query("SELECT * FROM mwc_vote_list WHERE id!=".$voteadm["tnum"]);
   while($result = $db->fetcharray($wats_v))
   {
    $result["top_pic"]=unhtmlentities($result["top_pic"]);
