@@ -1,46 +1,38 @@
-=Рекомендуемое ПО=
+=Recommended software=
 
-  * php 5.2(_можно выше, но придется настраивать_)
-  * любой веб-сервер, поддерживающий php
-  * наличие curl-библиотеки(*_желательно_*)
-  * возможность работы с sockets через php(*_желательно_*)
+  * php 5.2(or hight)
+  * any web server that supports php
+  * the presence of curl-library (*_desirable_*)
+  * opportunity to work with sockets in php(*_desirable_*)
 
 ==Настройки веб сервера==
-  # должен быть включен mod_rewrite
+  #  mod_rewrite on
   # register_globals = off in php.ini
 
-== Процесс установки сайта ==
-Если сайт устанавливается впервые, то достаточно в браузере указать адрес хоста, где располагается сайт.
+== The installation ==
+If you install site first time for database, just specify the address of the server where the site is
+  _*Importantly!*_ if you install site in your computer for test and do not want to public you server in LAN or Internet,
+  you can write http://locallhost in other case http://somedomain.ru or server's IP
 
-  _*Важно!*_ если вы ставите сайт на собственном компьютере для тестирования
-  возможностей и не собираетесь публиковать в локальной сети или сети интернет,
-  то можете в качестве адреса при установке(при первом запуске) указывать 
-  http://locallhost. В иных случаях следует указывать http://somedomain.ru 
-  или http://55.240.51.92 (внишний не динамический IP-адрес)
+  if you decided public you site(server) and do not want reinstall it just 
+  edit adress in admin-panel end clean cach (`_dat/menus` or throw button in site) 
 
-  Если вы поставили сайт на "localhost", но собираетесь публиковать его в сеть,
-  то в админ - панели следует изменить адрес сайта и очистить кеш меню в менеджере
-  меню. Или открыть opt.php найти там адрес и изменить на желаемый, после чего в
-  `_dat/menus` удатить все файлы, кроме *_.htaccess_*
+  So, first stap is choose language.
+  second, you will see table with settings:
 
-При установке, самое первое, что предстоит сделать - выбрать язык установки. Доступны 2 языка - Русский и Английский. Выбор производится кликом левой кнопкой мыши на  нужную иконку флага.
+  * COnnection type ODBC/SQL 
+  * Login SQL
+  * Password SQL
+  * Database name (default: muonline)
+  * adress SQL server
 
-На *втором шаге* вам предстоит помочь сайту сделать проверку соединения, заполнив поля:
-
-  * Тип подключения ODBC/SQL (выбираете как вам удобнее или какое будет работать)
-  * Логин к SQL серверу
-  * Пароль к SQL серверу
-  * Название базы данных
-  * Адрес SQL сервера - тут лучше указать либо имя машины(если в локальной сети или на компьютере), либо IP адрес. *Не стоит указывать доменное имя сайта, если SQL сервер стоит там же где и сайт.*
-
-После заполнения полей потребуется нажать на кнопку проверки соединения. Если попытка соединится с SQL-сервером прошла удачно, то появится кнопка "Далее". Если соединение прошло с ошибками, то проверьте, правильно ли вы ввели данные. Если после проверки соединение так и не удалось выполнить, то в папке сайта logZ лежит файл `Connect_[дата].log` в нем ошибка описана более подробно. Если вы не знаете как её решить, тогда пишите на http://www.p4f.ru/forum/ с подробным описанием проблемы и логами, попробуем разобраться вместе.
-
-Следующий этап - создание необходимых таблиц. Сайт выполняет все в автоматическом режиме. Единственное, что вы можете видеть, какой у вас тип базы данных:  с использованием md5 шифрования паролей или без.
-
-Последний важный этап - *"Создание учетной записи администратора"*.
-Заполняем учетные данные и "Ник администратора"(следует использовать только буквы английского алфавита и цифры, я, например, пишу Alexey). После заполнения нажимаем кнопку "Далее"
-
-Последний шаг "Завершение установки". После нажатия на Finish вас должно перекинуть на сайт(можно сразу зайти за админа, через обычную панель пользователя), проверяем наличие в корне сайта Install.php, если есть - переносим его в папку `_dat`, если нету, то все.
-Итак, поздравляю, с установкой MWC v 1.5.x. Надеюсь, что все оказалось просто и без проблем.
+  fill line and click on check button
+  If all ok - you will see next button, click it.
+  
+  Third stap - creating table in sql. The site provides all automatic.
+  
+  And last step  - create you admin account.
+  _*Note!*_ Admin acc for site, in server you not found it. You can write exests account, but different passwords or create completely identical account on your choice
+   admin nick is for admin chat [0-9A-z]
 
 <g:plusone></g:plusone>
