@@ -47,7 +47,7 @@ if ($_REQUEST["giveaprize"])
  {
    if($_POST["chkbox".$i])
    {
-    $query.=" UPDATE mwc_vote_top SET clicks=0,realvotes=realvotes+1 WHERE id='".checknum($_POST["chkbox".$i])."'";
+    $query.=" UPDATE mwc_vote_top SET realvotes=realvotes+clicks, clicks=0 WHERE id='".checknum($_POST["chkbox".$i])."'";
     $nick = $db->fetchrow("SELECT memb___id,top_id FROM mwc_vote_top WHERE id = '".checknum($_POST["chkbox".$i])."'");
     $topinfo = $db->fetchrow("SELECT credits FROM mwc_vote_list WHERE id ='".$nick[1]."' ");
     $query.=" UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+".$topinfo[0]." WHERE ".$config["cr_acc"]."= '".$nick[0]."'";
@@ -63,64 +63,103 @@ if ($_REQUEST["giveaprize"])
   echo "error!";
 
 }
+
+// если нажата кнопка проверки ммо топа
 if ($_REQUEST["mmochk"])
 {
-
  $topinfo = $db->fetchrow("SELECT flag, credits,top_addres,top_name FROM mwc_vote_list WHERE id='".$voteadm["tnum"]."'");
- $query = $db->query("SELECT * FROM mwc_vote_top WHERE clicks > '0' and top_id='".$voteadm["tnum"]."'");
+ $query = $db->query("SELECT * FROM mwc_vote_top WHERE top_id='".$voteadm["tnum"]."'");
 
+ $votequery = array();
  $i=0;
  while($temp = $db->fetchrow($query))
  {
   $votequery[$i][0]=$temp[1];//memb id
   $votequery[$i][1]=$temp[4];//date
+  $votequery[$i][2]=$temp[6];//clics
   $i++;
  }
+/*
+  print "<pre>";
+ print_r($votequery);
+ print "</pre>";*/
 
+ 
+ 
  function findmatch($value,$votequery)
  {
- foreach ($votequery as $id=>$oa)
- {
-  if ($oa[0]==$value) return $id;
+   foreach ($votequery as $id=>$oa)
+   {
+    if(trim($oa[0])==$value)return $id;
+   }
+  return -1;
  }
- return "no";
- }
+ 
  $contentZ = @file_get_contents($voteadm["mmotoplink"]);
 
  $massive=explode("\n", $contentZ);
+  
+
+ $i =0;
+ krsort($massive);
  foreach($massive as $id=>$value)
  {
-  $asd=explode("	",$value);
-  /*  0 - voter id  1 - date  2 - ip 3 - nick    4 - count votes  */
+  $asd=explode("	",$value);  /*  0 - voter id  1 - date  2 - ip 3 - nick    4 - count votes  */
   $asd[3]=trim($asd[3]);
   if (strlen($asd[3])>2)
-  { 
-   $account = $db->fetchrow("exec MWC_chartoacc '".$asd[3]."'"); //получааем ак
-   if(strlen($account[0])>2 || trim($account)!="")
-   {
-    $isright = $db->numrows("SELECT memb___id FROM MEMB_INFO WHERE memb___id='".$asd[3]."'");
-	($isright>0)? $account[0] = $asd[3]: $account[0]=0;
+  {
+    if ($i>=0)
+	  $n = findmatch($asd[3],$votequery); 
+	else 
+	$n=-1; 
+   if ($n<0)//если аккаунт отсутствует в списке
+   { 
+    $votequery[$i][0]=$asd[3];//memb id
+    $votequery[$i][1]=strtotime($asd[1]);//date
+    $votequery[$i][2]=1;//clics   
+	$votequery[$i][3]=1;
    }
-   else 
-     $account[0]=$asd[3];// если был вписан акк изначально
-   
-   if(strlen($account[0])>2) //если перс существует
+   else
    {
-   
-    $num = findmatch($account[0],$votequery);
-    if ($num!="no")//если в базе голосов этот акк есть
+   // echo  $n." -".$votequery[$n][1]." ".$votequery[$n][0]."<=".strtotime($asd[1])." ".$asd[3]."<br>";
+	if($votequery[$n][1]< strtotime($asd[1])) 
     {
-	 
-     if($votequery[$num][1]<= strtotime($asd[1])) // если человек голосовал через сайт
-     {
-      if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+1, clicks=0 WHERE memb___id='".$account[0]."'and top_id='".$voteadm["tnum"]."'  UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".$topinfo[1]." WHERE ".$config["cr_acc"]."='".$account[0]."'"))
-      WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$account[0]." начисленны кредиты");
-     }
+       $votequery[$n][1] = strtotime($asd[1]);
+	   $votequery[$n][2]+=1;
+	  /* print "<pre>";
+       print_r($votequery[$n]);
+       print "</pre>";*/
     }
-	//else
-	 // WriteLogs($topinfo[3]."_voters(auto)",$account[0]." голосовал, перехожду к следующему");
    }
+   $i++;
   }
+ }
+ foreach  ($votequery as $stri)
+ {
+   if ($stri[3]==1) //создать заново
+   {
+    if (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".$stri[0]."','".$voteadm["tnum"]."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')"))
+	{
+	 while (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".$stri[0]."','".$voteadm["tnum"]."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')")){}
+	} 
+	WriteLogs($topinfo[3]."_voters(auto)"," в топе отсутствует аккаунт $stri[0]. Скорее всего голосовал не через сайт. Внесен в список");
+   }
+   else
+   {
+    if ($stri[2]>0 && strlen($stri[2])>0)
+	{
+	 if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".$stri[0]."'and top_id='".$voteadm["tnum"]."'"))
+	 {
+	  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".$stri[0]."'");
+      WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$stri[0]." начисленны кредиты ".($topinfo[1]*$stri[2]));
+	 }
+	 else
+	 {
+	  while(!$db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".$stri[0]."'and top_id='".$voteadm["tnum"]."'  UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".$stri[0]."'")){}
+	      WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$stri[0]." начисленны кредиты ".($topinfo[1]*$stri[2]));
+	 }
+	}
+   }
  }
  header("Location: ".$config["siteaddress"]."/control.php?page=voteadm");
 }
