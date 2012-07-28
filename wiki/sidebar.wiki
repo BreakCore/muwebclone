@@ -1,2 +1,2 @@
-﻿[Install.wiki Установка(Install)]
-[localization.wiki Локализация(localization)]
+﻿[Install Установка(Install)]
+[localization Локализация(localization)]
