@@ -1,0 +1,2 @@
+﻿ * [Install Установка(Install)]
+ * [localization Локализация(localization)]
