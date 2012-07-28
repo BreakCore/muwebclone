@@ -1,3 +1,4 @@
+#sidebar sidebar
 =Recommended software=
 
   * php 5.2(or hight)

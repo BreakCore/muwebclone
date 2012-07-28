@@ -1,3 +1,4 @@
+#sidebar sidebar
 = How do localization =
 
 In site folder lang you will see folders with abbreviated names of languages (ex. rus, eng, uak)
