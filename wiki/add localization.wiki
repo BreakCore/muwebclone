@@ -1,0 +1,10 @@
+= How do localization =
+
+In site folder lang you will see folders with abbreviated names of languages (ex. rus, eng, uak)
+each name of lang should have 3 symbols 
+create folder with name of language wich you want localizate,
+next install on site all modules witch you want see on site
+next copy all files from rus folder in your language folder location witch you want to do, rename all files for you lang name
+(ex. we have rus_guildtop.php but copy this file into uak, so we should rename it uak_guildtop.php)
+when all files will be renamed, open first of it and rewrite russian (for example) letters to  letters witch you want.
+when all files will be translated go to your site and choose new language. 
