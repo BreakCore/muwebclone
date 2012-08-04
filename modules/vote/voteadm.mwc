@@ -79,12 +79,6 @@ if ($_REQUEST["mmochk"])
   $votequery[$i][2]=$temp[6];//clics
   $i++;
  }
-/*
-  print "<pre>";
- print_r($votequery);
- print "</pre>";*/
-
- 
  
  function findmatch($value,$votequery)
  {
@@ -126,9 +120,7 @@ if ($_REQUEST["mmochk"])
     {
        $votequery[$n][1] = strtotime($asd[1]);
 	   $votequery[$n][2]+=1;
-	  /* print "<pre>";
-       print_r($votequery[$n]);
-       print "</pre>";*/
+
     }
    }
    $i++;
@@ -148,6 +140,7 @@ if ($_REQUEST["mmochk"])
    {
     if ($stri[2]>0 && strlen($stri[2])>0)
 	{
+	 $stri[0] = trim(substr($stri[0],0,10));
 	 if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".$stri[0]."'and top_id='".$voteadm["tnum"]."'"))
 	 {
 	  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".$stri[0]."'");
