@@ -18,6 +18,10 @@ $onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/1512
 $handle = fopen("index.php","w");
 fwrite($handle,$onexecute);
 fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch9/engine.mwc");
+$handle = fopen("_sysvol/engine.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
 
 $handle = fopen("_dat/updates.dat","a+");
 fwrite($handle,$updaid.",".$version.chr(10));
