@@ -1,0 +1,8 @@
+<?php if (!defined('insite')) die("no access"); 
+global $config;
+if (!isset($_SESSION["user"]) && !isset($_SESSION["pwd"])) 
+{
+ global $content;
+ $content->out_content("theme/".$config["theme"]."/them/logininpage.html");
+}
+else header("Location:".$config["siteaddress"]."/index.php");
