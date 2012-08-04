@@ -24,7 +24,7 @@ fwrite($handle,$updaid.",".$version.chr(10));
 fclose($handle);
 
 $handle = fopen("_dat/pm.dat","a+");
-fwrite($handle,"login||1\r\n";
+fwrite($handle,"login||1\r\n");
 fclose($handle);
 $handle = fopen("lang/rus/rus_titles.php","a+");
 fwrite($handle,'$lang["title_login"] ="¬ход в личный кабинет";\r\n');
