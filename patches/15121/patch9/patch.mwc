@@ -27,10 +27,10 @@ $handle = fopen("_dat/pm.dat","a+");
 fwrite($handle,"login||1\r\n";
 fclose($handle);
 $handle = fopen("lang/rus/rus_titles.php","a+");
-fwrite($handle,'$lang["title_login"] ="¬ход в личный кабинет";\r\n';
+fwrite($handle,'$lang["title_login"] ="¬ход в личный кабинет";\r\n');
 fclose($handle);
 $handle = fopen("lang/rus/rus_site.php","a+");
-fwrite($handle,'\r\n $lang["capthaerr"]="¬веден неверный код с картинки!";';
+fwrite($handle,'\r\n $lang["capthaerr"]="¬веден неверный код с картинки!";');
 fclose($handle);
 
 WriteLogs("Update","ѕатч є$updaid установлен");
