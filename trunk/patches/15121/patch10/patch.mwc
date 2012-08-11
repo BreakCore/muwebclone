@@ -1,0 +1,59 @@
+$updaid=10;
+$version = 15121;
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/letterZ.png");
+$handle = fopen("imgs/letterZ.png","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/engine.mwc");
+$handle = fopen("_sysvol/engine.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/install.mwc");
+$handle = fopen("_dat/install.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/checkmail.mwc");
+$handle = fopen("_sysvol/_a/checkmail.php","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/checkmail_c.html");
+$handle = fopen("_sysvol/_a/theme/checkmail_c.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+$onexecute = unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch10/checkmail_h1.html");
+$handle = fopen("_sysvol/_a/theme/checkmail_h1.html","w");
+fwrite($handle,$onexecute);
+fclose($handle);
+
+global $db;
+$db->query("DROP TABLE [dbo].[MWC_messages]"); 
+ $db->query("CREATE TABLE [dbo].[MWC_messages](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[memb___id] [varchar](10) NULL,
+	[message] [text] NULL,
+	[Fromm] [varchar](10) NULL,
+	[isread] [char](1) default('0') NULL,
+	[date] [varchar](25) NULL,
+	[slave_id] [int] NULL default((0))
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]");
+
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+
+
+$handle = fopen("lang/rus/opt_cfg.php","a+");
+fwrite($handle,"\r\n".'$lang["ucapch"] ="Использовать капчу при авторизации (1/0)";');
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
