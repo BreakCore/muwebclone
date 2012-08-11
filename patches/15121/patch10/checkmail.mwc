@@ -56,9 +56,11 @@ if (get_accesslvl()>49)
   while($myrows = $db->fetchrow($query))
   {
    
-   $num = $db->fetchrow("SELECT id FROM MWC_messages WHERE slave_id=".$myrows[0]." and isread ='0'");
+   $num = $db->fetchrow("SELECT [memb___id] FROM [MWC_messages] WHERE ([isread] ='0' and [slave_id]=".$myrows[0].")or ([isread] ='0' and [id]=".$myrows[0].")");
    $content->set('|m_name|', $myrows[1]);
-   if ($num) $content->set('|m_let|', "<img src='imgs/letterZ.png' border='0'>");
+
+   if (strlen($num[0])>0) $content->set('|m_let|', "<img src='imgs/letterZ.png' border='0'>");
+   //if (isset($num) && $num[0]>=0) $content->set('|m_let|', "<img src='imgs/letterZ.png' border='0'>");
    else  $content->set('|m_let|', "-");
    $content->set('|m_date|', @date("H:i d.m.Y",$myrows[5]));
    $content->set('|id|', $myrows[0]);
