@@ -54,6 +54,9 @@ fclose($handle);
 $handle = fopen("lang/rus/opt_cfg.php","a+");
 fwrite($handle,"\r\n".'$lang["ucapch"] ="Использовать капчу при авторизации (1/0)";');
 fclose($handle);
+$handle = fopen("opt.php","a+");
+fwrite($handle,'$config["ucapch"]=1;'."\r\n");
+fclose($handle);
 
 WriteLogs("Update","Патч №$updaid установлен");
 header("Location: ".$config["siteaddress"]."/control.php?page=update");
