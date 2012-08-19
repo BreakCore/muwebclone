@@ -7,7 +7,9 @@ else
  global $content;
  global $db;
 
- require "imgs/items.php";
+//require "imgs/items.php";
+ require "_sysvol/item.inc.php";
+ $imt = new Iitems();
  require "lang/".$_SESSION["mwclang"]."/webshop.php";
  
   
@@ -85,7 +87,9 @@ if (!isset($_GET["si"]) && level_check()==1)
  }
  
  ob_start();
- show_items($wareg);
+ if (level_check()==1) $imt->showWH($wareg,$config["siteaddress"]."/?up=wsell&si");
+ else $imt->showWH($wareg);
+ //show_items($wareg);
  $invt = ob_get_contents();
  ob_end_clean();
 }
