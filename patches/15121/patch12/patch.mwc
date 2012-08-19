@@ -1,0 +1,11 @@
+$updaid=12;
+$version = 15121;
+
+createF("http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch12/item.inc.mwc","_sysvol/item.inc.php");
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
