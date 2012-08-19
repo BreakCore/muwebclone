@@ -4,12 +4,16 @@ global $content;
 $content->add_dict($_SESSION["mwclang"],"market");
 $content->set('|market_msg|', "");
 global $db;
+
 $market_db = @file("_dat/market.db");
 ob_start();
 $content->out_content("theme/".$config["theme"]."/them/market_h.html");
 if ($market_db)
 {
  require "imgs/items.php"; 
+ require "_sysvol/item.inc.php";
+ $imt = new Iitems();
+ 
  if ($_GET["state"]=="ok")$content->set('|market_msg|', $content->lng["market_msg"]); 
  if ($_GET["item"])
  {
@@ -84,7 +88,8 @@ if ($market_db)
    $newitem = $git["id"].$git["opt"]."0000000000".$git["exopt"]."0".$git["group"]."0000000000000"; 
 		
    ob_start();
-   echo show_items($newitem,3);
+   echo $imt->getOptions(items::readitems($newitem,$itembd,$anc),2);
+   //echo show_items($newitem,3);
    $item = ob_get_contents();
    ob_end_clean(); 
    $content->set('|num|', $i);

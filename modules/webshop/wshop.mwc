@@ -3,7 +3,9 @@ global $config;
 global $content;
 global $db;
 require "lang/".$_SESSION["mwclang"]."/webshop.php";
-
+require "imgs/items.php";
+ require "_sysvol/item.inc.php";
+ $imt = new Iitems();
 ob_start();
 if(isset($_SESSION["user"]) && level_check()==1)
 { 
@@ -290,7 +292,8 @@ elseif (isset($_GET["did"]))
 			else $content->set("|d|","");
 			
 			ob_start();
-			echo show_items($wintems_s[4], 0);
+			//echo show_items($wintems_s[4], 0);
+			echo $imt->getOptions(items::readitems($wintems_s[4],$itembd,$anc),3);
 			$itm = ob_get_contents();
 			ob_end_clean();
 			
