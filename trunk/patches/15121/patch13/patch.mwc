@@ -1,9 +1,9 @@
 $updaid=13;
 $version = 15121;
 
-createF("_sysvol/item.inc.php","http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch13/fsql.php");
+createF("_sysol/fsql.php","http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch13/fsql.php");
 
-$handle = fopen("_sysol/fsql.php","a+");
+$handle = fopen("_dat/updates.dat","a+");
 fwrite($handle,$updaid.",".$version.chr(10));
 fclose($handle);
 
