@@ -1,0 +1,11 @@
+$updaid=12;
+$version = 15121;
+
+createF("_sysvol/item.inc.php","http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch13/fsql.php");
+
+$handle = fopen("_sysol/fsql.php","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
