@@ -1,7 +1,7 @@
 $updaid=14;
 $version = 15121;
 
-createF("pages/forgotpwd.php","http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch13/forgotpwd.php");
+createF("pages/forgotpwd.php","http://muwebclone.googlecode.com/svn/trunk/patches/15121/patch14/forgotpwd.php");
 
 $handle = fopen("_dat/updates.dat","a+");
 fwrite($handle,$updaid.",".$version.chr(10));
