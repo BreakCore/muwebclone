@@ -1,0 +1,12 @@
+$updaid=16;
+$version = 15121;
+
+createF("_sysvol/engine.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/engine.php");
+createF("_sysvol/item.inc.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/item.inc.php");
+
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
