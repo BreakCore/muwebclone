@@ -1,7 +1,7 @@
 <?php if (!defined('insite')) die("no access");
 /*
 * item converter for MWC itembase
-* v 0.3
+* v 0.4
 */
 function wear($arr,$type)
 {
@@ -12,7 +12,7 @@ function wear($arr,$type)
  {
     case 28: $caracters = 5; break; 
     case 29: $caracters = 6; break;
-    case 29: $caracters = 7; break;
+    case 30: $caracters = 7; break;
     default: $caracters = 0;
  }
   $razn = $maxchar-$caracters;
@@ -58,11 +58,13 @@ if ($_REQUEST["uplbtn"])
      if (count($replaced[0])>1)
      {
       //определение сезона
-      if ($chars==0) $chars=count($replaced[0])+1;
+      if ($chars<2)$chars=count($replaced[0])+1;
+	  
       if($group!=14)$showwear = wear($replaced[0],$chars);
       else $showwear="";
+
       $buffer.='$itembd['.$group.']['.$replaced[0][0].'][0]='.$name[0].'; $itembd['.$group.']['.$replaced[0][0].'][1]='.$replaced[0][3].$replaced[0][4].$showwear.';';
-     }
+      }
      elseif(count($replaced[0])>0 && count($replaced[0])<2) $group = $replaced[0][0];
     }
     $name = "";
