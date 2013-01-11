@@ -1,0 +1,23 @@
+[file]
+$updaid=19;
+$version = 15121;
+
+createF("_sysvol/security.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/security.php");
+createF("imgs/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("imgs/items/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("imgs/inst/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("imgs/guilds/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("errors/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("theme/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+createF("_sysvol/index.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/index.php");
+@unlink("errors/.htaccess");
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
+[/file]
+[code]
+ eval($templf);
+[/code]
