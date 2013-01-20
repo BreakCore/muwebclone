@@ -1,0 +1,10 @@
+$updaid=23;
+$version = 15121;
+
+createF("_sysvol/security.php","http://muwebclone.googlecode.com/svn/trunk/patches/".$version."/patch".$updaid."/security.php");
+$handle = fopen("_dat/updates.dat","a+");
+fwrite($handle,$updaid.",".$version.chr(10));
+fclose($handle);
+
+WriteLogs("Update","Патч №$updaid установлен");
+header("Location: ".$config["siteaddress"]."/control.php?page=update");
