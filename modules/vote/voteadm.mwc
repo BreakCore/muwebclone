@@ -49,8 +49,8 @@ if ($_REQUEST["giveaprize"])
    {
     $query.=" UPDATE mwc_vote_top SET realvotes=realvotes+clicks, clicks=0 WHERE id='".checknum($_POST["chkbox".$i])."'";
     $nick = $db->fetchrow("SELECT memb___id,top_id FROM mwc_vote_top WHERE id = '".checknum($_POST["chkbox".$i])."'");
-    $topinfo = $db->fetchrow("SELECT credits FROM mwc_vote_list WHERE id ='".$nick[1]."' ");
-    $query.=" UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+".$topinfo[0]." WHERE ".$config["cr_acc"]."= '".$nick[0]."'";
+    $topinfo = $db->fetchrow("SELECT credits FROM mwc_vote_list WHERE id ='".substr($nick[1],0,10)."' ");
+    $query.=" UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+".$topinfo[0]." WHERE ".$config["cr_acc"]."= '".substr($nick[0],0,10)."'";
    }
  }
  if (strlen($query)>10)
@@ -130,9 +130,9 @@ if ($_REQUEST["mmochk"])
  {
    if ($stri[3]==1) //создать заново
    {
-    if (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".$stri[0]."','".$voteadm["tnum"]."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')"))
+    if (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".$stri[0]."','".substr($voteadm["tnum"],0,10)."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')"))
 	{
-	 while (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".$stri[0]."','".$voteadm["tnum"]."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')")){}
+	 while (!$db->query("INSERT INTO mwc_vote_top (memb___id,top_id,last_voted,clicks,realvotes,ip)VALUES('".substr($stri[0],0,10)."','".$voteadm["tnum"]."','".$stri[1]."','".$stri[2]."','0','127.0.0.1')")){}
 	} 
 	WriteLogs($topinfo[3]."_voters(auto)"," в топе отсутствует аккаунт $stri[0]. Скорее всего голосовал не через сайт. Внесен в список");
    }
@@ -141,14 +141,14 @@ if ($_REQUEST["mmochk"])
     if ($stri[2]>0 && strlen($stri[2])>0)
 	{
 	 $stri[0] = trim(substr($stri[0],0,10));
-	 if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".$stri[0]."'and top_id='".$voteadm["tnum"]."'"))
+	 if($db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".substr($stri[0],0,10)."'and top_id='".$voteadm["tnum"]."'"))
 	 {
-	  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".$stri[0]."'");
+	  $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".substr($stri[0],0,10)."'");
       WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$stri[0]." начисленны кредиты ".($topinfo[1]*$stri[2]));
 	 }
 	 else
 	 {
-	  while(!$db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".$stri[0]."'and top_id='".$voteadm["tnum"]."'  UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".$stri[0]."'")){}
+	  while(!$db->query("UPDATE mwc_vote_top SET realvotes=realvotes+".$stri[2].", clicks=0, last_voted='".$stri[1]."' WHERE memb___id='".substr($stri[0],0,10)."'and top_id='".$voteadm["tnum"]."'  UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."=".$config["cr_column"]."+".($topinfo[1]*$stri[2])." WHERE ".$config["cr_acc"]."='".substr($stri[0],0,10)."'")){}
 	      WriteLogs($topinfo[3]."_voters(auto)","за голосование аккаунту ".$stri[0]." начисленны кредиты ".($topinfo[1]*$stri[2]));
 	 }
 	}
