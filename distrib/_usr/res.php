@@ -22,7 +22,7 @@ function know_points($personaz)
  else return 0;
 }
 
-ob_start();	
+
 if ($_GET["chname"])
 {
  $reschar = substr($_GET["chname"],0,10);
@@ -64,10 +64,13 @@ else
 		
  if ($res["reset_point_add"]==1)
  {
-   if ($res["reset_point_type"] == 1) $r_pointss=(know_points($check_char[1])*($check_char[2]+1));
-   elseif($res["reset_point_type"] == 2){$r_pointss=know_points($check_char[1]);}
-      if ($check_char[6]>0)
-      {
+   if ($res["reset_point_type"] == 1)
+      $r_pointss=(know_points($check_char[1])*($check_char[2]+1));
+   elseif($res["reset_point_type"] == 2)
+      $r_pointss=know_points($check_char[1]);
+  
+   if ($check_char[6]>0)
+   {
        if ($res["greset_coef"]>0)$koef = round( ((($check_char[6]*$check_char[2])/10)/$res["greset_coef"])*know_points($check_char[1]));
        else $koef =0;
 	   
@@ -75,10 +78,10 @@ else
        {
         case 1: $r_pointss += $check_char[6]*know_gpoints($check_char[1]); break;
         case 2: $r_pointss += know_gpoints($check_char[1]);break;
+		default : $r_pointss += $check_char[6]*know_gpoints($check_char[1]); break;
        }
        $r_pointss += $koef;
-      } 
-   $reset_pts= $r_pointss;
+   } 
  }
  else $r_pointss =0;
  
@@ -120,7 +123,7 @@ else
      { 
       $queryres.=" LevelUpPoint =".$r_pointss.",";
       if($check_char[1]== 64 or $check_char[1]==65 or $check_char[1]==66) 
-	    $queryres.= " Leadership=".(25+($res["reset_com"]*$check_char[2])).",";		
+	    $queryres.= " Leadership=".(25+($res["reset_com"]*($check_char[2]+1))).",";		
      }
      else $queryres.=" LevelUpPoint =0,";
 						
@@ -172,5 +175,3 @@ else
  
     
 $content->out_content("theme/".$config["theme"]."/them/res.html");
-$temp = ob_get_contents();
-ob_end_clean();
