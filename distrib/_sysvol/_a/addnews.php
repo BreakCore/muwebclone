@@ -15,7 +15,7 @@ if (defined('inpanel'))
 	$content->set('|news_content|',"");
   if (!$_GET["act"])
   {
-   if (($_REQUEST["addnews"])&&(!empty($_POST['NewNews']))||(!empty($_POST['NewTitle']))) /*запись самих новостей*/
+   if (($_REQUEST["addnews"])&&(!empty($_POST['NewNews']))||(!empty($_POST['NewTitle']))) /*Р·Р°РїРёСЃСЊ СЃР°РјРёС… РЅРѕРІРѕСЃС‚РµР№*/
    {
     $mnews = bugsend(str_replace("\n","[br]",stripslashes($_POST["NewNews"])));
     if ($news["newsf"]=="on") $nforumlink = htmlspecialchars(substr($_POST["flink"],0,$news["liklen"]));
@@ -33,7 +33,7 @@ if (defined('inpanel'))
     header("Location:".$config["siteaddress"]."/control.php?page=addnews");
    }
   }	 
-  if ($_REQUEST["edited"])/*если нажата кнопка "редактировать"*/
+  if ($_REQUEST["edited"])/*РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєРЅРѕРїРєР° "СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ"*/
   {
    $title = htmlspecialchars($_POST["NewTitle"]);
    if ($news["newsf"]=="on") $nforumlink = htmlspecialchars(substr($_POST["flink"],0,$news["liklen"]));
@@ -52,7 +52,7 @@ if (defined('inpanel'))
    unset($title,$newsc,$_POST["NewNews"],$_REQUEST["edited"]);
    header("Location:".$config["siteaddress"]."/control.php?page=addnews");
   }
-  if ($_GET["act"]=="edit") /*поле редактирования*/
+  if ($_GET["act"]=="edit") /*РїРѕР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ*/
   {
 			$nom = checknum(substr($_GET["new"],0,5));
 			$_SESSION["newsnum"] = $nom;

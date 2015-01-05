@@ -1,4 +1,4 @@
-<?php if (!defined('insite')) die(''); 
+﻿<?php if (!defined('insite')) die(''); 
 $lang["db_host"] ="Host";
 $lang["db_user"] ="User";
 $lang["db_upwd"] ="Password";

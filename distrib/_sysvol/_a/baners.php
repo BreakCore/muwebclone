@@ -18,7 +18,7 @@ if($_REQUEST["add"] && isset($_POST["nlink"]))
  if(get_magic_quotes_gpc()==1)  fwrite($handle,stripslashes($_POST["nlink"]));
  else  fwrite($handle,$_POST["nlink"]);
  fclose($handle);
- WriteLogs("Adm_",$_SESSION["sadm"]." обновил банеры");
+ WriteLogs("Adm_",$_SESSION["sadm"]." РѕР±РЅРѕРІРёР» Р±Р°РЅРµСЂС‹");
  header("Location: ".$config["siteaddress"]."/control.php?page=baners");
  die();
 }

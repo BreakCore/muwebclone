@@ -13,7 +13,7 @@ while($onshow = $db->fetchrow($know_q))
  $content->set('|id|',$onshow[0]);
  $content->out_content("theme/".$config["theme"]."/them/amail_h_c.html");
 }
-//если нажали для выбора тикета
+//РµСЃР»Рё РЅР°Р¶Р°Р»Рё РґР»СЏ РІС‹Р±РѕСЂР° С‚РёРєРµС‚Р°
 if ($_GET["t"])
 {
   $n = checknum(substr($_GET["t"],0,5));
@@ -59,7 +59,7 @@ else
      if($db->query("INSERT INTO MWC_messages (memb___id,message,date,slave_id)VALUES('".$_SESSION["user"]."','".cyr_code($msg)."','".time()."','".$n."')"))
      {
 	  $db->query("UPDATE MWC_messages SET isread='0' WHERE id='".$n."'");
-      WriteLogs("Admin_mail", $_SESSION["user"]." послал сообщение администратору");
+      WriteLogs("Admin_mail", $_SESSION["user"]." РїРѕСЃР»Р°Р» СЃРѕРѕР±С‰РµРЅРёРµ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ");
       header("Location:".$config["siteaddress"]."/index.php?up=amail&act=1");
      }
 	}
@@ -68,7 +68,7 @@ else
   {
    if($db->query("INSERT INTO MWC_messages (memb___id,message,date)VALUES('".$_SESSION["user"]."','".cyr_code($msg)."','".time()."')"))
    {
-    WriteLogs("Admin_mail", $_SESSION["user"]." послал сообщение администратору");
+    WriteLogs("Admin_mail", $_SESSION["user"]." РїРѕСЃР»Р°Р» СЃРѕРѕР±С‰РµРЅРёРµ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ");
     header("Location:".$config["siteaddress"]."/index.php?up=amail&act=1");
    }
    else

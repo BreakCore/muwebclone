@@ -1,6 +1,6 @@
 <?php if (!defined('inpanel')) die("no access");
 /**
-* модуль изменения настроек модулей
+* РјРѕРґСѓР»СЊ РёР·РјРµРЅРµРЅРёСЏ РЅР°СЃС‚СЂРѕРµРє РјРѕРґСѓР»РµР№
 * Mu Web Clone
 **/
 if ($_GET["edit"]=="reinstall")
@@ -13,7 +13,7 @@ if ($_GET["edit"]=="reinstall")
  {
   global $db;
   $db->query("UPDATE MWC SET value = '0' WHERE parametr='reinstall' DELETE FROM MWC_admin");
-  WriteLogs ("Adm",$_SESSION["sadmin"]." решил переустановить сайт!");
+  WriteLogs ("Adm",$_SESSION["sadmin"]." СЂРµС€РёР» РїРµСЂРµСѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃР°Р№С‚!");
   rename("_dat/install.php","install.php");
   header("location: ".$config["siteaddress"]."/install.php");
  }
@@ -23,7 +23,7 @@ global $content;
 include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
 
 $content->out_content("_sysvol/_a/theme/configs_h.html");
-//строим меню
+//СЃС‚СЂРѕРёРј РјРµРЅСЋ
 $Lhandle = opendir("configs/");
 $noneed = array(".","..",".htaccess");
 
@@ -45,7 +45,7 @@ while (($file = readdir($Lhandle))!== false)
   $content->out_content("_sysvol/_a/theme/configs_c.html");
  }
 }
-//если надо сохранить кфг
+//РµСЃР»Рё РЅР°РґРѕ СЃРѕС…СЂР°РЅРёС‚СЊ РєС„Рі
 if($_REQUEST["aplcfg"] && $_GET["edit"])
 {
   $mname = substr($_GET["edit"],0,10);
@@ -95,7 +95,7 @@ if($_REQUEST["aplcfg"] && $_GET["edit"])
   else echo "can't find config!";
 }
 
-if($_GET["edit"])//если модуль выбран
+if($_GET["edit"])//РµСЃР»Рё РјРѕРґСѓР»СЊ РІС‹Р±СЂР°РЅ
 {
  $mname = substr($_GET["edit"],0,10);
  if (file_exists("configs/".$mname."_cfg.php") or $mname=="opt")

@@ -1,17 +1,17 @@
 <?php if (!defined('inpanel')) die("no access"); 
 /*
-* менеджер меню
+* РјРµРЅРµРґР¶РµСЂ РјРµРЅСЋ
 */
 global $config;
 global $db;
 global $content;
 
 ob_start();
-if (!isset($_GET["mtype"]))//если не выбрано меню
+if (!isset($_GET["mtype"]))//РµСЃР»Рё РЅРµ РІС‹Р±СЂР°РЅРѕ РјРµРЅСЋ
    $content->out_content("_sysvol/_a/theme/manm_menu.html");
 else
 {
- if ($_REQUEST["clear_m"] && isset($_GET["mtype"])) //очистить кеш
+ if ($_REQUEST["clear_m"] && isset($_GET["mtype"])) //РѕС‡РёСЃС‚РёС‚СЊ РєРµС€
  {
   switch (checknum($_GET["mtype"],0,3))
   {
@@ -44,7 +44,7 @@ if (isset($_GET["del"]))
   header("Location:".$config["siteaddress"]."/control.php?page=manmod&mtype=".$_GET["mtype"]);
 }
 /**
-* добавление модуля в меню сайта
+* РґРѕР±Р°РІР»РµРЅРёРµ РјРѕРґСѓР»В¤ РІ РјРµРЅСЋ СЃР°Р№С‚Р°
 */
 if($_REQUEST["add2menu"])
 {	
@@ -61,7 +61,7 @@ if($_REQUEST["add2menu"])
   if(fwrite($fhandle, validate(substr($_POST["mod_name"],0,20))."::".substr($_POST["mod_define"],0,20)."\r\n")) 
   { 
     //echo "<div align='center' class='succes'>".mm_modul_add_ok."</div><br>"; 
-    WriteLogs ("Adm_","Аккаунт ".$_SESSION["user"]." добавил пункт меню ".substr($_POST["mod_name"],0,20)." в _dat\menu.dat ");
+    WriteLogs ("Adm_","СРєРєР°СѓРЅС‚ ".$_SESSION["user"]." РґРѕР±Р°РІРёР» РїСѓРЅРєС‚ РјРµРЅСЋ ".substr($_POST["mod_name"],0,20)." РІ _dat\menu.dat ");
   }
    fclose($fhandle);
   unset($_REQUEST["add2menu"],$fhandle);
@@ -69,7 +69,7 @@ if($_REQUEST["add2menu"])
  }
 }
 /**
-* нажата стрелка "вверх"
+* РЅР°Р¶Р°С‚Р° СЃС‚СЂРµР»РєР° "РІРІРµСЂС…"
 */
 if (isset($_GET["mu"])) 
 {
@@ -121,7 +121,7 @@ if (isset($_GET["mu"]))
  }
 }
 /**
-* нажата стрелка "вниз"
+* РЅР°Р¶Р°С‚Р° СЃС‚СЂРµР»РєР° "РІРЅРёР·"
 */
 elseif (isset($_GET["md"])) 
 {

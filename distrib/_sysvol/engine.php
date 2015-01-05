@@ -1,283 +1,329 @@
 <?php  if (!defined('insite'))die("no access");
 /**
 * MuWebClone engine script 1.5.x
-* current 1.5.2.1
-* http://p4f.ru
+* current 1.5.3
 **/
 
 /**
-* отображение панели пользователя 
+* РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РїР°РЅРµР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ 
 */
-function show_login()
+function show_login($config,$db,$content)
 {
- if(strlen($_SESSION["user"])>=3 && strlen($_SESSION["pwd"])>=3 && !$_REQUEST["usrout"])
+ if(isset($_SESSION["user"]) && isset($_SESSION["pwd"]) && !isset($_REQUEST["usrout"]))
   {
-   require "_usr/lpanel.php";
+   require_once "_usr/lpanel.php";
    return $temp;
   }
 }
 
 /**
-* функция аунтивикации
+* С„СѓРЅРєС†РёСЏ Р°СѓРЅС‚РёРІРёРєР°С†РёРё
 **/
-function login($type="open")
+function login($content,$db,$config,$type="open")
 {
- global $content; 
- global $db;	
- global $config;
+    if (isset($_REQUEST["usrout"]))
+    {
+        if (adm_check($db) == 1)
+            logs::WriteLogs("site","Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ РІС‹С€РµР»: ".$_SESSION["user"]);
 
- if ($_REQUEST["usrout"])
- {
-  if (adm_check()==1) WriteLogs("site","администратор вышел: ".$_SESSION["user"]);
-  unset($_SESSION["user"],$_SESSION["pwd"],$_SESSION["character"]); 
-  header("Location: ".$config["siteaddress"]);
- }
- elseif(!isset($_SESSION["user"]) && !isset($_SESSION["pwd"]))
- {
-  if($_REQUEST["loginbtn"])
-  { 
-   if ($config["ucapch"]==1)
-   {
-     if($_SESSION['qq'] != substr($_POST['uscpt'],0,7) || !isset($_SESSION['qq'])) 
-	 {
-      unset($_SESSION['captcha_keystring'],$_SESSION["qq"]);
-	  header("Location:".$config["siteaddress"]."/index.php?err=1");
-	  die();
-	 }
-   }
-     unset($_SESSION['captcha_keystring'],$_SESSION["qq"]);
+        unset($_SESSION["user"],$_SESSION["pwd"],$_SESSION["character"]);
 
-     $userl = validate(substr(trim($_POST["usrlogin"]),0,10));
-     $userp = validate(substr(trim($_POST["usrpwd"]),0,10));
-    	
-     if ($config["md5use"]=="on") $suserp = "[dbo].[fn_md5]('".$userp."','".$userl."')";
-     else $suserp = "'".$userp."'";	
-	 
-     $validadm = $db->numrows($db->query("SELECT name,pwd FROM MWC_admin WHERE name='".$userl."' and pwd='".md5($userp)."'")); 
-     $queryregNum = $db->numrows($db->query("SELECT memb___id, memb__pwd FROM MEMB_INFO WHERE memb___id ='".$userl."' and memb__pwd = ".$suserp.""));
+        header("Location: ".$config["siteaddress"]);
+        die();
+    }
+    elseif(!isset($_SESSION["user"]) && !isset($_SESSION["pwd"]))
+    {
+        if(isset($_REQUEST["loginbtn"]))
+        {
+            if ($config["ucapch"]==1)
+            {
+                if($_SESSION['qq'] != substr($_POST['uscpt'],0,7) || !isset($_SESSION['qq']))
+                {
+                    unset($_SESSION['captcha_keystring'],$_SESSION["qq"]);
+                    header("Location:".$config["siteaddress"]."/index.php?err=1");
+                    die();
+                }
+            }
+            unset($_SESSION['captcha_keystring'],$_SESSION["qq"]);
 
-     if ($validadm==1)
-     {  
-      $_SESSION["sadmin"]=$userl;
-      $_SESSION["spwd"]=$userp;
-      $_SESSION["adm"]=1;
-      $chnick = $db->fetchrow("SELECT nick FROM MWC_admin WHERE name='".$_SESSION["sadmin"]."'");
-      $_SESSION["snick"] = $chnick[0];
-      $db->query("INSERT INTO MWC_chat (message,time,memb___id,nick)VALUES('I am online :) ','".time()."','".$_SESSION["sadmin"]."','".$_SESSION["snick"]."')");
-      WriteLogs("site","администратор вошел: ".$_SESSION["sadmin"]);
-      if ($queryregNum !=1)  header("Location:".$config["siteaddress"]."/control.php");
-     }
-     if ($config["under_rec"]==1 && $validadm!=1) $queryregNum=0;
+            $userl = substr(trim($_POST["usrlogin"]),0,10);
+            $userp = substr(trim($_POST["usrpwd"]),0,10);
 
-     if ($queryregNum == 1)	
-     {	
-      $_SESSION["user"] = $userl; 
-	  $_SESSION["pwd"]=$userp;
-      $now = time();
-      $chk_result = $db->fetchrow($db->query("SELECT mwcban_time, bloc_code,ban_des FROM memb_info WHERE memb___id='".$userl."'"));
-      if ($now>=$chk_result[0] && $chk_result[2]!="0" && $chk_result[0]!=0)/*если время бана вышло*/
-      {
-       if ($chk_result[1]==0)/*если забанен персонаж*/
-       {
-	    $db->query("UPDATE MEMB_INFO SET mwcban_time='0',ban_des='0' WHERE memb___id='".$_SESSION["user"]."'; UPDATE Character SET CtlCode='0' WHERE AccountID='".$_SESSION["user"]."'");
-	    WriteLogs("Ban_","Время бана истекло, аккаунт ".$_SESSION["user"]);				 
-       }
-       else
-       {
-	    $upd = $db->query("UPDATE memb_info SET mwcban_time=0, bloc_code=0,ban_des='0' WHERE memb___id='".$userl."'");
-	    $chk_result[1] = 0;
-	    WriteLogs("Ban_","Время бана истекло, аккаунт ".$_SESSION["user"]);			
-       }
-      }
-      unset($upd);
-    
-      if ($chk_result[1]==1) return $content->out_content("theme/".$config["theme"]."/them/login_fail.html",1);
-      else header("Location:".$config["siteaddress"]."/?up=usercp");
-     }
-     else 
-	 {
-	  header("Location:".$config["siteaddress"]."/index.php?err=2");
-	  die();
-	 }
-  }
-  elseif (!$_REQUEST["loginbtn"])
-  {
-   $content->set('|session_name|', session_name());
-   $content->set('|session_id|', session_id());
-   if ($type!="close") return $content->out_content("theme/".$config["theme"]."/them/login.html",1);
-   else return $content->out_content("theme/".$config["theme"]."/them/r_login.html",1);
-  }
-  elseif($config["under_rec"]==1)
-  {
-   if ($type!="close") return $content->out_content("theme/".$config["theme"]."/them/login.html",1);
-   else return $content->out_content("theme/".$config["theme"]."/them/r_login.html",1);
-  }
-  elseif($type=="inpage")
-  {
-   return $content->out_content("theme/".$config["theme"]."/them/logininpage.html",1);
-  }
-  else unset($_SESSION["user"],$_SESSION["pwd"]);
- }
+            if ($config["md5use"]=="on")
+                $suserp = "[dbo].[fn_md5]('".$userp."','".$userl."')";
+            else
+                $suserp = "'".$userp."'";
+
+            $check = $db->query(" SELECT
+ (SELECT COUNT(*) FROM MWC_admin WHERE name='$userl' and pwd='".md5($userp)."') as isadmin,
+ (SELECT COUNT(*) FROM MEMB_INFO WHERE memb___id ='$userl' and memb__pwd = $suserp) as numrow")->FetchRow();
+
+            if ($check["isadmin"]>0) // РµСЃР»Рё Р°РґРјРёРЅ
+            {
+                $_SESSION["sadmin"] = $userl;
+                $_SESSION["spwd"] = $userp;
+                $_SESSION["adm"] = 1;
+                $chnick = $db->query("SELECT nick FROM MWC_admin WHERE name='{$_SESSION["sadmin"]}'")->FetchRow();
+                $_SESSION["snick"] = $chnick["nick"];
+                logs::WriteLogs("site","Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ РІРѕС€РµР»: ".$_SESSION["sadmin"]);
+
+                if ($check["numrow"] !=1) //РµСЃР»Рё РЅРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, С‚Рѕ СЃСЂР°Р·Сѓ РІ Р°РґРјРёРЅРєСѓ
+                {
+                    header("Location:".$config["siteaddress"]."/control.php");
+                    die();
+                }
+            }
+
+            if ($config["under_rec"]==1 && $check["isadmin"]!=1) //РµСЃР»Рё СЃР°Р№С‚ "РІСЂРµРјРµРЅРЅРѕ РЅРµРґРѕСЃС‚СѓРїРµРЅ", С‚Рѕ СЃР±СЂР°СЃС‹РІР°РµРј Р°РІС‚РѕСЂРёР·Р°С†РёСЋ, РЅРµ Р°РґРјРёРЅ - РЅРµС„РёРі РґРµР»Р°С‚СЊ
+                $check["numrow"] = 0;
+
+            if ($check["numrow"] == 1)
+            {
+                $_SESSION["user"] = $userl;
+                $_SESSION["pwd"]=$userp;
+                $now = time();
+                $chk_result = $db->query("SELECT mwcban_time, bloc_code,ban_des FROM memb_info WHERE memb___id='$userl'")->FetchRow();
+
+                if ($now >= $chk_result["mwcban_time"] && $chk_result["ban_des"]!="0" && $chk_result["bloc_code"]!=0)/*РµСЃР»Рё РІСЂРµРјСЏ Р±Р°РЅР° РІС‹С€Р»Рѕ*/
+                {
+                    if ($chk_result["bloc_code"]==0)/*РµСЃР»Рё Р·Р°Р±Р°РЅРµРЅ РїРµСЂСЃРѕРЅР°Р¶*/
+                    {
+                        $db->query("UPDATE MEMB_INFO SET mwcban_time='0',ban_des='0' WHERE memb___id='{$_SESSION["user"]}'; UPDATE Character SET CtlCode='0' WHERE AccountID='{$_SESSION["user"]}'");
+                        logs::WriteLogs("Ban_","Р’СЂРµРјСЏ Р±Р°РЅР° РёСЃС‚РµРєР»Рѕ, Р°РєРєР°СѓРЅС‚ ".$_SESSION["user"]);
+                    }
+                    else
+                    {
+                        $upd = $db->query("UPDATE memb_info SET mwcban_time=0, bloc_code=0,ban_des='0' WHERE memb___id='$userl'");
+                        $chk_result["bloc_code"] = 0;
+                        WriteLogs("Ban_","Р’СЂРµРјСЏ Р±Р°РЅР° РёСЃС‚РµРєР»Рѕ, Р°РєРєР°СѓРЅС‚ ".$_SESSION["user"]);
+                    }
+                }
+
+                unset($upd);
+
+                if ($chk_result["bloc_code"]==1)
+                    return $content->out_content("theme/".$config["theme"]."/them/login_fail.html",1);
+                else
+                {
+                    header("Location:".$config["siteaddress"]."/?up=usercp");
+                    die();
+                }
+            }
+            else
+            {
+                header("Location:".$config["siteaddress"]."/index.php?err=2");
+                die();
+            }
+        }
+        elseif (!isset($_REQUEST["loginbtn"]))
+        {
+            $content->set('|session_name|', session_name());
+            $content->set('|session_id|', session_id());
+            if ($type!="close")
+                return $content->out_content("theme/".$config["theme"]."/them/login.html",1);
+            else
+                return $content->out_content("theme/".$config["theme"]."/them/r_login.html",1);
+        }
+        elseif($config["under_rec"]==1)
+        {
+            if ($type!="close")
+                return $content->out_content("theme/".$config["theme"]."/them/login.html",1);
+            else
+                return $content->out_content("theme/".$config["theme"]."/them/r_login.html",1);
+        }
+        elseif($type=="inpage")
+        {
+            return $content->out_content("theme/".$config["theme"]."/them/logininpage.html",1);
+        }
+        else
+            unset($_SESSION["user"],$_SESSION["pwd"]);
+    }
 }
 
 /**
-* проверяет, песонаж относится к аккаунту
+* РїСЂРѕРІРµСЂСЏРµС‚, РїРµСЃРѕРЅР°Р¶ РѕС‚РЅРѕСЃРёС‚СЃСЏ Рє Р°РєРєР°СѓРЅС‚Сѓ
 **/
-function own_char($charnames,$accchar)
+function own_char($charnames,$accchar,$db,$config)
 {
-	global $db;
-	
-	$char_nameCHK = $db->numrows($db->query("SELECT Name From Character WHERE Name='".substr($charnames,0,10)."' and AccountID='".substr($accchar,0,10)."'")); 
-	if ($char_nameCHK <=0)
+    $char_nameCHK = $db->query("SELECT count(*) as cnt From Character WHERE Name='".substr($charnames,0,10)."' and AccountID='".substr($accchar,0,10)."'")->FetchRow();
+    if ($char_nameCHK["cnt"] <=0)
 	{
-	 global $config;
-	 header("Location:".$config["siteaddress"]."/?p=not&error=6");
-	 die("epic fail!");
-	}
+        header("Location:".$config["siteaddress"]."/?p=not&error=6");
+        die("epic fail!");
+    }
 }
 
 /**
-* проверка логина и пароля у пользователя на валидность
+* РїСЂРѕРІРµСЂРєР° Р»РѕРіРёРЅР° Рё РїР°СЂРѕР»СЏ Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ
 */
-function chk_user($type=0)
+function chk_user($config,$db,$type=0)
 {
- global $config;
- if ((strlen($_SESSION["user"])>=3 && strlen($_SESSION["pwd"])>=3))
- {
-  $userl = validate($_SESSION["user"]);
-  $userp = validate($_SESSION["pwd"],1);
-		
-  global $db;
-  $use1="";
-  if ($config["md5use"]=="off") $use1= "SELECT count(*) FROM MEMB_INFO Where memb___id='$userl' and memb__pwd='$userp'";
-  elseif ($config["md5use"]=="on") $use1="SELECT count(*) FROM MEMB_INFO Where memb__pwd=[dbo].[fn_md5]('$userp','$userl') and memb___id='$userl'";	
-  else die('no md!');
-  
-  $qregum = $db->fetchrow($db->query($use1));
-  if ($qregum[0] !=1)
-  {//фейл логин
-   unset($_SESSION["user"],$_SESSION["pwd"],$_SESSION["character"]);
-   return 0;
-  }
-  if($userl)
-  {
-   $chek_ban = $db->fetchrow($db->query("SELECT bloc_code FROM MEMB_INFO WHERE memb___id='".$userl."'"));
-   if($chek_ban[0]==1) 
-     return 3;
-  }	
- }
- else 
- {
-  if ($type==0) return 4;
-  else
-  {
-   header("Location: ".$config["siteaddress"]."/?p=not&error=19");
-   die();
-  }
- }
- return 1;
+    if (isset($_SESSION["user"]) && isset($_SESSION["pwd"]))
+    {
+        //$userl = $_SESSION["user"];
+        //$userp = $_SESSION["pwd"];
+
+      /*  $use1="";
+        if ($config["md5use"]=="off")
+            $use1 = "SELECT count(*) as cnt FROM MEMB_INFO Where memb___id='$userl' and memb__pwd='$userp'";
+        elseif ($config["md5use"]=="on")
+            $use1 = "SELECT count(*) as cnt FROM MEMB_INFO Where memb__pwd=[dbo].[fn_md5]('$userp','$userl') and memb___id='$userl'";
+        else
+            die('error md5 config!');
+
+        $qregum = $db->query($use1)->FetchRow();
+        if ($qregum["cnt"] !=1)
+        {//С„РµР№Р» Р»РѕРіРёРЅ
+            unset($_SESSION["user"],$_SESSION["pwd"],$_SESSION["character"]);
+            return 0;
+        }*/
+
+        if(!empty($_SESSION["user"]))
+        {
+            $chek_ban = $db->query("SELECT bloc_code FROM MEMB_INFO WHERE memb___id='{$_SESSION["user"]}'")->FetchRow();
+            if($chek_ban["bloc_code"]==1)
+                return 3;
+        }
+    }
+    else
+    {
+        if ($type==0)
+            return 4;
+        else
+        {
+            header("Location: ".$config["siteaddress"]."/?p=not&error=19");
+            die();
+        }
+    }
+    return 1;
 }
 
 /**
-* отображение страниц
+* РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ СЃС‚СЂР°РЅРёС†
 **/
-function pages()
+function pages($config)
 {
-  $pmnfile=file("_dat/pm.dat");
-  $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11)); 
-  $pracces=0;
-  $temp="";
-  if(!isset($_GET["p"])||$pagefile == "home")
-  {
-   require("_sysvol/news.php");
-   return $temp;
-  }
-  elseif($pagefile=="theme")
-  {
-    global $config;
-    require("theme/".$config["theme"]."/index.php");
-    return $temp;
-  }  
-  else if(file_exists("pages/".$pagefile.".php"))
-  {
-    foreach ($pmnfile as $num=>$str)
+    $pmnfile=file("_dat/pm.dat");
+    $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11));
+    $pracces=0;
+    $temp="";
+    if(!isset($_GET["p"]) || $pagefile == "home")
     {
-     $pacces=explode("||",$str);
-     if($pacces[0]==$pagefile && $pacces[1]==1){$pracces=1;break;}
-     elseif(($pacces[0]==$pagefile && $pacces[1]==0)){$pracces=0;break;}
-     else{$pracces=0;}
+        require_once("_sysvol/news.php");
+        return $temp;
     }
-    if($pracces==1)
+    elseif($pagefile=="theme")
     {
-	 ob_start();
-     require("pages/".$pagefile.".php");
-	 $temp_p = ob_get_contents(); 
-     ob_end_clean();
-     if (!$temp) return $temp_p;
-     return $temp;
+        require("theme/".$config["theme"]."/index.php");
+        return $temp;
     }
-    else return "<div align='center' valign='center'>No page</div>";
-  }
-  else
-  {
-   WriteLogs("Pages_","несуществующая страница '".$pagefile."', возможно изучают сайт, возможный аккаунт (".$_SESSION["user"].")");				 
-   require("pages/not.php");
-   return $temp;
-  }
+    else if(file_exists("pages/".$pagefile.".php"))
+    {
+        foreach ($pmnfile as $num=>$str)
+        {
+            $pacces = explode("||",$str);
+            if($pacces[0] == $pagefile && $pacces[1] == 1)
+            {
+                $pracces=1;
+                break;
+            }
+            elseif($pacces[0] == $pagefile && $pacces[1] == 0)
+            {
+                $pracces=0;
+                break;
+            }
+            else
+                $pracces=0;
+        }
+        if($pracces == 1)
+        {
+            ob_start();
+            require_once("pages/".$pagefile.".php");
+            $temp_p = ob_get_contents();
+            ob_end_clean();
+            if (!isset($temp) || empty($temp))
+                return $temp_p;
+
+            return $temp;
+        }
+        else
+            return "<div align='center' valign='center'>No page exists</div>";
+    }
+    else
+    {
+        if(isset($_SESSION["user"]))
+            logs::WriteLogs("Pages_","РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° '{$pagefile}', РІРѕР·РјРѕР¶РЅРѕ РёР·СѓС‡Р°СЋС‚ СЃР°Р№С‚, РІРѕР·РјРѕР¶РЅС‹Р№ Р°РєРєР°СѓРЅС‚ ({$_SESSION["user"]})");
+        else
+            logs::WriteLogs("Pages_","РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° '{$pagefile}', РІРѕР·РјРѕР¶РЅРѕ РёР·СѓС‡Р°СЋС‚ СЃР°Р№С‚, РІРѕР·РјРѕР¶РЅС‹Р№ Р°РєРєР°СѓРЅС‚");
+        require("pages/not.php");
+        return $temp;
+    }
 }
 
-function show_chars($accname)
+function show_chars($accname,$db)
 {
- global $db;
- $accname = substr($accname,0,10);
- $query = $db->query("SELECT Name FROM character WHERE AccountID='$accname'");
- $i=0;
- while ($result = $db->fetchrow($query))
- {
-  $names[$i]=$result[0];
-  $i++;
- }
- return $names;
+    $accname = substr($accname,0,10);
+    $query = $db->query("SELECT Name FROM character WHERE AccountID='$accname'");
+    $i=0;
+    $names = array();
+    while ($result = $query->FetchRow())
+    {
+        $names[$i]=$result["Name"];
+        $i++;
+    }
+    return $names;
 }
+
 function userpages()
 {
- if(isset($_GET["up"]))
- {
-  $upmnfile=file("_dat/upm.dat");
-  $userpage = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["up"],0,11));
-  $pracces=0;
-  if(is_file("_usr/".$userpage.".php"))
-  {
-   foreach ($upmnfile as $num=>$str)
-   {
-	$pacces=explode("||",$str);
-	if($pacces[0]==$userpage && $pacces[1]==1){$pracces=1;break;}
-	elseif($pacces[0]==$userpage && $pacces[0]==1){$pracces=0;break;}
-	else $pracces=0;
-   }
-   if($pracces==1)
-   {
-    ob_start();
-    require "_usr/".$userpage.".php";
-	$tempZ = ob_get_contents(); 
-    ob_end_clean();
-    if (!$temp) return $tempZ;
-    return $temp;
-   }
-   else
-   { 
-    WriteLogs("DeniedPages_","доступ к неразрешенной страницы пользователя '".$userpage."', возможный аккаунт (".$_SESSION["user"].")");
-    return "<div align='center' valign='center'>Access denied</div>";
-   }
-  }
-  else
-  {
-   WriteLogs("Pages_","несуществующая страница пользователя '".$userpage."', возможно изучают сайт, возможный аккаунт (".$_SESSION["user"].")");				 
-   require("pages/not.php");
-   return $temp;
-  }
- }
+    if(isset($_GET["up"]))
+    {
+        $upmnfile = file("_dat/upm.dat");
+        $userpage = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["up"],0,11));
+        $pracces=0;
+        if(is_file("_usr/".$userpage.".php"))
+        {
+            foreach ($upmnfile as $num=>$str)
+            {
+                $pacces=explode("||",$str);
+                if($pacces[0] == $userpage && $pacces[1] == 1)
+                {
+                    $pracces=1;
+                    break;
+                }
+                elseif($pacces[0] == $userpage && $pacces[0] == 1)
+                {
+                    $pracces=0;
+                    break;
+                }
+                else
+                    $pracces=0;
+            }
+            if($pracces == 1)
+            {
+                ob_start();
+                require "_usr/".$userpage.".php";
+                $tempZ = ob_get_contents();
+                ob_end_clean();
+                if (!isset($temp))
+                    return $tempZ;
+                return $temp;
+            }
+            else
+            {
+                logs::WriteLogs("DeniedPages_","РґРѕСЃС‚СѓРї Рє РЅРµСЂР°Р·СЂРµС€РµРЅРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ '$userpage', РІРѕР·РјРѕР¶РЅС‹Р№ Р°РєРєР°СѓРЅС‚ (".$_SESSION["user"].")");
+                return "<div align='center' valign='center'>Access denied</div>";
+            }
+        }
+        else
+        {
+            logs::WriteLogs("Pages_","РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ '".$userpage."', РІРѕР·РјРѕР¶РЅРѕ РёР·СѓС‡Р°СЋС‚ СЃР°Р№С‚, РІРѕР·РјРѕР¶РЅС‹Р№ Р°РєРєР°СѓРЅС‚ (".$_SESSION["user"].")");
+            require("pages/not.php");
+            return $temp;
+        }
+    }
 }
+
 function classname($classnum)
 {
 	switch($classnum)
@@ -303,6 +349,7 @@ function classname($classnum)
 	}
   return $classnum;
 }
+
 function q_chr_top($class)
 {
 	global $config;
@@ -359,6 +406,7 @@ function q_chr_top($class)
 	else return "<br>".$ch_name." : ".$sho_t[0]."";
 	
 }
+
 function classpicture($classpic)
 {
   switch ($classpic)
@@ -385,75 +433,87 @@ function classpicture($classpic)
   return $picture="<img src='imgs/".$classpic.".png' border='0'>";
 }
 
-function titles($type=false)
+/**
+ * РІРѕР·РІСЂР°Р°РµС‚ СЃС‚СЂРѕРєСѓ СЃ РЅР°Р·РІР°РЅРёРµРј СЃС‚СЂР°РЅРёС†С‹
+ * @param $config
+ * @param bool $type true - С‚РѕР»СЊРєРѕ С‚РµРєСЃС‚, false - html РєРѕРґ СЃ СЃСЃС‹Р»РєРѕР№ РЅР° СЃС‚СЂР°РЅРёС†Сѓ
+ * @return string
+ */
+function titles($config,$type=false)
 {
- global $config;
- ob_start();
- if ($type) echo $config["server_name"];
- else echo  "<a href='".$config["siteaddress"]."'>".$config["server_name"]."</a>";
- include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
- if ($_GET["p"])
- {
-  $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11)); 
-  if($pagefile=="theme") echo $config["theme"];
-  else
-  { 
-   if ($lang["title_".$pagefile]=="")
-   {
-    if ($type)
-     echo " - title_".$pagefile;
-	else
-	 echo " - <a href='".$config["siteaddress"]."/?p=".$pagefile."'>".$lang["title_".$pagefile]."</a>";
-   }
-   else
-   {
-    if ($type)
-     echo " - ".$lang["title_".$pagefile];
-	else
-	 echo " - <a href='".$config["siteaddress"]."/?p=".$pagefile."'>".$lang["title_".$pagefile]."</a>";
-   }
-  }  
- }
- else if($_GET["up"])
- {
-  $upagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["up"],0,11)); 
-  if ($upagefile!="usercp")
-  {
-   if($type)
-    echo " - ".$lang["title_usercp"];
-   else
-    echo " - <a href='".$config["siteaddress"]."/?up=usercp'>".$lang["title_usercp"]."</a>";
-  }
-  if($type)
-   echo " - ".$lang["title_".$upagefile];
-  else
-   echo " - <a href='".$config["siteaddress"]."/?up=".$upagefile."'>".$lang["title_".$upagefile]."</a>";
- }
- $bufer = ob_get_contents();
- ob_end_clean(); 
- return $bufer;
+    ob_start();
+    if (isset($type))
+        echo $config["server_name"];
+    else echo  "<a href='".$config["siteaddress"]."'>".$config["server_name"]."</a>";
+
+    require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+
+    if (isset($_GET["p"]))
+    {
+        $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11));
+
+        if($pagefile=="theme")
+            echo $config["theme"];
+        else
+        {
+            if (!isset($lang["title_".$pagefile]))
+            {
+                if (isset($type))
+                    echo " - title_".$pagefile;
+                else
+                    echo " - <a href='".$config["siteaddress"]."/?p=".$pagefile."'>title_$pagefile</a>";
+            }
+            else
+            {
+                if (isset($type))
+                    echo " - ".$lang["title_".$pagefile];
+                else
+                    echo " - <a href='".$config["siteaddress"]."/?p=".$pagefile."'>".$lang["title_".$pagefile]."</a>";
+            }
+        }
+    }
+    else if(isset($_GET["up"]))
+    {
+        $upagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["up"],0,11));
+        if ($upagefile!="usercp")
+        {
+            if(isset($type))
+                echo " - ".$lang["title_usercp"];
+            else
+                echo " - <a href='".$config["siteaddress"]."/?up=usercp'>".$lang["title_usercp"]."</a>";
+        }
+        if(isset($type))
+            echo " - ".$lang["title_".$upagefile];
+        else
+            echo " - <a href='".$config["siteaddress"]."/?up=".$upagefile."'>".$lang["title_".$upagefile]."</a>";
+    }
+    $bufer = ob_get_contents();
+    ob_end_clean();
+
+    return $bufer;
 }
 
-function adm_check ($admin_name=0,$type=0)
-{
 
- if (isset($_SESSION["sadmin"]) && $_SESSION["adm"]==1)
- {
-   global $db;
-   $validadm = $db->numrows($db->query("SELECT name,pwd FROM MWC_admin WHERE name='".$_SESSION["sadmin"]."' and pwd='".md5($_SESSION["spwd"])."'")); 
-   if ($validadm==1) return 1;
-   else
-   {
-    unset($_SESSION["sadmin"],$_SESSION["spwd"]);
-    return 0;
-   }    
-  }
-  else
-   return 0;
+function adm_check ($db,$admin_name=0,$type=0)
+{
+    if (isset($_SESSION["sadmin"]) && $_SESSION["adm"]==1)
+    {
+        $validadm = $db->query("SELECT count(*) as cnt FROM MWC_admin WHERE name='{$_SESSION["sadmin"]}' and pwd='".md5($_SESSION["spwd"])."'")->FetchRow();
+        if ($validadm["cnt"] == 1)
+            return 1;
+        else
+        {
+            unset($_SESSION["sadmin"],$_SESSION["spwd"]);
+            return 0;
+        }
+    }
+    else
+        return 0;
 }
 
 function level_check()
 {
+    die("under construction level_check");
  if ($_SESSION["user"])
  {
   global $db;
@@ -473,238 +533,323 @@ function level_check()
 }
 
 
+function print_price($params)
+{
+    return number_format($params, 2, ',', ' ');
+}
 
-function print_price($params) {return str_replace(' ', ' ', number_format($params, 0, '.', ' '));}
+/**
+ * Р·Р°РјРµРЅСЏС‚ РІ СЃСѓРјРјРµ Р±СѓРєРІСѓ k РЅР° 000
+ * @param $word
+ * @return mixed
+ */
+function valute($word)
+{
+    return str_replace("k","000",$word);
+}
 
-function valute($word){return str_replace("k","000",$word);}
-
+/**
+ * Р·Р°РєСЂС‹РІР°РµС‚ С‡Р°СЃС‚СЊ СЃР»РѕРІР° $word Р·РІРµСЃРґРѕС‡РєР°РјРё: РїСЂРёРјРµСЂ -> РїСЂ***СЂ
+ * @param $word
+ * @return string
+ */
 function hide_acc($word)
 {
-$length=strlen($word);
-return substr($word,0,1).str_repeat("*",$length-3).substr($word,$length-2);
+    $length=strlen($word);
+    return substr($word,0,1).str_repeat("*",$length-3).substr($word,$length-2);
 }
 
-function bankZ_show($numbers=0,$type=0)
+/**
+ * РїРѕРґСЃРІРµС‡РёРІР°РµС‚ СЃСѓРјРјСѓ, РµСЃР»Рё $numbers 0 С‚Рѕ Р±РµСЂРµС‚ РІРјРµСЃС‚Рѕ СЃСѓРјРјС‹ Р±Р°РЅРє РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
+ * @param $db
+ * @param int $numbers 0 - РёР· Р±Р°Р·С‹, 1 - С‚Рѕ, С‡С‚Рѕ РїРѕРґСЃРѕРІС‹РІР°СЋС‚
+ * @param int $type
+ * @return int|string
+ */
+function bankZ_show($db,$numbers=0,$type=0)
 {
-	if(strlen($_SESSION["user"])>1)
+	if(isset($_SESSION["user"]))
 	{
-	 $usr = substr($_SESSION["user"],0,10);
 		if ($numbers == 0)
-		{
-		 global $db;
-		$Bzen = $db->fetchrow($db->query("SELECT bankZ FROM memb_info WHERE memb___id='".$usr."'"));
-		}
-		else $Bzen[0] = $numbers;
+            $Bzen = $db->query("SELECT bankZ FROM memb_info WHERE memb___id='{$_SESSION["user"]}'")->FetchRow();
+		else
+            $Bzen["bankZ"] = $numbers;
 		
-		if ($type==1) return $Bzen[0];
+		if ($type==1)
+            return $Bzen["bankZ"];
 		
-		if ($Bzen[0] <1000000) {$color="color:#E0BA14";}
-		elseif($Bzen[0] >=1000000 && $Bzen[0] < 10000000){$color="color:#00AE00";}
-		elseif($Bzen[0] >=10000000 && $Bzen[0] < 100000000){$color="color:#428200";}
-		elseif($Bzen[0] >=100000000 && $Bzen[0] < 1000000000){$color="color:#800009";}
-		elseif($Bzen[0] >=1000000000){$color="color:#516EFF";}
-		$Bzen[1] = "<span style='".$color.";font-weight:bold;'>".print_price($Bzen[0])."</span>";
-		return $Bzen[1];
+		if ($Bzen["bankZ"] <1000000)
+            $color="color:#E0BA14";
+		elseif($Bzen["bankZ"] >=1000000 && $Bzen["bankZ"] < 10000000)
+            $color="color:#00AE00";
+		elseif($Bzen["bankZ"] >=10000000 && $Bzen["bankZ"] < 100000000)
+            $color="color:#428200";
+		elseif($Bzen["bankZ"] >=100000000 && $Bzen["bankZ"] < 1000000000)
+            $color="color:#800009";
+		elseif($Bzen["bankZ"] >=1000000000)
+            $color="color:#516EFF";
+
+		$Bzen["bankZ"] = "<span style='$color;font-weight:bold;'>".print_price($Bzen["bankZ"])."</span>";
+
+		return $Bzen["bankZ"];
 	}
 }
 
-function cred_show()
+/**
+ * РїРѕРєР°С…С‹РІР°РµС‚ РєСЂРµРґРёС‚С‹ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹Рє СЃ РїРѕРґСЃРІРµС‚РєРѕР№ (Р·Р°РІРёСЃРёС‚ РѕС‚ С‡РёСЃР»Р°)
+ * @param $db
+ * @param $config
+ * @return bool
+ */
+function cred_show($db,$config)
 {
-	if(strlen($_SESSION["user"])>1)
+	if(isset($_SESSION["user"]))
 	{
-	global $config;
-	global $db;
-		$Bzen = $db->fetchrow($db->query("SELECT ".$config["cr_column"]." FROM ".$config["cr_table"]." WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'"));
-		if ($Bzen[0] <1000000) {$color="color:#E0BA14";}
-		elseif($Bzen[0] >=1000000 && $Bzen[0] < 10000000){$color="color:#00AE00";}
-		elseif($Bzen[0] >=10000000 && $Bzen[0] < 100000000){$color="color:#428200";}
-		elseif($Bzen[0] >=100000000 && $Bzen[0] < 1000000000){$color="color:#800009";}
-		elseif($Bzen[0] >=1000000000){$color="color:#516EFF";}
-		$Bzen[1] = "<span style='".$color.";font-weight:bold;'>".print_price($Bzen[0])."</span>";
-		return $Bzen[1];
+		$Bzen = $db->query("SELECT {$config["cr_column"]} FROM {$config["cr_table"]} WHERE {$config["cr_acc"]} = '{$_SESSION["user"]}'")->FetchRow();
+		if ($Bzen[$config["cr_column"]] <1000000)
+            $color="color:#E0BA14";
+		elseif($Bzen[$config["cr_column"]] >=1000000 && $Bzen[$config["cr_column"]] < 10000000)
+            $color="color:#00AE00";
+		elseif($Bzen[$config["cr_column"]] >=10000000 && $Bzen[$config["cr_column"]] < 100000000)
+            $color="color:#428200";
+		elseif($Bzen[$config["cr_column"]] >=100000000 && $Bzen[$config["cr_column"]] < 1000000000)
+            $color="color:#800009";
+		elseif($Bzen[$config["cr_column"]] >=1000000000)
+            $color="color:#516EFF";
+
+		$Bzen[$config["cr_column"]] = "<span style='$color;font-weight:bold;'>".print_price($Bzen[$config["cr_column"]])."</span>";
+
+		return $Bzen[$config["cr_column"]];
 	}
+    return false;
 }
 
-function know_kredits($accname="no")
+/**
+ * РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РєСЂРµРґРёС‚РѕРІ
+ * @param $db
+ * @param $config
+ * @param string $accname
+ * @return bool|int
+ */
+function know_kredits($db,$config,$accname="no")
 {
-	if($accname=="no") $accname = validate($_SESSION["user"]);
+	if($accname == "no")
+    {
+        if(isset($_SESSION["user"]))
+        {
+            $accname = $_SESSION["user"];
+        }
+        else
+            return false;
+    }
 
-	if(strlen($accname)>2)
+    $credits = $db->query("SELECT {$config["cr_column"]} FROM {$config["cr_table"]} WHERE {$config["cr_acc"]} = '{$accname}'")->FetchRow();
+    return $credits[$config["cr_column"]];
+}
+
+/**
+ * РІРѕР·РІСЂР°Р°РµС‚ РїРѕРґСЃРІРµС‡РµРЅРЅРѕРµ РєРѕР»-РІРѕ Р·РµРЅ РёР· СЃСѓРЅРґСѓРєР°
+ * @param $db
+ * @return bool|string
+ */
+function wareg_show($db)
+{
+	if(isset($_SESSION["user"]))
 	{
-		global $db;
-		global $config;
-		$credits = $db->fetchrow($db->query("SELECT ".$config["cr_column"]." FROM ".$config["cr_table"]." WHERE ".$config["cr_acc"]."='".$accname."'"));
-		return $credits[0];
+		$Bzen = $db->query("SELECT Money FROM warehouse WHERE AccountID ='{$_SESSION["user"]}'")->FetchRow();
+
+		if ($Bzen["Money"] <1000000)
+            $color="color:#E0BA14";
+		elseif($Bzen["Money"] >=1000000 && $Bzen["Money"] < 10000000)
+            $color="color:#00AE00";
+		elseif($Bzen["Money"] >=10000000 && $Bzen["Money"] < 100000000)
+            $color="color:#428200";
+		elseif($Bzen["Money"] >=100000000 && $Bzen["Money"] < 1000000000)
+            $color="color:#800009";
+		elseif($Bzen["Money"] >=1000000000)
+            $color="color:#516EFF";
+
+		$Bzen["Money"] = "<span style='$color;font-weight:bold;'>".print_price($Bzen["Money"])."</span>";
+
+		return $Bzen["Money"];
 	}
+    return false;
 }
 
-function wareg_show()
+/**
+ * РїСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё РЅР° Р°РєРєР°СѓРЅС‚Рµ РґР°РЅРЅС‹Р№ РїРµСЂСЃРѕРЅР°Р¶
+ * @param string $login Р°РєРєР°СѓРЅС‚
+ * @param $db
+ * @return int 1/0
+ */
+function chkc_char($login,$db)
 {
-	if(strlen($_SESSION["user"])>1)
-	{
-		global $db;
-		$Bzen = $db->fetchrow($db->query("SELECT Money FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
-		if ($Bzen[0] <1000000) {$color="color:#E0BA14";}
-		elseif($Bzen[0] >=1000000 && $Bzen[0] < 10000000){$color="color:#00AE00";}
-		elseif($Bzen[0] >=10000000 && $Bzen[0] < 100000000){$color="color:#428200";}
-		elseif($Bzen[0] >=100000000 && $Bzen[0] < 1000000000){$color="color:#800009";}
-		elseif($Bzen[0] >=1000000000){$color="color:#516EFF";}
-		$Bzen[1] = "<span style='".$color.";font-weight:bold;'>".print_price($Bzen[0])."</span>";
-		return $Bzen[1];
-	}
-}
+ $chk_count =  $db->query("SELECT Name FROM Character WHERE AccountID='".substr($login,0,10)."'")->FetchRow();
+ if (isset($chk_count["Name"]) && !empty($chk_count["Name"]))
+     return 1;
 
-function chkc_char($login)
-{
- global $db;
- $chk_count =  $db->numrows($db->query("SELECT Name FROM Character WHERE AccountID='".substr($login,0,10)."'"));
- if ($chk_count>0)  return 1;
  return 0;
 }
 
-
-function chck_online($login)
+/**
+ * @param $db
+ * @param $login Р»РѕРіРёРЅ
+ * @return int 1/0
+ */
+function chck_online($db,$login)
 {
-	global $db;
-	$chk_count = $db->numrows($db->query("SELECT ConnectStat FROM memb_stat WHERE memb___id='".substr($login,0,10)."' and ConnectStat>0"));
-	if ($chk_count<=0 or empty($chk_count)) return 0;
-	else return 1;
+	$chk_count = $db->query("SELECT ConnectStat FROM memb_stat WHERE memb___id='".substr($login,0,10)."' and ConnectStat>0")->FetchRow();
+	if (!isset($chk_count["ConnectStat"]) || empty($chk_count["ConnectStat"]) || $chk_count["ConnectStat"] == 0)
+        return 0;
+	else
+        return 1;
 }
 
 function mod_status ($stat)
 {
-	if($stat==1) $m="<span style='font-weight:bold;color:green'>On</span>";
-	else $m="<span style='font-weight:bold;color:red'>Off</span>";
-	return $m;
-}
-
-/*
-* конструтор главного меню
-*/
-function getmenutitles()
-{
- $loadfile = @file("_dat/menu.dat");
- $nowitime = time();
- $cachtime = @filemtime("_dat/menus/".$_SESSION["mwclang"]."_mainmenu"); 
- if (empty($loadfile) or !$loadfile) return "error menu loading!";
- else
- {
-  if(!$cachtime || ($nowitime-$cachtime > 3600))
-  {	
-   ob_start();
-   global $config;
-   global $content;
-
-   include "./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
-
-   $content->set('|siteaddress|', $config["siteaddress"]);
-   foreach ($loadfile as $m)
-   {
-    $showarr = explode("::",$m);
-    $showarr[1]=trim($showarr[1]);
-    $content->set('|modulename|', $showarr[0]);
-    $content->set('|modulecapt|', $lang[$showarr[1]]);
-    $content->out_content("theme/".$config["theme"]."/them/mainmenu.html");	
-   }
-   $bufer = ob_get_contents();
-   write_catch("_dat/menus/".$_SESSION["mwclang"]."_mainmenu",$bufer);ob_end_clean(); return $bufer;
-  }else return file_get_contents( "_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
- }
+	if($stat==1)
+        return "<span style='font-weight:bold;color:green'>On</span>";
+    return "<span style='font-weight:bold;color:red'>Off</span>";
 }
 
 /**
-* конструктор меню персонажа
-*/
-function getcharmenu($type=0, $name="non")
+ * РєРѕРЅСЃС‚СЂСѓС‚РѕСЂ РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ
+ * @param $config
+ * @param $content
+ * @return string
+ */
+function getmenutitles($config,$content)
 {
- $loadfile = @file("_dat/cmenu.dat");
+    $loadfile = @file("_dat/menu.dat");
+    $nowitime = time();
+    $cachtime = @filemtime("_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+    if (empty($loadfile) or !$loadfile)
+        return "error menu loading!";
+    else
+    {
+        if(!$cachtime || ($nowitime-$cachtime > 3600))
+        {
+            include "./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+            ob_start();
 
- if (empty($loadfile) or !$loadfile) echo "error menu loading!";
- else
- {
-  global $config;
-  if ($name != "non") $namel = "&chname=".$name; 
-  unset($name);
-  include ("./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
-  $let_num = count($loadfile);
-  $j=0;
-  $show = '<table width="100%" align="center" class="lighter1">';
-  foreach ($loadfile as $m)
-  {
-   $showarr = explode("::",$m);
-   $showarr[1]=trim($showarr[1]);
-   if ($type == 0)$show .= "<tr><td height='15' align='center' ><a href='".$config["siteaddress"]."/?up=".$showarr[0].$namel."' >".$lang[$showarr[1]]."</a></td></tr>";
-   else if ($type==1)
-   {
-    if ($j%2 == 0)$show .= "<tr>"; 
-    $show .= "<td";
-    if($j==($let_num-1) && ($j % 2) == 0) $show .=" colspan='2' style='text-align: justify;'"; 
-    $show .=" height='15' ><a href='".$config["siteaddress"]."/?up=".$showarr[0].$namel."'>".$lang[$showarr[1]]."</a></td>";
-    if ($j%2!=0) $show .="</tr>";
-    $j++;
-   }
-  }
-  if ($type==1 && ($let_num % 2)!=0) $show .="</tr>";
-  $show .="</table>"; 
-  return $show;
- }
+            $content->set('|siteaddress|', $config["siteaddress"]);
+
+            foreach ($loadfile as $m)
+            {
+                $showarr = explode("::",$m);
+                $showarr[1]=trim($showarr[1]);
+                $content->set('|modulename|', $showarr[0]);
+                $content->set('|modulecapt|', $lang[$showarr[1]]);
+                $content->out_content("theme/".$config["theme"]."/them/mainmenu.html");
+            }
+            $bufer = ob_get_contents();
+            write_catch("_dat/menus/".$_SESSION["mwclang"]."_mainmenu",$bufer);
+            ob_end_clean();
+            return $bufer;
+        }
+        else
+            return file_get_contents( "_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+    }
 }
 
 /**
-* конструктор меню пользователя
+* РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РјРµРЅСЋ РїРµСЂСЃРѕРЅР°Р¶Р°
 */
-function getusrmenu()
+function getcharmenu($config,$type=0, $name="non")
 {
- $loadfile = @file("_dat/umenu.dat");
- $nowitime = time();
- 
- $cachtime = @filemtime("_dat/menus/".$_SESSION["mwclang"]."_usermenu"); 
+    $loadfile = @file("_dat/cmenu.dat");
 
- global $config;
- global $content;
- if (empty($loadfile) or !$loadfile) echo "error menu loading!";
- else
- {
-  if(!$cachtime || ($nowitime-$cachtime > 3600))
-  {
-   ob_start();
-   include("./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
-   foreach ($loadfile as $m)
-   {
-    $showarr = explode("::",$m);
-    $content->set('|modulename|', $showarr[0]);
-    $content->set('|modulecapt|', $lang[trim($showarr[1])]);
-    $content->out_content("theme/".$config["theme"]."/them/usermenu.html");	
-   }
-   $content->set('|modulename|', "usercp");
-   $content->set('|modulecapt|', $lang["title_usercp"]);
-   $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
-   $bufer = ob_get_contents();
-   write_catch("_dat/menus/".$_SESSION["mwclang"]."_usermenu",$bufer);
-   ob_end_clean();
-   if (adm_check()==1)return $bufer.$content->out_content("theme/".$config["theme"]."/them/usermenu_a.html",1);
-   return $bufer;	
-  }
-  else
-  {
-   if (adm_check()==1) 
-    return file_get_contents("_dat/menus/".$_SESSION["mwclang"]."_usermenu").$content->out_content("theme/".$config["theme"]."/them/usermenu_a.html",1);
-   
-   return file_get_contents("_dat/menus/".$_SESSION["mwclang"]."_usermenu");
-  }				
- }
+    if (empty($loadfile) or !$loadfile)
+        echo "error menu loading!";
+    else
+    {
+        if ($name != "non")
+            $namel = "&chname=".$name;
+        unset($name);
+        include ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
+        $let_num = count($loadfile);
+        $j=0;
+        $show = '<table width="100%" align="center" class="lighter1">';
+        foreach ($loadfile as $m)
+        {
+            $showarr = explode("::",$m);
+            $showarr[1]=trim($showarr[1]);
+            if ($type == 0)
+                $show .= "<tr><td height='15' align='center' ><a href='".$config["siteaddress"]."/?up=".$showarr[0].$namel."' >".$lang[$showarr[1]]."</a></td></tr>";
+            else if ($type==1)
+            {
+                if ($j%2 == 0)$show .= "<tr>";
+                $show .= "<td";
+                if($j==($let_num-1) && ($j % 2) == 0)
+                    $show .=" colspan='2' style='text-align: justify;'";
+                $show .=" height='15' ><a href='".$config["siteaddress"]."/?up=".$showarr[0].$namel."'>".$lang[$showarr[1]]."</a></td>";
+                if ($j%2!=0) $show .="</tr>";
+                $j++;
+            }
+        }
+        if ($type==1 && ($let_num % 2)!=0)
+            $show .="</tr>";
+        $show .="</table>";
+        return $show;
+    }
 }
+
 /**
-* проверка на поддрежку 65к в стате
+* РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РјРµРЅСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+*/
+function getusrmenu($content,$config,$db)
+{
+    $loadfile = @file("_dat/umenu.dat");
+    $nowitime = time();
+    $cachtime = @filemtime("_dat/menus/".$_SESSION["mwclang"]."_usermenu");
+
+    if (empty($loadfile) or !$loadfile)
+        echo "error menu loading!";
+    else
+    {
+        if(!$cachtime || ($nowitime-$cachtime > 3600))
+        {
+            ob_start();
+            include("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
+            foreach ($loadfile as $m)
+            {
+                $showarr = explode("::",$m);
+                $content->set('|modulename|', $showarr[0]);
+                $content->set('|modulecapt|', $lang[trim($showarr[1])]);
+                $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
+            }
+            $content->set('|modulename|', "usercp");
+            $content->set('|modulecapt|', $lang["title_usercp"]);
+            $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
+            $bufer = ob_get_contents();
+            write_catch("_dat/menus/".$_SESSION["mwclang"]."_usermenu",$bufer);
+            ob_end_clean();
+
+            if (adm_check($db)==1)
+                return $bufer.$content->out_content("theme/".$config["theme"]."/them/usermenu_a.html",1);
+            return $bufer;
+        }
+        else
+        {
+            if (adm_check($db)==1)
+                return file_get_contents("_dat/menus/".$_SESSION["mwclang"]."_usermenu").$content->out_content("theme/".$config["theme"]."/them/usermenu_a.html",1);
+            return file_get_contents("_dat/menus/".$_SESSION["mwclang"]."_usermenu");
+        }
+    }
+}
+
+/**
+* РїСЂРѕРІРµСЂРєР° РЅР° РїРѕРґРґСЂРµР¶РєСѓ 65Рє РІ СЃС‚Р°С‚Рµ
 */
 function stats65 ($stat){ return $stat = ($stat <0) ? 65535+ $stat : $stat; }
 function restats65($var){ return $var =($var>32767) ? $var -65535 : $var;}
+
 /**
-* html-символы - экран
+* html-СЃРёРјРІРѕР»С‹ - СЌРєСЂР°РЅ
 */
-function bugsend($bug) 
-	{
-	 $bug = str_replace("<","&lt;",$bug);
+function bugsend($bug)
+{
+	/* $bug = str_replace("<","&lt;",$bug);
 	 $bug = str_replace('"',"&quot;",$bug);
 	 $bug = str_replace(">","&gt;",$bug);
 	 $bug = str_replace("!","&#033;",$bug);
@@ -715,36 +860,43 @@ function bugsend($bug)
 	 $bug = str_replace("^ +"," ",$bug);
 	 $bug = str_replace("\r"," ",$bug);
 	 //$bug = str_replace("\n","&lt;br&gt;",$bug);
-	 $bug = str_replace('\\\"',"&quot;",$bug);
-	 return $bug;
-	}
+	 $bug = str_replace('\\\"',"&quot;",$bug);*/
+	 return htmlspecialchars($bug,ENT_QUOTES);
+}
+
 /**
-* шифруем латинские символы для корректного отображения
+* С€РёС„СЂСѓРµРј Р»Р°С‚РёРЅСЃРєРёРµ СЃРёРјРІРѕР»С‹ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
 */
 function cyr_code ($in_text)
 {
-$output="";
-$other[1025]="Ё";
-$other[1105]="ё";
-$other[1028]="Є";
-$other[1108]="є";
-$other[1031]="Ї";
-$other[1111]="ї";
+    $output="";
+    $other[1025]="РЃ";
+    $other[1105]="С‘";
+    $other[1028]="Р„";
+    $other[1108]="С”";
+    $other[1031]="Р‡";
+    $other[1111]="С—";
 
-for ($i=0; $i<strlen($in_text);$i++) 
-{
-if (ord($in_text{$i})>191){$output.="&#".(ord($in_text{$i})+848).";";} 
-else 
-	{
-		if (array_search($in_text{$i}, $other)===false)	$output.=$in_text{$i};
-		else $output.="&#".array_search($in_text{$i}, $other).";";
-	}
+    for ($i=0; $i<strlen($in_text);$i++)
+    {
+        if (ord($in_text{$i})>191)
+        {
+            $output.="&#".(ord($in_text{$i})+848).";";
+        }
+        else
+        {
+            if (array_search($in_text{$i}, $other)===false)
+                $output.=$in_text{$i};
+            else
+                $output.="&#".array_search($in_text{$i}, $other).";";
+        }
+    }
+    $output =str_replace("'","&#039;",$output);
+    return $output;
 }
-$output =str_replace("'","&#039;",$output);
-return $output;
-}
+
 /**
-* кеширование
+* РєРµС€РёСЂРѕРІР°РЅРёРµ
 */
 function write_catch($file,$content)
 {
@@ -772,7 +924,7 @@ function bbcode($text) {
  "/\[hr\]/is" => "<hr>",
  "/\[br\]/is" => "<br>",
  "/\[sup\](.*?)\[\/sup\]/is" => "<sup>$1</sup>",
- "/\[sub\](.*?)\[\/sub\]/is" => "<sub>$1</sub>",//подстрочный
+ "/\[sub\](.*?)\[\/sub\]/is" => "<sub>$1</sub>",//РїРѕРґСЃС‚СЂРѕС‡РЅС‹Р№
  "/\[size\=(.*?)\](.*?)\[\/size\]/is" => "<span style=\"font-size:$1pt;\">$2</span>",
   "/\[color\=(.*?)\](.*?)\[\/color\]/is" => "<font color=\"#$1\">$2</font>",
   "/\[sml\](.*?)\[\/sml\]/is" => "<img src=\"$1\" style=\"position:relative; bottom: -4px;\" border=\"0\">"
@@ -791,162 +943,187 @@ function unhtmlentities ($str)
   $trans_tbl = array_flip ($trans_tbl);
   return strtr ($str, $trans_tbl);
 }
+
 /**
 * guild's logo
 */
 function GuildLogo($hex,$name,$size=64,$livetime) 
 {
- if (substr($hex,0,2)=="0x") $hex = strtolower(substr($hex,2));
- else $hex = urlencode(bin2hex($hex));
-		
- $pixelSize	= $size / 8;
- $img = ImageCreate($size,$size);
- $ftime = @filemtime("imgs/guilds/".$name."-".$size.".png");
- if(file_exists("imgs/guilds/".$name."-".$size.".png") && (time() - $ftime <= $livetime)) 
- {
-   return "<img alt=\"\" src=\"imgs/guilds/".$name."-".$size.".png\">";
- }
- else 
- {
-  if(@preg_match('/[^a-zA-Z0-9]/',$hex) || $hex == '') $hex = '0044450004445550441551554515515655555566551551660551166000566600';
-  else $hex = stripslashes($hex);
-	
-  for ($y = 0; $y < 8; $y++) 
-  {
-   for ($x = 0; $x < 8; $x++) 
-   {
-	 $offset	= ($y*8)+$x;
-	 if(substr($hex, $offset, 1) == '0')	{$c1 = "0";		$c2 = "0"; 		$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '1')	{$c1 = "0";		$c2 = "0"; 		$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '2')	{$c1 = "128"; 	$c2 = "128"; 	$c3 = "128";	}
-	 elseif	(substr($hex, $offset, 1) == '3')	{$c1 = "255"; 	$c2 = "255"; 	$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == '4')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '5')	{$c1 = "255"; 	$c2 = "128"; 	$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '6')	{$c1 = "255"; 	$c2 = "255"; 	$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '7')	{$c1 = "128"; 	$c2 = "255"; 	$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '8')	{$c1 = "0"; 	$c2 = "255"; 	$c3 = "0";		}
-	 elseif	(substr($hex, $offset, 1) == '9')	{$c1 = "0"; 	$c2 = "255"; 	$c3 = "128";	}
-	 elseif	(substr($hex, $offset, 1) == 'a')	{$c1 = "0"; 	$c2 = "255";	$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == 'b')	{$c1 = "0"; 	$c2 = "128"; 	$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == 'c')	{$c1 = "0"; 	$c2 = "0"; 		$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == 'd')	{$c1 = "128"; 	$c2 = "0"; 		$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == 'e')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "255";	}
-	 elseif	(substr($hex, $offset, 1) == 'f')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "128";	}
-	 else										{$c1 = "255"; 	$c2 = "255"; 	$c3 = "255";	}
-	 $row[$x] 		= $x*$pixelSize;
-	 $row[$y] 		= $y*$pixelSize;
-	 $row2[$x] 		= $row[$x] + $pixelSize;
-	 $row2[$y]		= $row[$y] + $pixelSize;
-	 $color[$y][$x]	= imagecolorallocate($img, $c1, $c2, $c3);
-	 imagefilledrectangle($img, $row[$x], $row[$y], $row2[$x], $row2[$y], $color[$y][$x]);
-	}
-  }
-  Imagepng($img,"imgs/guilds/".$name."-".$size.".png");
-  Imagedestroy($img);
-  return "<img border=\"0\" src=\"imgs/guilds/".$name."-".$size.".png\">";
- }
+    if (substr($hex,0,2)=="0x")
+        $hex = strtolower(substr($hex,2));
+    else
+        $hex = urlencode(bin2hex($hex));
+
+    $pixelSize	= $size / 8;
+    $img = ImageCreate($size,$size);
+    $ftime = @filemtime("imgs/guilds/".$name."-".$size.".png");
+    if(file_exists("imgs/guilds/".$name."-".$size.".png") && (time() - $ftime <= $livetime))
+    {
+        return "<img alt=\"\" src=\"imgs/guilds/".$name."-".$size.".png\">";
+    }
+    else
+    {
+        if(@preg_match('/[^a-zA-Z0-9]/',$hex) || $hex == '')
+            $hex = '0044450004445550441551554515515655555566551551660551166000566600';
+        else
+            $hex = stripslashes($hex);
+
+        for ($y = 0; $y < 8; $y++)
+        {
+            for ($x = 0; $x < 8; $x++)
+            {
+                $offset	= ($y*8)+$x;
+                 if(substr($hex, $offset, 1) == '0')	{$c1 = "0";		$c2 = "0"; 		$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '1')	{$c1 = "0";		$c2 = "0"; 		$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '2')	{$c1 = "128"; 	$c2 = "128"; 	$c3 = "128";	}
+                 elseif	(substr($hex, $offset, 1) == '3')	{$c1 = "255"; 	$c2 = "255"; 	$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == '4')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '5')	{$c1 = "255"; 	$c2 = "128"; 	$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '6')	{$c1 = "255"; 	$c2 = "255"; 	$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '7')	{$c1 = "128"; 	$c2 = "255"; 	$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '8')	{$c1 = "0"; 	$c2 = "255"; 	$c3 = "0";		}
+                 elseif	(substr($hex, $offset, 1) == '9')	{$c1 = "0"; 	$c2 = "255"; 	$c3 = "128";	}
+                 elseif	(substr($hex, $offset, 1) == 'a')	{$c1 = "0"; 	$c2 = "255";	$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == 'b')	{$c1 = "0"; 	$c2 = "128"; 	$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == 'c')	{$c1 = "0"; 	$c2 = "0"; 		$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == 'd')	{$c1 = "128"; 	$c2 = "0"; 		$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == 'e')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "255";	}
+                 elseif	(substr($hex, $offset, 1) == 'f')	{$c1 = "255"; 	$c2 = "0"; 		$c3 = "128";	}
+                 else										{$c1 = "255"; 	$c2 = "255"; 	$c3 = "255";	}
+                 $row[$x] 		= $x*$pixelSize;
+                 $row[$y] 		= $y*$pixelSize;
+                 $row2[$x] 		= $row[$x] + $pixelSize;
+                 $row2[$y]		= $row[$y] + $pixelSize;
+                 $color[$y][$x]	= imagecolorallocate($img, $c1, $c2, $c3);
+                 imagefilledrectangle($img, $row[$x], $row[$y], $row2[$x], $row2[$y], $color[$y][$x]);
+            }
+        }
+        Imagepng($img,"imgs/guilds/".$name."-".$size.".png");
+        Imagedestroy($img);
+        return "<img border=\"0\" src=\"imgs/guilds/".$name."-".$size.".png\">";
+    }
 }
 	
 /*
-* выводит на экран время кеша
+* РІС‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ РІСЂРµРјСЏ РєРµС€Р°
 */
-function timing($toptime,$type=1)
+function timing($toptime,$content,$type=1)
 {
- global $content;
-
- $forms=array( $content->lng["caching_mins1"],  $content->lng["caching_mins2"],  $content->lng["caching_mins3"]);
- 
- if ($type==1)
- {
- $toptime = round(($toptime/60),2);
-  echo "<div align=\"center\" class=\"cathtime\">*".$content->lng["caching_time"]." ".$toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]))."</div>";
- }
- else
-  return $toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2])); 
+    $forms=array( $content->getVal["caching_mins1"],  $content->getVal["caching_mins2"],  $content->getVal["caching_mins3"]);
+    if ($type==1)
+    {
+        $toptime = round(($toptime/60),2);
+        echo "<div align=\"center\" class=\"cathtime\">*".$content->getVal["caching_time"]." ".$toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]))."</div>";
+    }
+    else
+        return $toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]));
 }
-	
+
 function know_level($personaz)
-{	
- require "configs/res_cfg.php";
- if ($personaz>=0 && $personaz<=3) return $res["reset_sm_lvl"];
- elseif ($personaz>=16 && $personaz<=19) return $res["reset_bk_lvl"];
- elseif ($personaz>=32 && $personaz<=35) return $res["reset_elf_lvl"];
- elseif ($personaz>=48 && $personaz<=50) return $res["reset_mg_lvl"];
- elseif ($personaz>=64 && $personaz<=66) return $res["reset_dl_lvl"];
- elseif ($personaz>=80 && $personaz<=83) return $res["reset_bs_lvl"];
- elseif ($personaz>=96 && $personaz<=98) return $res["reset_rf_lvl"];
- else return 1000;
+{
+    if(file_exists("configs/res_cfg.php"))
+    {
+        require "configs/res_cfg.php";
+        if ($personaz>=0 && $personaz<=3)
+            return $res["reset_sm_lvl"];
+        elseif ($personaz>=16 && $personaz<=19)
+            return $res["reset_bk_lvl"];
+        elseif ($personaz>=32 && $personaz<=35)
+            return $res["reset_elf_lvl"];
+        elseif ($personaz>=48 && $personaz<=50)
+            return $res["reset_mg_lvl"];
+        elseif ($personaz>=64 && $personaz<=66)
+            return $res["reset_dl_lvl"];
+        elseif ($personaz>=80 && $personaz<=83)
+            return $res["reset_bs_lvl"];
+        elseif ($personaz>=96 && $personaz<=98)
+            return $res["reset_rf_lvl"];
+        else
+            return 1000;
+    }
+    return 1000;
 }
 
 function know_gpoints($personaz)
-{	
-  require "configs/gres_cfg.php";
- if ($personaz>=0 && $personaz<=3) return $gres["greset_dw"];
- elseif ($personaz>=16 && $personaz<=19) return $gres["greset_dk"];
- elseif ($personaz>=32 && $personaz<=35) return $gres["greset_elf"];
- elseif ($personaz>=48 && $personaz<=50) return $gres["greset_mg"];
- elseif ($personaz>=64 && $personaz<=66) return $gres["greset_dl"];
- elseif ($personaz>=80 && $personaz<=83) return $gres["greset_s"];
- elseif ($personaz>=96 && $personaz<=98) return $gres["greset_rf"];
- else die("not supported classtype!");
+{
+    if(file_exists("configs/gres_cfg.php"))
+    {
+        require "configs/gres_cfg.php";
+        if ($personaz >= 0 && $personaz <= 3)
+            return $gres["greset_dw"];
+        elseif ($personaz >= 16 && $personaz <= 19)
+            return $gres["greset_dk"];
+        elseif ($personaz >= 32 && $personaz <= 35)
+            return $gres["greset_elf"];
+        elseif ($personaz >= 48 && $personaz <= 50)
+            return $gres["greset_mg"];
+        elseif ($personaz >= 64 && $personaz <= 66)
+            return $gres["greset_dl"];
+        elseif ($personaz >= 80 && $personaz <= 83)
+            return $gres["greset_s"];
+        elseif ($personaz >= 96 && $personaz <= 98)
+            return $gres["greset_rf"];
+        else die("not supported classtype!");
+    }
+    else
+        die("not supported classtype!");
 }
 
 function swiched_val($value)
 {
- switch ($value)
-  {
-   case 0: return "<span style='color:red;font-weight:bold;'>Off</span>";break;
-   case 1: return "<span style='color:green;font-weight:bold;'>On</span>";break;
-   default: "error!";
-  }
+    switch ($value)
+    {
+        case 0: return "<span style='color:red;font-weight:bold;'>Off</span>";break;
+        case 1: return "<span style='color:green;font-weight:bold;'>On</span>";break;
+        default: "error!";
+    }
 }
 
 /*
-* проверяет, есть ли сундук, если нет возвращает 0
+* РїСЂРѕРІРµСЂСЏРµС‚, РµСЃС‚СЊ Р»Рё СЃСѓРЅРґСѓРє, РµСЃР»Рё РЅРµС‚ РІРѕР·РІСЂР°С‰Р°РµС‚ 0
 */
-function is_wh()
+function is_wh($db)
 {
- if ($_SESSION["user"])
- {
-   global $config;
-   global $db;
-   return $db->numrows($db->query("SELECT AccountID FROM warehouse WHERE AccountID='".substr($_SESSION["user"],0,11)."'"));
- }
- else return 0;
+    if (isset($_SESSION["user"]))
+    {
+        $q = $db->query("SELECT count(*) as cnt FROM warehouse WHERE AccountID='".substr($_SESSION["user"],0,11)."'")->FetchRow();
+        return $q["cnt"];
+    }
+    return 0;
 }
 
 /*
-* узнать максимальне число итемов в магазине для акка
+* СѓР·РЅР°С‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅРµ С‡РёСЃР»Рѕ РёС‚РµРјРѕРІ РІ РјР°РіР°Р·РёРЅРµ РґР»СЏ Р°РєРєР°
 *
 */
-function knowmaxit()
+function knowmaxit($db)
 {
-  if ($_SESSION["user"])
-  {
-    global $config;
-    global $db;
-    return $db->numrows($db->query("SELECT code FROM web_shop WHERE memb___id='".substr($_SESSION["user"],0,10)."'"));
-  } 
-  else return 0;  
+    if (isset($_SESSION["user"]))
+    {
+        $q = $db->query("SELECT count(*) as cnt FROM web_shop WHERE memb___id='".substr($_SESSION["user"],0,10)."'")->FetchRow();
+        return $q["cnt"];
+    }
+    return 0;
 }
 
 /*
-* работает с парсом времени со скула
-*@point - данные с базы
-*@tpat - шаблон времени
-*@type - тип 1 - возвратит кол-во секунд, 0 вернет время в нужном шаблоне
+* СЂР°Р±РѕС‚Р°РµС‚ СЃ РїР°СЂСЃРѕРј РІСЂРµРјРµРЅРё СЃРѕ СЃРєСѓР»Р°
+*@point - РґР°РЅРЅС‹Рµ СЃ Р±Р°Р·С‹
+*@tpat - С€Р°Р±Р»РѕРЅ РІСЂРµРјРµРЅРё
+*@type - С‚РёРї 1 - РІРѕР·РІСЂР°С‚РёС‚ РєРѕР»-РІРѕ СЃРµРєСѓРЅРґ, 0 РІРµСЂРЅРµС‚ РІСЂРµРјСЏ РІ РЅСѓР¶РЅРѕРј С€Р°Р±Р»РѕРЅРµ
 */
 function parsetime($point,$type=0,$tpat="none")
 {
-if ($tpat=="none") 
- $tpat = "H:i d-M";
-if ($type==0)
-   return @date($tpat,strtotime($point));
-else 
-   return strtotime($point);
+    if ($tpat=="none")
+        $tpat = "H:i d-M";
+    if ($type==0)
+        return @date($tpat,strtotime($point));
+    else
+        return strtotime($point);
 }
+
 /*
-* цвет цены
+* С†РІРµС‚ С†РµРЅС‹
 */
 function pod_price ($price)
 {
@@ -961,247 +1138,137 @@ function pod_price ($price)
 
 
 /*
-* дает краткую информацию о осаде
-* возвращает массив, 0 член - имя владельцев замка, 1 - текущий период, 2 - начало 3- конец
+* РґР°РµС‚ РєСЂР°С‚РєСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РѕСЃР°РґРµ
+* РІРѕР·РІСЂР°С‰Р°РµС‚ РјР°СЃСЃРёРІ, 0 С‡Р»РµРЅ - РёРјСЏ РІР»Р°РґРµР»СЊС†РµРІ Р·Р°РјРєР°, 1 - С‚РµРєСѓС‰РёР№ РїРµСЂРёРѕРґ, 2 - РЅР°С‡Р°Р»Рѕ 3- РєРѕРЅРµС†
 */
 
-function know_csstate()
+function know_csstate($db,$content)
 {
- global $db;
- global $content;
- $info_ar=array(); 
- $CS_GUILD = $db->fetchrow($db->query("SELECT OWNER_GUILD,CONVERT(CHAR(19), SIEGE_START_DATE, 120),CONVERT(CHAR(19), SIEGE_END_DATE, 120) FROM MuCastle_DATA"));
- if (strlen($CS_GUILD[0])<3) $info_ar[0]="-/-";
- else $info_ar[0]=$CS_GUILD[0];
- 
- if((@strtotime($CS_GUILD[1])+86400) > $Current_Time) $info_ar[1] = $content->lng["cs_period"];       /* 0 00:00 - 0 23:59 */
- elseif	((@strtotime($CS_GUILD[1])+432000) > $Current_Time) $info_ar[1] = $content->lng["cs_period1"]; /* 1 00:00 - 4 23:59 */
- elseif	((@strtotime($CS_GUILD[1])+500400) > $Current_Time) $info_ar[1] = $content->lng["cs_period2"]; /* 5 00:00 - 5 19:00 */
- elseif	((@strtotime($CS_GUILD[1])+586800) > $Current_Time) $info_ar[1] = $content->lng["cs_period3"]; /* 5 19:00 - 6 19:00 */
- elseif	((@strtotime($CS_GUILD[1])+594000) > $Current_Time) $info_ar[1] = $content->lng["cs_period4"]; /* 6 19:00 - 6 21:00 */
- else $info_ar[1] = $content->lng["cs_period5"];
- 
- $info_ar[2] = parsetime($CS_GUILD[1],0,"d.m.Y");
- $info_ar[3] = parsetime($CS_GUILD[2],0,"d.m.Y");
- return $info_ar;
-}
+    $info_ar=array();
+    $CS_GUILD = $db->query("SELECT OWNER_GUILD,CONVERT(CHAR(19), SIEGE_START_DATE, 120) as SIEGE_START_DATE,CONVERT(CHAR(19), SIEGE_END_DATE, 120) as SIEGE_END_DATE FROM MuCastle_DATA")->FetchRow();
+    if (!isset($CS_GUILD["OWNER_GUILD"]) || empty($CS_GUILD["OWNER_GUILD"]))
+        $info_ar[0]="-/-";
+    else
+        $info_ar[0] = $CS_GUILD["OWNER_GUILD"];
 
+    $Current_Time = time();
 
-/**
-* построение диаграммы
-*/
-function Diagramm($im,$VALUES,$LEGEND) 
-{
- // Зададим цвета элементов
- $COLORS[0] = imagecolorallocate($im, 255, 203, 3);
- $COLORS[1] = imagecolorallocate($im, 220, 101, 29);
- $COLORS[2] = imagecolorallocate($im, 189, 24, 51);
- $COLORS[3] = imagecolorallocate($im, 214, 0, 127);
- $COLORS[4] = imagecolorallocate($im, 98, 1, 96);
- $COLORS[5] = imagecolorallocate($im, 0, 62, 136);
- $COLORS[6] = imagecolorallocate($im, 0, 102, 179);
- $COLORS[7] = imagecolorallocate($im, 0, 145, 195);
- $COLORS[8] = imagecolorallocate($im, 0, 115, 106);
- $COLORS[9] = imagecolorallocate($im, 178, 210, 52);
- $COLORS[10] = imagecolorallocate($im, 137, 91, 74);
- $COLORS[11] = imagecolorallocate($im, 82, 56, 47);
- $COLORS[12] = imagecolorallocate($im, 68, 255, 48);
- $COLORS[13] = imagecolorallocate($im, 0, 255, 255);
- $COLORS[14] = imagecolorallocate($im, 63, 211, 44);
- $COLORS[15] = imagecolorallocate($im, 255, 160, 165);
- $COLORS[16] = imagecolorallocate($im, 124, 38, 255);
- $COLORS[17] = imagecolorallocate($im, 182, 93, 0);
- $COLORS[18] = imagecolorallocate($im, 255, 251, 0);
- $COLORS[19] = imagecolorallocate($im, 169, 192, 198);
- $COLORS[20] = imagecolorallocate($im, 164, 116, 113);
- // Зададим цвета теней элементов
- $SHADOWS[0] = imagecolorallocate($im, 205, 153, 0);
- $SHADOWS[1] = imagecolorallocate($im, 170, 51, 0);
- $SHADOWS[2] = imagecolorallocate($im, 139, 0, 1);
- $SHADOWS[3] = imagecolorallocate($im, 164, 0, 77);
- $SHADOWS[4] = imagecolorallocate($im, 48, 0, 46);
- $SHADOWS[5] = imagecolorallocate($im, 0, 12, 86);
- $SHADOWS[6] = imagecolorallocate($im, 0, 52, 129);
- $SHADOWS[7] = imagecolorallocate($im, 0, 95, 145);
- $SHADOWS[8] = imagecolorallocate($im, 0, 65, 56);
- $SHADOWS[9] = imagecolorallocate($im, 128, 160, 2);
- $SHADOWS[10] = imagecolorallocate($im, 87, 41, 24);
- $SHADOWS[11] = imagecolorallocate($im, 32, 6, 0);	
- $SHADOWS[12] = imagecolorallocate($im, 40, 150, 28);	
- $SHADOWS[13] = imagecolorallocate($im, 0, 127, 127);	
- $SHADOWS[14] = imagecolorallocate($im, 40, 135, 28);	
- $SHADOWS[15] = imagecolorallocate($im, 193, 122, 125);	
- $SHADOWS[16] = imagecolorallocate($im, 67, 21, 142);	
- $SHADOWS[17] = imagecolorallocate($im, 122, 61, 0);	
- $SHADOWS[18] = imagecolorallocate($im, 130, 127, 0);	
- $SHADOWS[19] = imagecolorallocate($im, 108, 123, 127);	
- $SHADOWS[20] = imagecolorallocate($im, 86, 61, 59);	
- $black=ImageColorAllocate($im,0,0,0);
+    if((@strtotime($CS_GUILD["SIEGE_START_DATE"])+86400) > $Current_Time)
+        $info_ar[1] = $content->getVal["cs_period"];       /* 0 00:00 - 0 23:59 */
+    elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+432000) > $Current_Time)
+        $info_ar[1] = $content->getVal["cs_period1"]; /* 1 00:00 - 4 23:59 */
+    elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+500400) > $Current_Time)
+        $info_ar[1] = $content->getVal["cs_period2"]; /* 5 00:00 - 5 19:00 */
+    elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+586800) > $Current_Time)
+        $info_ar[1] = $content->getVal["cs_period3"]; /* 5 19:00 - 6 19:00 */
+    elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+594000) > $Current_Time)
+        $info_ar[1] = $content->getVal["cs_period4"]; /* 6 19:00 - 6 21:00 */
+    else
+        $info_ar[1] = $content->getVal["cs_period5"];
 
- // Получим размеры изображения
- $W=ImageSX($im);                 
- $H=ImageSY($im);
- // Вывод легенды 
- // Посчитаем количество пунктов, от этого зависит высота легенды
- $legend_count=count($LEGEND);
- // Посчитаем максимальную длину пункта, от этого зависит ширина легенды
- $max_length=0;
- foreach($LEGEND as $v) if ($max_length<strlen($v)) $max_length=strlen($v);
- // Номер шрифта, котором мы будем выводить легенду
- $FONT=2;
- $font_w=ImageFontWidth($FONT);
- $font_h=ImageFontHeight($FONT);
- // Вывод прямоугольника - границы легенды 
+    $info_ar[2] = parsetime($CS_GUILD["SIEGE_START_DATE"],0,"d.m.Y");
+    $info_ar[3] = parsetime($CS_GUILD["SIEGE_END_DATE"],0,"d.m.Y");
 
- $l_width=($font_w*$max_length)+$font_h+10+5+10;
- $l_height=$font_h*$legend_count+10+10;
-		
- // Получим координаты верхнего левого угла прямоугольника - границы легенды
- $l_x1=$W-10-$l_width;
- $l_y1=($H-$l_height)/2;
- 
- // Выводя прямоугольника - границы легенды
- ImageRectangle($im, $l_x1, $l_y1, $l_x1+$l_width, $l_y1+$l_height, $black);
-
- // Вывод текст легенды и цветных квадратиков
- $text_x=$l_x1+10+5+$font_h;
- $square_x=$l_x1+10;
- $y=$l_y1+10;
- $i=0;
- foreach($LEGEND as $v) 
- {
-  $dy=$y+($i*$font_h);
-  ImageString($im, $FONT, $text_x, $dy, $v, $black);
-  ImageFilledRectangle($im,
-  $square_x+1,$dy+1,$square_x+$font_h-1,$dy+$font_h-1, $COLORS[$i]);
-  ImageRectangle($im, $square_x+1,$dy+1,$square_x+$font_h-1,$dy+$font_h-1, $black);
-  $i++;
- }
- // Вывод круговой диаграммы 
-
- $total=array_sum($VALUES);
- $anglesum=$angle=Array(0);
- $i=1;
- // Расчет углов
- while ($i<count($VALUES)) 
- {
-  $part=$VALUES[$i-1]/$total;
-  $angle[$i]=floor($part*360);
-  $anglesum[$i]=array_sum($angle);
-  $i++;
- }
- $anglesum[]=$anglesum[0];
- // Расчет диаметра
- $diametr=$l_x1-10-10;
- // Расчет координат центра эллипса
- $circle_x=($diametr/2)+10;
- $circle_y=$H/2-10;
-
- // Поправка диаметра, если эллипс не помещается по высоте
- if ($diametr>($H*2)-10-10) $diametr=($H*2)-20-20-40;
- // Вывод тени
- for ($j=20;$j>0;$j--)
-  for ($i=0;$i<count($anglesum)-1;$i++)
-      ImageFilledArc($im,$circle_x,$circle_y+$j,$diametr,$diametr/2,$anglesum[$i],$anglesum[$i+1], $SHADOWS[$i],IMG_ARC_PIE);
- // Вывод круговой диаграммы
- for ($i=0;$i<count($anglesum)-1;$i++)
-     ImageFilledArc($im,$circle_x,$circle_y, $diametr,$diametr/2,$anglesum[$i],$anglesum[$i+1],$COLORS[$i],IMG_ARC_PIE);
+    return $info_ar;
 }
 
 /**
-* проверка на администратора
+* РїСЂРѕРІРµСЂРєР° РЅР° Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°
 */
 function isadmin()
 {
- if (isset($_SESSION["sadmin"]))
- {
-   global $db;
- 
-   $validadm = $db->numrows($db->query("SELECT name,pwd FROM MWC_admin WHERE name='".validate($_SESSION["sadmin"])."' and pwd='".md5($_SESSION["spwd"])."'")); 
-   
-   if ($validadm==1) return 1;
-   else
-   {
-    unset($_SESSION["sadmin"],$_SESSION["spwd"],$_SESSION["adm"]);
+    if (isset($_SESSION["sadmin"]))
+    {
+        return 1;
+       /* global $db;
+        $validadm = $db->numrows($db->query("SELECT name,pwd FROM MWC_admin WHERE name='".validate($_SESSION["sadmin"])."' and pwd='".md5($_SESSION["spwd"])."'"));
+
+        if ($validadm==1) return 1;
+        else
+        {
+            unset($_SESSION["sadmin"],$_SESSION["spwd"],$_SESSION["adm"]);
+            return 0;
+        }  */
+    }
     return 0;
-   }  
- }
- return 0;
 } 
 
 /**
-* Проверка на баны, разбан в случае, если бан истек
+* РџСЂРѕРІРµСЂРєР° РЅР° Р±Р°РЅС‹, СЂР°Р·Р±Р°РЅ РІ СЃР»СѓС‡Р°Рµ, РµСЃР»Рё Р±Р°РЅ РёСЃС‚РµРє
 **/
-function autobans($nocach=false)
+function autobans($db,$nocach=false)
 {
- $ntime = @filemtime("_dat/cach/bc"); 
- $now = time();
- if(!$ntime or time() - $ntime >3600 or $nocach) //проверка раз в час 
- {
-  $filrb = @file("_dat/autobans.dat");
-  global $db;
-  
-  if (count($filrb>0))
-  {
-   foreach($filrb as $m)
-   {
-    $tempA = explode("|:",$m);
-    if ($tempA[1]!=1)
+    $ntime = @filemtime("_dat/cach/bc");
+    $now = time();
+    if(!$ntime or time() - $ntime >3600 or $nocach) //РїСЂРѕРІРµСЂРєР° СЂР°Р· РІ С‡Р°СЃ
     {
-     $name = $tempA[0];
-     $tt = $db->fetchrow("SELECT AccountID FROM Character WHERE Name='".$tempA[0]."'");
-     $tempA[0]=$tt[0];
-    }
+        $filrb = @file("_dat/autobans.dat");
 
-    $chk_result = $db->fetchrow($db->query("SELECT mwcban_time, bloc_code,ban_des FROM memb_info WHERE memb___id='".$tempA[0]."'"));
-    if ($now>=$chk_result[0] && $chk_result[2]!="0" && $chk_result[0]!=0)/*если время бана вышло*/
-    {
-     if ($chk_result[1]==0)/*если забанен персонаж*/
-     {
-      $db->query("UPDATE MEMB_INFO SET mwcban_time='0',ban_des='0' WHERE memb___id='".$tempA[0]."'; UPDATE Character SET CtlCode='0' WHERE Name='".$name."'");
-      WriteLogs("Ban_","Время бана истекло, персонаж ".$name);	
-     }
-     else
-     {
-      $upd = $db->query("UPDATE memb_info SET mwcban_time=0, bloc_code=0,ban_des='0' WHERE memb___id='".$tempA[0]."'");
-	  $chk_result[1] = 0;
-	  WriteLogs("Ban_","Время бана истекло, аккаунт ".$tempA[0]);
-     }
-    }
-   }
-   @unlink("_dat/cach/".$_SESSION["mwclang"]."_ban");	  
-  
-   $fhandle = fopen("_dat/autobans.dat","w");	
-   fclose($fhandle);   
-   $h=fopen("_dat/cach/bc","w");  
-   fclose($h);
+        if (count($filrb>0))
+        {
+            foreach($filrb as $m)
+            {
+                $tempA = explode("|:",$m);
+                if ($tempA[1]!=1)
+                {
+                    $name = $tempA[0];
+                    $tt = $db->query("SELECT AccountID FROM Character WHERE Name='{$tempA[0]}'")->FetchRow();
+                    $tempA[0]=$tt["AccountID"];
+                }
 
-  }
-  else
-  {
-   $query_s = $db->query("SELECT memb___id,bloc_code,mwcban_time,ban_des FROM memb_info where ban_des!='0'");
-   $accs=array();
-   $chars = array();
-   while ($show_ar = $db->fetcharray($query_s))
-   {
-    if ($show_ar["bloc_code"]==0) 
-    {
-     $b_chr = $db->fetchrow($db->query("SELECT Name FROM Character WHERE CtlCode = 1 and AccountID='".$show_ar["memb___id"]."'"));
-     $show_ar["memb___id"] = $b_chr[0];
-     $chars[]=$show_ar["memb___id"];
+                $chk_result = $db->query("SELECT mwcban_time, bloc_code,ban_des FROM memb_info WHERE memb___id='{$tempA[0]}'")->FetchRow();
+
+                if ($now>=$chk_result["mwcban_time"] && $chk_result["ban_des"]!="0" && $chk_result["mwcban_time"]!=0)/*РµСЃР»Рё РІСЂРµРјСЏ Р±Р°РЅР° РІС‹С€Р»Рѕ*/
+                {
+                    if ($chk_result["bloc_code"]==0)/*РµСЃР»Рё Р·Р°Р±Р°РЅРµРЅ РїРµСЂСЃРѕРЅР°Р¶*/
+                    {
+                        $db->query("UPDATE MEMB_INFO SET mwcban_time='0',ban_des='0' WHERE memb___id='{$tempA[0]}'; UPDATE Character SET CtlCode='0' WHERE Name='{$name}'");
+                        logs::WriteLogs("Ban_","Р’СЂРµРјСЏ Р±Р°РЅР° РёСЃС‚РµРєР»Рѕ, РїРµСЂСЃРѕРЅР°Р¶ ".$name);
+                    }
+                    else
+                    {
+                        $db->query("UPDATE memb_info SET mwcban_time=0, bloc_code=0,ban_des='0' WHERE memb___id='{$tempA[0]}'");
+                        $chk_result["bloc_code"] = 0;
+                        logs::WriteLogs("Ban_","Р’СЂРµРјСЏ Р±Р°РЅР° РёСЃС‚РµРєР»Рѕ, Р°РєРєР°СѓРЅС‚ ".$tempA[0]);
+                    }
+                }
+            }
+            @unlink("_dat/cach/".$_SESSION["mwclang"]."_ban");
+
+            $fhandle = fopen("_dat/autobans.dat","w");
+            fclose($fhandle);
+            $h=fopen("_dat/cach/bc","w");
+            fclose($h);
+        }
+        else
+        {
+            $query_s = $db->query("SELECT memb___id,bloc_code,mwcban_time,ban_des FROM memb_info where ban_des!='0'");
+            $accs=array();
+            $chars = array();
+            while ($show_ar = $query_s->FetchRow())
+            {
+                if ($show_ar["bloc_code"]==0)
+                {
+                    $b_chr = $db->query("SELECT Name FROM Character WHERE CtlCode = 1 and AccountID='{$show_ar["memb___id"]}'")->FetchRow();
+                    $show_ar["memb___id"] = $b_chr["Name"];
+                    $chars[]=$show_ar["memb___id"];
+                }
+                else
+                    $accs[]=$show_ar["memb___id"];
+            }
+
+            if (count($accs)>0 || count($chars)>0)
+            {
+                $fhandle = fopen("_dat/autobans.dat","w");
+                foreach ($accs as $v)
+                    fwrite($fhandle,$v."|:1\r\n");
+                foreach ($chars as $v)
+                    fwrite($fhandle,$v."|:2\r\n");
+                fclose($fhandle);
+                $h=fopen("_dat/cach/bc","w");
+                fclose($h);
+                @unlink("_dat/cach/".$_SESSION["mwclang"]."_ban");
+            }
+        }
     }
-    else $accs[]=$show_ar["memb___id"];
-   }
-   if (count($accs)>0 || count($chars)>0)
-   {
-    $fhandle = fopen("_dat/autobans.dat","w");
-    foreach ($accs as $v)  fwrite($fhandle,$v."|:1\r\n"); 
-    foreach ($chars as $v) fwrite($fhandle,$v."|:2\r\n");
-    fclose($fhandle);
-	$h=fopen("_dat/cach/bc","w");  
-    fclose($h);
-    @unlink("_dat/cach/".$_SESSION["mwclang"]."_ban");
-   }
-  }
- }
 }

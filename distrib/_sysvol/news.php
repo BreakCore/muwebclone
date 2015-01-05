@@ -3,7 +3,7 @@ global $config;
 global $content;
 require "configs/news_cfg.php";
 
-$inpage = $news["shownews"]; /*количество новостей на странице*/
+$inpage = $news["shownews"]; /*РєРѕР»РёС‡РµСЃС‚РІРѕ РЅРѕРІРѕСЃС‚РµР№ РЅР° СЃС‚СЂР°РЅРёС†Рµ*/
 $t = $news["shownews"];
 $linksv = $news["newsf"];
 $linklen = $news["liklen"];

@@ -37,7 +37,7 @@ elseif(strlen(trim($_GET["chat"]))>0)
     { 
      if(substr_count(strtolower($text), strtolower($word)) > 0) 
      {
-      WriteLogs ("ALARMA_Inject","çàïðåùåííûå ñèìâîëû â ÷àòå àäìèíîâ ". $_GET["smasg"]);
+      WriteLogs ("ALARMA_Inject","Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½Ð½Ñ‹Ðµ ÑÐ¸Ð¼Ð²Ð¾Ð»Ñ‹ Ð² Ñ‡Ð°Ñ‚Ðµ Ð°Ð´Ð¼Ð¸Ð½Ð¾Ð² ". $_GET["smasg"]);
       $text = "sorry, i using dangeruos symbols! :(";
       break;
      }
@@ -50,7 +50,7 @@ elseif(strlen(trim($_GET["chat"]))>0)
    }
   break;
   case "refresh":
-   $needt = time()-10;//çà 10 ñåêóíä
+   $needt = time()-10;//Ð·Ð° 10 ÑÐµÐºÑƒÐ½Ð´
    $query = $db->query("SELECT * FROM MWC_chat WHERE time>=".$needt." and memb___id!='".$_SESSION["sadmin"]."'");
    while($result = $db->fetchrow($query))
    {

@@ -36,7 +36,7 @@ if ($_REQUEST["edchr"] && strlen($_SESSION["ched"])>2)
  if ($db->query("UPDATE Character SET ".$qque." WHERE Name='".$_SESSION["ched"]."'"))
  {
 
-    WriteLogs ("Adm_","Àêêàóíò ".$_SESSION["user"]." èçìåíèë ïàðàìåòðû ïåðñîíàæó ".$_SESSION["ched"]);
+    WriteLogs ("Adm_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð» Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶Ñƒ ".$_SESSION["ched"]);
     unset($_SESSION["ched"]);
  }
 }
@@ -49,7 +49,7 @@ if ($_REQUEST["edacc"] && $_SESSION["accz"])
  if($db->query("UPDATE MEMB_INFO SET fpas_answ='".$acount["answer"]."',bankZ='".$acount["bankz"]."',opt_inv='".$acount["opt_inv"]."' WHERE memb___id='".$_SESSION["accz"]."'"))
  {
   $db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]."='".$acount["credits"]."' WHERE ".$config["cr_acc"]."='".$_SESSION["accz"]."'");
-  WriteLogs ("Adm_","Àêêàóíò ".$_SESSION["user"]." èçìåíèë ïàðàìåòðû àêêàóíòó ".$_SESSION["accz"]);
+  WriteLogs ("Adm_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð» Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñƒ ".$_SESSION["accz"]);
   unset($_SESSION["accz"],$_SESSION["ched"]);
  }
 }
@@ -68,7 +68,7 @@ if ($_REQUEST["st1"] or $_GET["char"])
   $chack_name = checkword(substr($_POST["chak"],0,11));
  }
 	
- if ($type==0) /*âûáðàëîè ïåðñîíàæà*/
+ if ($type==0) /*Ð²Ñ‹Ð±Ñ€Ð°Ð»Ð¾Ð¸ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶Ð°*/
  {
   $_SESSION["ched"]=$chack_name;
   $ololo = $db->query("SELECT COLUMN_NAME FROM  INFORMATION_SCHEMA.Columns where TABLE_NAME = 'Character'");

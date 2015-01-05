@@ -55,7 +55,7 @@ if(isset($_GET["f"]) && isset($_GET["path"]) && (in_array($_GET["path"],$directo
 	 fwrite($handle,$query);
 	fclose($handle);
 	$content->set("|qmsg|","File edited.");
-	WriteLogs("Adm_",$_SESSION["sadmin"]." Èçìåíèë ìîäóëü".$path."/".$_GET["f"].".php");
+	WriteLogs("Adm_",$_SESSION["sadmin"]." Â»Ð·Ð¼ÐµÐ½Ð¸Ð» Ð¼Ð¾Ð´ÑƒÐ»ÑŒ".$path."/".$_GET["f"].".php");
 	if($_GET["path"]=="_dat") $content->set("|value|",file_get_contents($path."/".$_GET["f"].".db"));
 	elseif(substr($_GET["f"],3)=="rules") $content->set("|value|",file_get_contents($path."/".$_GET["f"].".txt"));
 	else $content->set("|value|",file_get_contents($path."/".$_GET["f"].".php"));

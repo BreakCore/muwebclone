@@ -1,4 +1,4 @@
-<?php if (!defined('insite')){die();} 
+﻿<?php if (!defined('insite')){die();} 
 $lang["inst_dblogin"]="SQL Login";
 $lang["inst_dbpwd"]="SQL Password";
 $lang["inst_dbbd"]="Data Base name";

@@ -1,3 +1,3 @@
-<?php if (!defined("insite")){die("no access");}
-$faql["aboutgame"]="Î èãðå";
-$faql["statistic"]="Î ñåðâåðå";
+ï»¿<?php if (!defined("insite")){die("no access");}
+$faql["aboutgame"]="Ðž Ð¸Ð³Ñ€Ðµ";
+$faql["statistic"]="Ðž ÑÐµÑ€Ð²ÐµÑ€Ðµ";

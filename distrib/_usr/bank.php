@@ -11,7 +11,7 @@ $content->out_content("theme/".$config["theme"]."/them/bank_h.html");
 //center
 switch(validate(substr($_GET["step"],0,10)))	
 {
- //èç áàíêà â ñóíäóê
+ //Ð¸Ð· Ð±Ð°Ð½ÐºÐ° Ð² ÑÑƒÐ½Ð´ÑƒÐº
  case "zen2war":
   $content->out_content("theme/".$config["theme"]."/them/bank_b2w.html");
  if($_REQUEST["waregok"])
@@ -38,13 +38,13 @@ switch(validate(substr($_GET["step"],0,10)))
      if($db->query("UPDATE memb_info SET bankZ=bankZ-".$countzen1." WHERE memb___id ='".validate($_SESSION["user"])."' 
      UPDATE warehouse SET Money=Money+".$countzen1." WHERE AccountID ='".validate($_SESSION["user"])."'"))
      {
-     WriteLogs ("Bank_","Àêêàóíò ".$_SESSION["user"]." çåí â ñóíäóê â áàíêå áûëî: ".$zenbank[0].", îñòàëîñü: ".$vwareg.", ñíÿòî: ".$countzen);
+     WriteLogs ("Bank_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð·ÐµÐ½ Ð² ÑÑƒÐ½Ð´ÑƒÐº Ð² Ð±Ð°Ð½ÐºÐµ Ð±Ñ‹Ð»Ð¾: ".$zenbank[0].", Ð¾ÑÑ‚Ð°Ð»Ð¾ÑÑŒ: ".$vwareg.", ÑÐ½Â¤Ñ‚Ð¾: ".$countzen);
      unset($checkstep, $countzen, $_REQUEST["waregok"]);
      $vwareg= -1;
      header("Location:".$config["siteaddress"]."/index.php?up=bank");
      die();
      }
-     echo "îøèáêà!";
+     echo "Ð¾ÑˆÐ¸Ð±ÐºÐ°!";
     }
     }
    }
@@ -55,7 +55,7 @@ switch(validate(substr($_GET["step"],0,10)))
    }
   }
  break;
- //èç ñóíäóêà â áàíê
+ //Ð¸Ð· ÑÑƒÐ½Ð´ÑƒÐºÐ° Ð² Ð±Ð°Ð½Ðº
  case "zen2bank":
   $content->out_content("theme/".$config["theme"]."/them/bank_w2b.html");
   if($_REQUEST["bankok"])
@@ -68,7 +68,7 @@ switch(validate(substr($_GET["step"],0,10)))
     if($vwareg>=0 && $countzen>=0)
     {
      $updatess =$db->query("UPDATE memb_info SET bankZ=bankZ+$countzen WHERE memb___id ='".validate($_SESSION["user"])."' UPDATE warehouse SET Money=Money-$countzen WHERE AccountID ='".$_SESSION["user"]."'");
-     WriteLogs ("Bank_","Àêêàóíò ".$_SESSION["user"]." çåí â áàíê â èíâåíòàðå áûëî: ".$zenwar[0].", îñòàëîñü: ".$vwareg);
+     WriteLogs ("Bank_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð·ÐµÐ½ Ð² Ð±Ð°Ð½Ðº Ð² Ð¸Ð½Ð²ÐµÐ½Ñ‚Ð°Ñ€Ðµ Ð±Ñ‹Ð»Ð¾: ".$zenwar[0].", Ð¾ÑÑ‚Ð°Ð»Ð¾ÑÑŒ: ".$vwareg);
      unset($updatess, $checkstep, $_REQUEST["bankok"],$countzen);
      header("Location:".$config["siteaddress"]."/index.php?up=bank");
     }
@@ -98,7 +98,7 @@ switch(validate(substr($_GET["step"],0,10)))
     if ($money>0 && $invzen[0]-$money >=0)
     {
      $upd_q = "UPDATE Character SET Money=Money-".$money." Where Name='".$ned_crh."'  UPDATE MEMB_INFO SET bankZ=bankZ+".$money." Where memb___id='".$_SESSION["user"]."'";
-     $msg_log = "Zen èç èíâåíòàðÿ ".$ned_crh." â áàíê";		  
+     $msg_log = "Zen Ð¸Ð· Ð¸Ð½Ð²ÐµÐ½Ñ‚Ð°Ñ€Â¤ ".$ned_crh." Ð² Ð±Ð°Ð½Ðº";		  
     }
     else 
     {
@@ -110,7 +110,7 @@ switch(validate(substr($_GET["step"],0,10)))
    {
     if ($money>0 && ($bankzen[0]-$money >=0) && ($invzen[0]+$money <=2000000000))
     {
-     $msg_log = "Zen èç áàíêà ".$ned_crh." â èíâåíòàðü";		  
+     $msg_log = "Zen Ð¸Ð· Ð±Ð°Ð½ÐºÐ° ".$ned_crh." Ð² Ð¸Ð½Ð²ÐµÐ½Ñ‚Ð°Ñ€ÑŒ";		  
      $upd_q = "UPDATE Character SET Money=Money+".$money." Where Name='".$ned_crh."' UPDATE MEMB_INFO SET bankZ=bankZ-".$money." Where memb___id='".$_SESSION["user"]."'";
     }
     else

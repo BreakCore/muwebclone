@@ -11,13 +11,13 @@ function WriteLogs($where,$content)
 	if(!$where) Die ("<div style='text-align: center; font-size: 18px; color: red;'>Log folder doesn't exist!</div>");
 	if($handle = fopen('logZ/'.$where.'['.@date("d_m_Y", time()).'].log', 'a+'))
 	{
-		if (fwrite($handle, "[".@date("H:i:s", time())."] IP [".getenv("REMOTE_ADDR")."] \r\n Message: ".$content." \r\n адрес: '".$_SERVER['QUERY_STRING']."' \r\n рефер: '".getenv('HTTP_REFERER')."' \r\n браузер: '".$_SERVER['HTTP_USER_AGENT']."' \r\n\n") === FALSE) fclose($handle);		
+		if (fwrite($handle, "[".@date("H:i:s", time())."] IP [".getenv("REMOTE_ADDR")."] \r\n Message: ".$content." \r\n Р°РґСЂРµСЃ: '".$_SERVER['QUERY_STRING']."' \r\n СЂРµС„РµСЂ: '".getenv('HTTP_REFERER')."' \r\n Р±СЂР°СѓР·РµСЂ: '".$_SERVER['HTTP_USER_AGENT']."' \r\n\n") === FALSE) fclose($handle);		
 	}
 } 
 
 foreach ($_POST as $id=>$val)
 {
-  $_POST[$id] = preg_replace("/[^[:digit:]A-Za-zА-Яа-я_@.,!?;:%\]\[ \-+@()=\s]/",'',$val);
+  $_POST[$id] = preg_replace("/[^[:digit:]A-Za-zРђ-РЇР°-СЏ_@.,!?;:%\]\[ \-+@()=\s]/",'',$val);
 }
 
  $search_id = substr((int)trim($_POST["smsdeluxe_uid"]),0,10);
@@ -32,13 +32,13 @@ foreach ($_POST as $id=>$val)
   if ($credits[0]>0)
   {
     $db->query("UPDATE smsdeluxe SET datepayed='".$date."',county='".$country."' WHERE id='".$search_id."' UPDATE MEMB_INFO SET credits=credits+'".$credits[0]."' WHERE memb___id='".$credits[1]."'");
-    WriteLogs("SMSDeluxe","На аккаунт ".$credits[1]." успешно зачислены кредиты ".$credits[0]);
+    WriteLogs("SMSDeluxe","РќР° Р°РєРєР°СѓРЅС‚ ".$credits[1]." СѓСЃРїРµС€РЅРѕ Р·Р°С‡РёСЃР»РµРЅС‹ РєСЂРµРґРёС‚С‹ ".$credits[0]);
     WriteLogs("SMSquery","UPDATE smsdeluxe SET datepayed='".$date."',county='".$country."' WHERE id='".(int)$search_id."' UPDATE MEMB_INFO SET credits=credits+'".$credits[0]."' WHERE memb___id='".$credits[1]."'");
 	$db->close();
   }
  }
- else WriteLogs("SMSDeluxe_error","сгенерированный ключ ".$genkey." не равен полученному ".$key.". Или ошибка скрипта или попытка подделать платеж");
- //WriteLogs("SMSDeluxe_error","сгенерироан ключик ".$genkey." пришел ключик ".$key." что пришло в пост для генерации: smsdeluxe_uid ".$_POST["smsdeluxe_uid"]."smsdeluxe_country ".$_POST["smsdeluxe_country"]."smsdeluxe_operator ".$_POST["smsdeluxe_operator"]."smsdeluxe_number ".$_POST["smsdeluxe_number"]);
+ else WriteLogs("SMSDeluxe_error","СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅС‹Р№ РєР»СЋС‡ ".$genkey." РЅРµ СЂР°РІРµРЅ РїРѕР»СѓС‡РµРЅРЅРѕРјСѓ ".$key.". РР»Рё РѕС€РёР±РєР° СЃРєСЂРёРїС‚Р° РёР»Рё РїРѕРїС‹С‚РєР° РїРѕРґРґРµР»Р°С‚СЊ РїР»Р°С‚РµР¶");
+ //WriteLogs("SMSDeluxe_error","СЃРіРµРЅРµСЂРёСЂРѕР°РЅ РєР»СЋС‡РёРє ".$genkey." РїСЂРёС€РµР» РєР»СЋС‡РёРє ".$key." С‡С‚Рѕ РїСЂРёС€Р»Рѕ РІ РїРѕСЃС‚ РґР»СЏ РіРµРЅРµСЂР°С†РёРё: smsdeluxe_uid ".$_POST["smsdeluxe_uid"]."smsdeluxe_country ".$_POST["smsdeluxe_country"]."smsdeluxe_operator ".$_POST["smsdeluxe_operator"]."smsdeluxe_number ".$_POST["smsdeluxe_number"]);
 }
 else
 die();

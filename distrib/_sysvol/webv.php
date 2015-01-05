@@ -1,13 +1,13 @@
 <?php if (!defined('insite')) die("no access");
 /**
-* показ вещей 
-* @inv_items - хекс-код вещей, если пусто, то ничего не возратит
-* @type - тип отображения
-* 4 - возвращает текстовое название вещи + опции
-* 3 - показывает название вещи при наведении картинку и инфу.
-* 2 - показывает изображение вещи, при наведении - информацию
-* 1 - показывает сундук
-* 0 - показывает только вещь, но с всплывающим изображением
+* РїРѕРєР°Р· РІРµС‰РµР№ 
+* @inv_items - С…РµРєСЃ-РєРѕРґ РІРµС‰РµР№, РµСЃР»Рё РїСѓСЃС‚Рѕ, С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РІРѕР·СЂР°С‚РёС‚
+* @type - С‚РёРї РѕС‚РѕР±СЂР°Р¶РµРЅРёВ¤
+* 4 - РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСЃС‚РѕРІРѕРµ РЅР°Р·РІР°РЅРёРµ РІРµС‰Рё + РѕРїС†РёРё
+* 3 - РїРѕРєР°Р·С‹РІР°РµС‚ РЅР°Р·РІР°РЅРёРµ РІРµС‰Рё РїСЂРё РЅР°РІРµРґРµРЅРёРё РєР°СЂС‚РёРЅРєСѓ Рё РёРЅС„Сѓ.
+* 2 - РїРѕРєР°Р·С‹РІР°РµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РІРµС‰Рё, РїСЂРё РЅР°РІРµРґРµРЅРёРё - РёРЅС„РѕСЂРјР°С†РёСЋ
+* 1 - РїРѕРєР°Р·С‹РІР°РµС‚ СЃСѓРЅРґСѓРє
+* 0 - РїРѕРєР°Р·С‹РІР°РµС‚ С‚РѕР»СЊРєРѕ РІРµС‰СЊ, РЅРѕ СЃ РІСЃРїР»С‹РІР°СЋС‰РёРј РёР·РѕР±СЂР°Р¶РµРЅРёРµРј
 **/ 
 function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 {
@@ -29,8 +29,8 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
    
    for ($i=0;$i<$col_i;$i++) 
    {
-     if (!$itemarr[$i] || strlen($itemarr[$i]==32))$itemarr[$i] = substr($inv_items,$i*32, 32); //вещь
-     if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==32) //если не пустая ячейка
+     if (!$itemarr[$i] || strlen($itemarr[$i]==32))$itemarr[$i] = substr($inv_items,$i*32, 32); //РІРµС‰СЊ
+     if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==32) //РµСЃР»Рё РЅРµ РїСѓСЃС‚Р°В¤ В¤С‡РµР№РєР°
      {	
        $item["id"] = hexdec(substr($itemarr[$i],0,2)); // ID
        $item["lopt"] = hexdec(substr($itemarr[$i],2,2)); // level/opt
@@ -189,7 +189,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	 $mnoz = 5;
 	 $sum = 20;
 	}
-	elseif($item["group"]==13 && in_array($item["id"],$bezuter))//бижутерия
+	elseif($item["group"]==13 && in_array($item["id"],$bezuter))//Р±РёР¶СѓС‚РµСЂРёВ¤
 	{
 	 $mnoz = 1;
 	 $sum = 4;
@@ -199,7 +199,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	 $mnoz = 4;
 	 $sum = 16;
 	}
-	/* опции*/
+	/* РѕРїС†РёРё*/
 	$itemsopt[0] = "Additional dmg";
 	$itemsopt[1] = "Additional dmg";
 	$itemsopt[2] = "Additional dmg";
@@ -235,11 +235,11 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	$dw_wing = array(1,4,41,42); //wings sum & dw
 	$dk_wing = array(2,5); // dk
 	$elf_wing = array(3,0); // elf
-	$thss = array(36,37,38,39,40,43);//винги для 3-го класса
+	$thss = array(36,37,38,39,40,43);//РІРёРЅРіРё РґР»В¤ 3-РіРѕ РєР»Р°СЃСЃР°
 	
 	if ($item["group"]==12 or ($item["group"]==13 and $item["id"]==30))
 	{
-	  if (in_array($item["id"],$dw_wing)) // опции на винги дв
+	  if (in_array($item["id"],$dw_wing)) // РѕРїС†РёРё РЅР° РІРёРЅРіРё РґРІ
 	  {
 	   if (($item["exopt"]>=31 and $item["exopt"]<=64 and $item["exopt"]!=32)  or $item["exopt"]==0)
 	   {
@@ -266,7 +266,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	     }
 	   }
 	  }
-	  else if(in_array($item["id"],$dk_wing)) //опции на винги дк
+	  else if(in_array($item["id"],$dk_wing)) //РѕРїС†РёРё РЅР° РІРёРЅРіРё РґРє
 	  {
 	   if ($item["exopt"]>=32 or $item["exopt"]>=96)//add dmg
 	   {
@@ -353,7 +353,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	    $itemsopt[12]=$wing_opt[3];
 	   }
 	 }
-	 else // все остальные винги
+	 else // РІСЃРµ РѕСЃС‚Р°Р»СЊРЅС‹Рµ РІРёРЅРіРё
 	 {
 	  if ($item["exopt"] <32 or ($item["exopt"]>=64 && $item["exopt"]<96) ) // wizardy dmg
 	  {
@@ -382,7 +382,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	 }
 	 }
 	}
-	else // обычные вещи
+	else // РѕР±С‹С‡РЅС‹Рµ РІРµС‰Рё
 	{
 	 if ($item["exopt"]>63)
 	 {
@@ -409,7 +409,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	 $csstyle="name_ex";
 	 $name = " Excellent&nbsp;".$name;
 						
-	 if (($item["group"]<=5)||($item["group"]==13 && ($item["id"]==12 || $item["id"]==13 || $item["id"]>=25 && $item["id"]<=28)))//если это оружие или пенданты
+	 if (($item["group"]<=5)||($item["group"]==13 && ($item["id"]==12 || $item["id"]==13 || $item["id"]>=25 && $item["id"]<=28)))//РµСЃР»Рё СЌС‚Рѕ РѕСЂСѓР¶РёРµ РёР»Рё РїРµРЅРґР°РЅС‚С‹
 	 {
  	  $excoptar[0]="<div class=\"excellent\">Mana After Hunting Monsters +mana/8</div>";
 	  $excoptar[1]="<div class=\"excellent\">Life After Hunting Monsters +life/8</div>";
@@ -418,7 +418,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	  $excoptar[4]="<div class=\"excellent\">Increase Damage +Level/20</div>";
 	  $excoptar[5]="<div class=\"excellent\">Excellent Damage Rate +10%</div>";
 	 }
-	 elseif(($item["group"]>=6 && $item["group"]<=11)||(($item["group"]==13 && $item["id"]!=30)&&(($item["id"]>=8 && $item["id"]<=10) || ($item["id"]>=20 && $item["id"]<=24)||($item["id"]>=38 && $item["id"]<=41))))	// щиты, сеты, кольца
+	 elseif(($item["group"]>=6 && $item["group"]<=11)||(($item["group"]==13 && $item["id"]!=30)&&(($item["id"]>=8 && $item["id"]<=10) || ($item["id"]>=20 && $item["id"]<=24)||($item["id"]>=38 && $item["id"]<=41))))	// С‰РёС‚С‹, СЃРµС‚С‹, РєРѕР»СЊС†Р°
 	 {
 	  $excoptar[0]="<div class=\"excellent\">Increase Rate of Zen 40%</div>";
 	  $excoptar[1]="<div class=\"excellent\">Defense Success Rate +10%</div>";
@@ -427,7 +427,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 	  $excoptar[4]="<div class=\"excellent\">Increase Max Mana +4%</div>";
 	  $excoptar[5]="<div class=\"excellent\" >Increase Max Hp +4%</div>";
 	 }
-	 elseif($item["group"]==12 || ($item["group"]==13 && $item["id"]==30))// винги и плащи
+	 elseif($item["group"]==12 || ($item["group"]==13 && $item["id"]==30))// РІРёРЅРіРё Рё РїР»Р°С‰Рё
 	 {
 	  $excoptar[0]="<div class=\"excellent\" >+ 115 HP</div>";
 	  $excoptar[1]="<div class=\"excellent\">+ 115 MP</div>";
@@ -481,7 +481,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 						$item["lopt"] = knowop($item["id"],$item["group"],$item["lopt"]);
 
 						$img = "imgs/items/".$item["group"].$item["id"].$item["lopt"].".gif";
-						if (!file_exists($img))$img="you must name img: ".$item["group"].". ".$item["id"].". ".$item["lopt"].".gif"; //если нет изображения
+						if (!file_exists($img))$img="you must name img: ".$item["group"].". ".$item["id"].". ".$item["lopt"].".gif"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёВ¤
 						else $img = "<img src=\"".$img ."\" align=center >";
 						$display ="
 							<table align='center' vAlign='top' width='100%' width='100%' border='0' cellspacing='0' cellpadding='0'>
@@ -505,7 +505,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 					$item["lopt"] = knowop($item["id"],$item["group"],$item["lopt"]);
 
 						$img = "imgs/items/".$item["group"].$item["id"].$item["lopt"].".gif";
-						if (!file_exists($img))$img="you must name img: ".$item["group"].". ".$item["id"].". ".$item["lopt"].".gif"; //если нет изображения
+						if (!file_exists($img))$img="you must name img: ".$item["group"].". ".$item["id"].". ".$item["lopt"].".gif"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёВ¤
 						else $img = "<img src=\"".$img ."\" align=center >";
 						$display ="<table align='center' vAlign='top' width='250' border='0' cellspacing='0' cellpadding='0'>";
 						if (strlen($iskill)>2) $display.="<tr><td align=\"center\" valign=\"center\" class=\"cskill\">".$iskill."</td></tr>";
@@ -555,7 +555,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 					$x = substr($itembd[$item["group"]][$item["id"]][1],0,1);
 					$y = substr($itembd[$item["group"]][$item["id"]][1],1,1);
 				}
-				if (!$x || !$y){$x=1;$y=1;}//если нет в базе вещи
+				if (!$x || !$y){$x=1;$y=1;}//РµСЃР»Рё РЅРµС‚ РІ Р±Р°Р·Рµ РІРµС‰Рё
 				if ($type==3)
 				{
 					$dd = "<table>
@@ -574,7 +574,7 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 							</table>";
 					// "<div id='tooltiper' title='$dd' class='$csstyle'>$name$ilevel</div>";		
 				}
-				if (!file_exists($img))$img="<span style='font-size:8px;'>".$item["group"].". ".$item["id"].". ".$item["lopt"].".</span>"; //если нет изображения
+				if (!file_exists($img))$img="<span style='font-size:8px;'>".$item["group"].". ".$item["id"].". ".$item["lopt"].".</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёВ¤
 				else $img = "<img title = '".$display."' src='".$img."' id='tooltiper' alt='".$name."' align='center' style='width:".($x*32)."px; height:".($y*32)."px;'>";			
 				
 				$j=$x*$y;
@@ -620,10 +620,10 @@ function show_items($inv_items='nope', $type=1,$link="/?up=wsell&si")
 }
 
 /**
-* функция возвращает цифру, учавтсвующую в генерации имени изображения(опции) 
-* @num - id вещи
-* @group - группа вещи
-* @opt - опции что есть
+* С„СѓРЅРєС†РёВ¤ РІРѕР·РІСЂР°С‰Р°РµС‚ С†РёС„СЂСѓ, СѓС‡Р°РІС‚СЃРІСѓСЋС‰СѓСЋ РІ РіРµРЅРµСЂР°С†РёРё РёРјРµРЅРё РёР·РѕР±СЂР°Р¶РµРЅРёВ¤(РѕРїС†РёРё) 
+* @num - id РІРµС‰Рё
+* @group - РіСЂСѓРїРїР° РІРµС‰Рё
+* @opt - РѕРїС†РёРё С‡С‚Рѕ РµСЃС‚СЊ
 **/
 function knowop($num,$group,$opt)
 {
@@ -709,7 +709,7 @@ function smartsearch($item_hex,$x,$y,$tt=0)
 			$str = $i;
 			$x1=0;
 			$found=0;		
-			$ind = ((floor($i/8)+1)*8)-1; // правый конец строки
+			$ind = ((floor($i/8)+1)*8)-1; // РїСЂР°РІС‹Р№ РєРѕРЅРµС† СЃС‚СЂРѕРєРё
 			$raz = $i+($x-1);
 			while($j>0)
 			{
@@ -898,7 +898,7 @@ else $item_name = $itembd[$item["group"]][$item["id"]][0];
 return $item_name;
 }
 /**
-* функсия определения классов
+* С„СѓРЅРєСЃРёВ¤ РѕРїСЂРµРґРµР»РµРЅРёВ¤ РєР»Р°СЃСЃРѕРІ
 */
 function can_equip($array)
 {
@@ -945,11 +945,11 @@ return $display;
 }
 
 /*
-* узнать опции на вингах
-* @exnum - цифра эксел
-* @n - номер опции в массиве wing_opt
-* @n1 - номер опции в массиве wing_opt
-* @show_info - остатки опции на вывод
+* СѓР·РЅР°С‚СЊ РѕРїС†РёРё РЅР° РІРёРЅРіР°С…
+* @exnum - С†РёС„СЂР° СЌРєСЃРµР»
+* @n - РЅРѕРјРµСЂ РѕРїС†РёРё РІ РјР°СЃСЃРёРІРµ wing_opt
+* @n1 - РЅРѕРјРµСЂ РѕРїС†РёРё РІ РјР°СЃСЃРёРІРµ wing_opt
+* @show_info - РѕСЃС‚Р°С‚РєРё РѕРїС†РёРё РЅР° РІС‹РІРѕРґ
 */
 function knowWopt($exnum,$n,$n1,$show_info, $sum,$mnoz)
 {

@@ -1,239 +1,157 @@
-<?php
-/*
-* MWC database framework
-* ver 0.7 [07.02.2012]
-* coded by epmak
-*/
-class Connect
+ï»¿<?php
+
+require_once "_sysvol/adodb5/adodb5/adodb-exceptions.inc.php";
+require_once "_sysvol/adodb5/adodb5/adodb.inc.php";
+
+class connect
 {
-  private $res_id;               //ðåñóðñ, ëèíê
-  private $type;                 //òèï ïîäêëþ÷åíèÿ
-  private $errors;               //óðîâåíü îøèáîê
-  private $cur_query;            //òåêñò òåêóùåãî çàïðîñà
-  private $errmsg;				 // òåêñò øèáêè
-  private $constate;
-  private $result;              //
-  /*
-  * Êîíñòðóêòîð êëàññà 
-  */
-  function Connect ($conn_type="0", $host="0", $database="0", $user="0", $password="0", $driver, $err_lvl=1)
-  {
-   if ($conn_type == "0" || $host== "0" || $database== "0" || $user== "0" || $password=="0")
-   {
-    $this->logs(" íå çàïîëíåíû âñå ïîëÿ, ñëåäóåò ïðîâåðèòü íàñòðîéêè");
-    return false;
-   }  
-   
-   ($err_lvl>=1)? $this->errors =1:$this->errors=0; 
-   $this->type = $conn_type;
+    private $resId; // Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ Ñ€ÐµÑÑƒÑ€ÑÐ¾Ð²
+    private $iserror; //Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ Ð¾ÑˆÐ¸Ð±ÐºÐ¸
+    private $btype; //Ñ‚Ð¸Ð¿ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ
+    private $lastq;//Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¹ Ð·Ð°Ð¿Ñ€Ð¾Ñ
+    private $ntype;
+    private $cons = array(
+        "SQL",
+        "MPDO",
+        "ODBC"
+    );
 
-   if ($conn_type=="SQL")
-   {
-    if (function_exists("mssql_connect"))
+    /**
+     * @param $type
+     * @param $host
+     * @param $base
+     * @param $user
+     * @param $pwd
+     * @throws Exception
+     */
+    public function __construct ($type,$host,$base,$user,$pwd)
     {
-     $conn = mssql_connect($host,$user,$password) or $this->logs("Can't connect to SQL!") ;
+        $this->iserror=false;
+        $this->btype=$type;
+        global $ADODB_FETCH_MODE;
+        $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 
-     if ($this->res_id = @mssql_select_db($database,$conn))
-     {
-       $this->constate = "<div style='font-weight:bold;color:green;'>Connection Work!</div>";
-     }
-     else
-     {
-      $this->logs("mssql_connect: no connect to tadabase in host: $host and user: $user");
-      //echo "no db connect!";
-     }
-	}
-	else
-    {
-	 $this->constate = "<div style='font-weight:bold;color:red;'>Connection <u>Not</u> Work!</div>";
-     $this->logs("Can't execute mssql functions! ");
-	}
-   }
-   elseif ($conn_type == "ODBC")
-   {
-    if (strlen($driver)<1)
-    {
-     $driver="SQL Server";
-     $this->logs("ODBC: Warning, no driver writen, set default: \"SQL Server\"");
+        switch ($type)
+        {
+            case "SQL":
+            case 1:
+                $this->mmsql($host,$base,$user,$pwd);$this->ntype=1; break;    //ms sql connection
+            case "MPDO":
+            case 2:
+                $this->pdo_mssql($host,$base,$user,$pwd);$this->ntype=2;break; //pdo ms sql connection
+            case "ODBC":
+            case 3:
+                $this->odbc_mmsql($host,$base,$user,$pwd);$this->ntype=3;break; //odbc mssql connection
+            default:
+                throw new Exception("Unknown connect Type");
+        }
     }
-    $this->res_id  = @odbc_connect("Driver={".$driver."};Server=".$host.";Database=".$database.";",$user,$password) or  $this->logs(@odbc_errormsg($this->res_id)." no odbc connect!");
-    if (odbc_error())
+
+    /**
+     * Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ðµ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ
+     * @return array
+     */
+    public function SupportedCon()
     {
-     $this->logs(@odbc_errormsg($this->res_id)."  no odbc connect!");
-     //if ($this->errors==1) echo $this->res_id." no odbc connect!";
-	  $this->constate = "<div style='font-weight:bold;color:red;'>Connection <u>Not</u> Work!</div>";
-	 unset($this->res_id);
-     return false;
+        return $this->cons;
     }
-	else  $this->constate = "<div style='font-weight:bold;color:green;'>Connection Work!</div>";
-   }
-  }
-  
-  /*
-  * Ïðîâåðêà ïîäêëþ÷åíèå è ïðîâåðêà ïîäêëþ÷åíèÿ. âîçâðàùàåò òèï ïîäêëþ÷åíèÿ
-  */
-  function check_c()
-  {
-   return $this->constate;
-  }
-  
-  /*
-  * çàïðîñ
-  */
-  function query($query)
-  {
-   $this->cur_query = $query;
-  // $this->logs($query);
-   if ($this->type == "SQL")
-   {
-    if($n=@mssql_query($query))
+
+    public function ConType()
     {
-	 $this->result = $n;
-     return $n;
+        return $this->ntype;
     }
-    else
-    { 
-     $this->getmsg();
-     unset($n);
-    }
-   }
-   else
-   {	
-    $n = @odbc_exec($this->res_id,$query);
-	$this->result = $n;
-    if(@odbc_errormsg($this->res_id)) $this->getmsg();
-    return $n;
-   }
-  }
-  
-  function numrows($query)
-  {
-   if(@strlen($query)>18)
-	  $query=$this->query($query);
-     
-   if ($this->type == "SQL") return @mssql_num_rows($query);
-   else 
-   {
-     $nr = @odbc_num_rows($query);
-     if ($nr == -1)
-     {
-	 $i=0;
-      while ($n=odbc_fetch_row($query))
-      {
-       ($n>0)? $i++:false;      
-      }
-      return $i;
-     }
-     else 
-	 {
-      return $nr;
-	 }
-   }
-   return 0;   
-  }
-  
-  function fetchrow($query)
-  {
-    if(@strlen($query)>18)
-	  $query=$this->query($query);
 
-    if ($this->type == "SQL") return @mssql_fetch_row($query);
-	else 
-	{
-	  $i = @odbc_num_fields($query);
-	  $status = @odbc_fetch_row($query);
-	  if ($status !=1) return false;
-	  $field=1;
-	  while ($field<=$i)
-	  {
-	    $arr[($field-1)] = @odbc_result($query,$field);
-		$field++;
-	  }
-	  return $arr;
-	}
-  }
-  
-  function fetcharray($query)
-  {
-    if(strlen($query)>18)
-	  $query=$this->query($query);
-
-    if ($this->type == "SQL") return @mssql_fetch_array($query);
-	else
-	{
-	 $status = @odbc_fetch_array($query);
-	 if(is_array($status)) 
-	 {
-	  return $status;
-	 }
-	 else return false;
-	}
-  }
-  
-  function close()
-  {
- 
-	if ($this->type == "SQL") 
-	   @mssql_close($this->res_id);
-	else
-	   @odbc_close($this->res_id);
-	unset($this->res_id);
-  }
-
-  function getmsg()
-  {
-   if ($this->type == "SQL")
-      $n=@mssql_get_last_message();
-	  
-   elseif ($this->type == "ODBC")
-      $n=@odbc_errormsg($this->res_id);
-
-   if(strlen($n)>1 && strlen($this->cur_query)>1 && substr($n,0,2)!="0x")
-   {
-    if($this->errmsg != $n)
-    {	   
-     $this->logs("Found some errors: ".$n." query text: ".$this->cur_query." page:".$_GET["p"]);
-     unset($this->cur_query);
-     $this->errmsg = $n;
-     if($this->errors==1)  echo $n;		
-    }
-    unset($n);
-   }
-  }
-  
-  function showmsg()
-  {
-   if ($this->type == "SQL")
-   {
-      $n=@mssql_get_last_message();
-	  if (!$n) return mssql_result($this->result);
-   }
-	  
-   elseif ($this->type == "ODBC")
-   {
-      $n=@odbc_errormsg($this->res_id);
-	  if(!$n) return odbc_result_all($this->result,"align='center'");
-   }
-	return $n;
-  }
-  
-  function lastmsg()
-  {
-  if ($this->type == "SQL") return mssql_get_last_message();
-  elseif ($this->type == "ODBC") 
-  {
-	if (@odbc_error($this->res_id))return "error!";
-  }
-  else return false;
-  }
-  
-  private function logs($message="nan")
-  {
-    if ($message=="nan") $message = "epmty message... check your confings and code.";
-    if($handle = fopen('logZ/connect['.@date("d_m_Y", time()).'].log', 'a+'))
+    /**
+     * Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¹ insert id
+     * @param string $tbname - Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹, ÐºÑƒÐ´Ð° Ð±Ñ‹Ð»Ð° Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð²ÑÑ‚Ð°Ð²ÐºÐ°
+     * @return int id
+     */
+    public function lastId($tbname=null)
     {
-      fwrite($handle, "[".@date("H:i:s", time())."] - >> ".$message." << \r\n");  
-      fclose($handle);		
-    }	
-  }
+        if (!$tbname)
+            return NULL;
+
+        $res = self::query("SELECT IDENT_CURRENT('{$tbname}') as lastid")->FetchRow();
+        return $res["lastid"];
+    }
+
+    /**
+     * MS SQL Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ðº Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+     **/
+    private function mmsql($host,$base,$user,$pwd)
+    {
+        if (function_exists("mssql_connect"))
+        {
+            $this->resId = ADONewConnection('mssql');
+            $this->resId->PConnect($host,$user,$pwd,$base);
+        }
+        else
+            throw new Exception("mssql_connect is NOT supported!");
+    }
+
+
+    /**
+     * ODBC Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ðº Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+     **/
+    private function odbc_mmsql($host,$base,$user,$pwd)
+    {
+
+        if (function_exists("odbc_connect"))
+        {
+            $this->resId = &ADONewConnection('odbc_mssql');
+            $dsn = "Driver={SQL Server};Server=".$host.";Database=".$base.";";
+            $this->resId->debug=false;
+            $this->resId->PConnect($dsn,$user,$pwd);
+        }
+        else
+            throw new Exception("odbc_connect is NOT supported!");
+    }
+
+
+    /**
+     * PDO mssql Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ðº Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+     **/
+    private function pdo_mssql($host,$base,$user,$pwd)
+    {
+        $drivers = PDO::getAvailableDrivers();
+        if (in_array("mssql",$drivers))
+        {
+            $this->resId =&NewADOConnection("pdo_mssql://{$user}:{$pwd}@{$host}/{$base}");
+        }
+        else
+            throw new Exception("PDO_mssql is NOT supported!");
+    }
+
+    public function getMsg()
+    {
+        return $this->resId->lastMessage;
+    }
+
+    public function Msg()
+    {
+        return $this->resId->ErrorMsg();
+    }
+
+    public function query($qtext)
+    {
+        try
+        {
+            $this->lastq = $qtext;
+            return $this->resId->Execute($qtext);
+        }
+        catch (Exception $ex)
+        {
+            throw $ex;
+        }
+    }
+
+    public function  getQuery()
+    {
+        return $this->lastq;
+    }
+
+    public function close()
+    {
+        $this->resId->Close();
+    }
 }

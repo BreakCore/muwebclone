@@ -12,7 +12,7 @@ if (get_accesslvl()>49)
  {
   $n = checknum(substr($_GET["del"],0,5));
   $db->query("DELETE FROM MWC_messages WHERE id='".$n."'; DELETE FROM MWC_messages WHERE slave_id='".$n."'");
-  WriteLogs("Messages","администратор ".$_SESSION["sadmin"]." удалил цепочку сообщений");
+  WriteLogs("Messages","Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ ".$_SESSION["sadmin"]." СѓРґР°Р»РёР» С†РµРїРѕС‡РєСѓ СЃРѕРѕР±С‰РµРЅРёР№");
   header("Location:".$config["siteaddress"]."/control.php?page=checkmail");
  }
 

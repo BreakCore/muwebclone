@@ -66,10 +66,10 @@ if($statistic["showgraph"]==1)
  {
   $im=ImageCreate($statistic["sizey"],$statistic["sizex"]);
 
-  // Зададим цвет фона. 
+  // Р—Р°РґР°РґРёРј С†РІРµС‚ С„РѕРЅР°. 
   $bgcolor=ImageColorAllocate($im,$statistic["bgcolR"],$statistic["bgcolG"],$statistic["bgcolB"]);
   Diagramm($im,$VALUES,$LEGEND);
-  // Генерация изображения
+  // Р“РµРЅРµСЂР°С†РёСЏ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
   Imagepng($im,"imgs/statistic.png");
   Imagedestroy($im);
   $graphic = "<img border=\"0\" src=\"imgs/statistic.png\">";}else $graphic="";

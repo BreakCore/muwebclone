@@ -11,7 +11,7 @@ $linkZ = "_dat/dl.dat";
 
 $content->out_content("_sysvol/_a/theme/donwload_h.html");
 
-if ($_REQUEST["addlink"])//добавить ссыль на скачку
+if ($_REQUEST["addlink"])//РґРѕР±Р°РІРёС‚СЊ СЃСЃС‹Р»СЊ РЅР° СЃРєР°С‡РєСѓ
 {
  $titleZ = htmlspecialchars($_POST["title"]);
   if(get_magic_quotes_gpc()==1)  $glin=stripslashes($glin);
@@ -61,7 +61,7 @@ if($_GET["edit"]==1 && $_REQUEST["editlink"])
   header("Location:".$config["siteaddress"]."/control.php?page=down"); 
  }
  else
-  echo "некоторые поля остались незаполненными";
+  echo "РЅРµРєРѕС‚РѕСЂС‹Рµ РїРѕР»СЏ РѕСЃС‚Р°Р»РёСЃСЊ РЅРµР·Р°РїРѕР»РЅРµРЅРЅС‹РјРё";
  
 }
 if($_GET["edit"]==0 && isset($_GET["pos"]))

@@ -3,10 +3,10 @@ global $config;
 global $db;
 global $content;
 /**
-* создание комбобокса
-* @fname = имя формы, в которой находится бокс
-* @valarr массив со значениями значение => что показать на экране
-* @name - имя элемента,@class=ксс класс,@type - делать ли сабмит
+* СЃРѕР·РґР°РЅРёРµ РєРѕРјР±РѕР±РѕРєСЃР°
+* @fname = РёРјСЏ С„РѕСЂРјС‹, РІ РєРѕС‚РѕСЂРѕР№ РЅР°С…РѕРґРёС‚СЃСЏ Р±РѕРєСЃ
+* @valarr РјР°СЃСЃРёРІ СЃРѕ Р·РЅР°С‡РµРЅРёСЏРјРё Р·РЅР°С‡РµРЅРёРµ => С‡С‚Рѕ РїРѕРєР°Р·Р°С‚СЊ РЅР° СЌРєСЂР°РЅРµ
+* @name - РёРјСЏ СЌР»РµРјРµРЅС‚Р°,@class=РєСЃСЃ РєР»Р°СЃСЃ,@type - РґРµР»Р°С‚СЊ Р»Рё СЃР°Р±РјРёС‚
 */
 function build_mt($fname,$valarr,$name,$class,$type=0,$selected="none")
 {
@@ -70,7 +70,7 @@ if($_REQUEST["addmod"])
  fwrite($fh,$stringw);
  fclose($fh);header("location:".$config["siteaddress"]."/control.php?page=mmodul");
 }
-//удаляем модуль
+//СѓРґР°Р»СЏРµРј РјРѕРґСѓР»СЊ
 if (isset($_GET["edit"]) && $_GET["edit"]==0)
 {
   $p=substr(checknum($_GET["pos"]),0,3);
@@ -82,7 +82,7 @@ if (isset($_GET["edit"]) && $_GET["edit"]==0)
   $btnval=" name='addmod' value='".$content->lng["mm_manager_btn1"]."'";$modname[0]="";$modname[1]="";
   header("location:".$config["siteaddress"]."/control.php?page=mmodul");				
 }
-// если нажать "применить"
+// РµСЃР»Рё РЅР°Р¶Р°С‚СЊ "РїСЂРёРјРµРЅРёС‚СЊ"
  if ($_REQUEST["okmod"])
  {
    $cnt = count($pmfile);

@@ -1,10 +1,10 @@
 <?php if (!defined('inpanel'))die();
 /**
-* Парсинг рсс у ucoz форума
-*@path = путь до форума
+* РџР°СЂСЃРёРЅРі СЂСЃСЃ Сѓ ucoz С„РѕСЂСѓРјР°
+*@path = РїСѓС‚СЊ РґРѕ С„РѕСЂСѓРјР°
 */
 function addnews($path="http://www.p4f.ru/forum/0-0-0-37")
-{
+{/*
  global $content;
  $temp = @file_get_contents($path);
  if($temp)
@@ -24,15 +24,15 @@ function addnews($path="http://www.p4f.ru/forum/0-0-0-37")
  ob_end_clean();
  return $temp;
  }
- else return "<div align='center'>Can't open site</div>";
+ else return "<div align='center'>Can't open site</div>";*/
+ return "on reconstruction";
 }
 /**
-* конструктор меню администратора
+* РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РјРµРЅСЋ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°
 */
-function getadmenu()
+function getadmenu($config,$content)
 {
- global $config;
- if(!$_SESSION["mwclang"])
+ if(!isset($_SESSION["mwclang"]))
    $_SESSION["mwclang"] = $config["def_lang"]="rus";
 	  
  $loadfile = @file("_dat/amenu.dat");
@@ -44,17 +44,17 @@ function getadmenu()
  {
   if(!$cachtime || ($nowitime-$cachtime >3606))
   {
-   if ($config["oporclos"]==1)
+ /*  if ($config["oporclos"]==1)
    {
     if($_GET["page"]!="update" && $_GET["page"]!="modules") require "_sysvol/imbrowser.php";
     $str=unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/updatelist.mwc");
     $handle = fopen("_dat/updates/updlist","w");
     fwrite ($handle,$str);
     fclose ($handle);
-   }
+   }*/
    ob_start();
    include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
-   global $content;
+
    foreach ($loadfile as $m)
    {
     $showarr = explode("::",$m);
@@ -75,14 +75,14 @@ function getadmenu()
  }
 }
 /*
-* показать модули админа
+* РїРѕРєР°Р·Р°С‚СЊ РјРѕРґСѓР»Рё Р°РґРјРёРЅР°
 */
-function a_modul($mname)
+function a_modul($mname,$db)
 {
  if( strlen($mname)>1)
  {
   $apages = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($mname,0,10));
-  if(get_accesslvl()>=checacc($apages)&& strlen($_SESSION["sadmin"])>3)
+  if(get_accesslvl($db)>=checacc($apages)&& strlen($_SESSION["sadmin"])>3)
   {
    if(file_exists("_sysvol/_a/".$apages.".php"))
    {
@@ -90,7 +90,8 @@ function a_modul($mname)
      require "_sysvol/_a/".$apages.".php";
 	 $temp_a = ob_get_contents(); 
     ob_end_clean();
-    if (!$temp) return $temp_a;
+    if (empty($temp))
+     return $temp_a;
     return $temp;
    }
    else return "wrong page!";
@@ -102,16 +103,14 @@ function a_modul($mname)
 	
 }
 /*
-* инфо о(для) админе
+* РёРЅС„Рѕ Рѕ(РґР»СЏ) Р°РґРјРёРЅРµ
 */
-function ainfo()
+function ainfo($db,$content)
 {
- global $db;
- global $content;
  $alert=0;
  
- $letters = $db->numrows("SELECT id FROM MWC_messages WHERE slave_id=0 and isread=0 or slave_id=0 and isread=NULL");
- ($letters<1) ? $letters=0 : true;
+ $letters = $db->query("SELECT count(*) as cnt FROM MWC_messages WHERE slave_id=0 and isread=0 or slave_id=0 and isread=NULL")->FetchRow();
+ ($letters["cnt"] < 1) ? $letters=0 : true;
  $content->set('|lnum|', $letters);
  $content->set('|admin|', $_SESSION["sadmin"]);
  $content->set('|gradm|', get_group());
@@ -140,7 +139,7 @@ function ainfo()
  if($alert>0)
  {
 
-  $content->set('|alert_msg|', "<img src=\"imgs/x.gif\" border=\"0\" alt=\"сообщения\" style=\"position:relative;top:4px;left:0px;\">".$content->lng["adm_warn"]);
+  $content->set('|alert_msg|', "<img src=\"imgs/x.gif\" border=\"0\" alt=\"СЃРѕРѕР±С‰РµРЅРёСЏ\" style=\"position:relative;top:4px;left:0px;\">".$content->lng["adm_warn"]);
  $content->set('|vari|', 1);
  $content->set('|numb|', $gfile);
  }
@@ -168,27 +167,26 @@ function ainfo()
 }
 
 /**
-* узнать максимальный доступ у админа
+* СѓР·РЅР°С‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РґРѕСЃС‚СѓРї Сѓ Р°РґРјРёРЅР°
 */
-function get_accesslvl()
+function get_accesslvl($db)
 {
- if ($_SESSION["sadmin"])
+ if (isset($_SESSION["sadmin"]))
  {
-  global $db;
-  $level = $db->fetchrow("SELECT [access] FROM MWC_admin WHERE name='".validate($_SESSION["sadmin"])."'");
-  return $level[0];
+
+  $level = $db->query("SELECT [access] FROM MWC_admin WHERE name='{$_SESSION["sadmin"]}'")->FetchRow();
+  return $level["access"];
  }
  die("you don't access to this pages!");
 }
 /**
-* отображение группы по провам доступа в админку (для админов и гм)
+* РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РіСЂСѓРїРїС‹ РїРѕ РїСЂРѕРІР°Рј РґРѕСЃС‚СѓРїР° РІ Р°РґРјРёРЅРєСѓ (РґР»СЏ Р°РґРјРёРЅРѕРІ Рё РіРј)
 */
-function get_group()
+function get_group($db,$content)
 {
-  if($_SESSION["sadmin"])
+  if(isset($_SESSION["sadmin"]))
   {
-   global $content;
-   $acclevel = get_accesslvl();
+   $acclevel = get_accesslvl($db);
    if ($acclevel>0 && $acclevel<=10) return $content->lng["adm_gr1"]; //gm
    elseif ($acclevel>10 && $acclevel<=20) return $content->lng["adm_gr2"]; //moders
    elseif ($acclevel>20 && $acclevel<=30) return $content->lng["adm_gr3"]; //adm helpers
@@ -200,9 +198,9 @@ function get_group()
 }
 
 /**
-* проверка на доступ
-* @mname - навание модуля
-* возвращает уровень тоступа
+* РїСЂРѕРІРµСЂРєР° РЅР° РґРѕСЃС‚СѓРї
+* @mname - РЅР°РІР°РЅРёРµ РјРѕРґСѓР»СЏ
+* РІРѕР·РІСЂР°С‰Р°РµС‚ СѓСЂРѕРІРµРЅСЊ С‚РѕСЃС‚СѓРїР°
 */
 function checacc($mname)
 {
@@ -221,7 +219,7 @@ function checacc($mname)
 }
 
 /**
-* названия страничек
+* РЅР°Р·РІР°РЅРёСЏ СЃС‚СЂР°РЅРёС‡РµРє
 */
 function show_t($tt,$t=1)
 {

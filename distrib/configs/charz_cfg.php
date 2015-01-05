@@ -1,4 +1,4 @@
 <?php if (!defined('insite')) die("no access"); 
 $charz["num_adm_col"] ="0,2,3,5,6,7,8,9,12,17,18,19,20,21,22,23,26,29,33,34";	
-$charz["num_adm_col_def"] = "0,2,3,5,6,7,8,9,12,17,18,19,20,21,22,23,26,29,33,34";	//íîìåðà ïî ïîðÿäêó ñòîëáöîâ â òàáëèöå character( c 0)
+$charz["num_adm_col_def"] = "0,2,3,5,6,7,8,9,12,17,18,19,20,21,22,23,26,29,33,34";	//Ð½Ð¾Ð¼ÐµÑ€Ð° Ð¿Ð¾ Ð¿Ð¾Ñ€ÑÐ´ÐºÑƒ ÑÑ‚Ð¾Ð»Ð±Ñ†Ð¾Ð² Ð² Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ðµ character( c 0)
 $charz["stats_n"] = "Vitality,Strength,Energy,Dexterity,Leadership";

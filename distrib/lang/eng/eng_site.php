@@ -1,4 +1,4 @@
-<?php if (!defined('insite')){die();} 
+﻿<?php if (!defined('insite')){die();} 
 $lang["lang_nav_loginarea"]="Login Area";
 $lang["lang_nav_loginw"]="Login";
 $lang["lang_nav_loginpw"]="PAssword";
