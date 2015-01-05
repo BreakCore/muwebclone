@@ -15,14 +15,23 @@ if(is_array($strongest))
             $show_gm="";
 
         $templ = explode(",",$strongest["stron_hiden"]);
+        $hiden="";
+        $jj = 0;
+
+        foreach ($templ as $tmp) {
+            if($jj>0)
+                $hiden.=",";
+            $hiden.="'$tmp'";
+            $jj++;
+        }
+
 
         if (count($templ) > 0)
-            $hiden = " and Name NOT IN ($templ) ";
+            $hiden = " and ch.Name NOT IN ($hiden) ";
         else
             $hiden="";
 
-        $resulttop5 = $db->query("
-SELECT TOP 5
+        $resulttop5 = $db->query("SELECT TOP 5
  ch.Name,
  ch.{$strongest["res_colum"]},
  ch.cLevel,

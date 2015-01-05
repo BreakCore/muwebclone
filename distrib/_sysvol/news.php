@@ -1,6 +1,5 @@
 <?php  if (!defined('insite')) die("no access");
-global $config;
-global $content;
+
 require "configs/news_cfg.php";
 
 $inpage = $news["shownews"]; /*количество новостей на странице*/
@@ -26,7 +25,7 @@ if ($NewsCount>0)
    if ($inpage !=0)
     {
 	 list($title,$news,$flinkz,$date)=split("::",$NewsBase[$i],4); 
-	 if ($linksv=="on" && $flinkz!="none" && strlen(trim($flinkz))>0 && (strlen($flinkz) <=$linklen)) $flinkz="<a href='".$flinkz."'>".$content->lng["inforum_link"]."</a>";
+	 if ($linksv=="on" && $flinkz!="none" && strlen(trim($flinkz))>0 && (strlen($flinkz) <=$linklen)) $flinkz="<a href='".$flinkz."'>".$content->getVal("inforum_link")."</a>";
 	 else $flinkz="";
 
 	 $title = bbcode($title);
@@ -48,7 +47,7 @@ if ($NewsCount>0)
   if(!empty($NewsBase[$i]))
   {
    list($title,$news,$flinkz,$date)=split("::",$NewsBase[$i],4);
-   if ($linksv=="on" && strlen($flinkz)>3 && $flinkz!="none" && $flinkz!="" && (strlen($flinkz) <=$linklen)) $flinkz="<a href='".$flinkz."'>".$content->lng["inforum_link"]."</a>";else $flinkz="";
+   if ($linksv=="on" && strlen($flinkz)>3 && $flinkz!="none" && $flinkz!="" && (strlen($flinkz) <=$linklen)) $flinkz="<a href='".$flinkz."'>".$content->getVal("inforum_link")."</a>";else $flinkz="";
    $title = bbcode($title);
    $date = @date('d.m.Y',$date);
    $news = unhtmlentities(bbcode($news));
