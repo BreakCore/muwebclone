@@ -91,7 +91,7 @@ else
             $month_today = @date("M", time());
             $day_today = @date("j", time());
             $year_today = @date("Y", time());
-            $online_today = $db->query("SELECT count(*) as perday FROM MEMB_STAT WHERE ConnectTM LIKE '%".$month_today."%".$day_today."%".$year_today."%' OR DisConnectTM LIKE '%".$month_today."%".$day_today."%".$year_today."%'")->FetchRw();
+            $online_today = $db->query("SELECT count(*) as perday FROM MEMB_STAT WHERE ConnectTM LIKE '%".$month_today."%".$day_today."%".$year_today."%' OR DisConnectTM LIKE '%".$month_today."%".$day_today."%".$year_today."%'")->FetchRow();
             $content->set('|write|', $content->getVal("online_today"));
             $content->set('|value|', $online_today["perday"]);
             $content->out("qinfo_c.html");

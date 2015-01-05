@@ -201,7 +201,7 @@ function chk_user($config,$db,$type=0)
 /**
 * отображение страниц
 **/
-function pages($config)
+function pages($config,$db,$content)
 {
     $pmnfile=file("_dat/pm.dat");
     $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11));

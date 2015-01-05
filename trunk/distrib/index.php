@@ -1,5 +1,6 @@
 <?php session_start(); 
 ob_start();
+error_reporting(E_ALL);
 define ('insite', 1);
 $starttime = explode(' ', microtime());
 $starttime = $starttime[1] + $starttime[0];
@@ -34,8 +35,24 @@ if(!file_exists("opt.php"))
 else
 {
  require_once "opt.php";
- if ($config["debug"]==0)
-  error_reporting(0);
+ if(!is_array($config) or empty($config))
+ {
+  if(file_exists("_dat/install.php"))
+  {
+   rename("_dat/install.php","install.php");
+  }
+
+  if(file_exists("install.php"))
+  {
+   header("location: install.php");
+  }
+  else
+  {
+   die("<h2>Please put install.php in main folder!</h2>");
+  }
+ }
+ //if ($config["debug"]==0)
+ // error_reporting(0);
 
  if(!isset($_SESSION["mwclang"]) or strlen($_SESSION["mwclang"])!=3) //если язык не выбран или не состоит из 3(!) букв
   $_SESSION["mwclang"]=$config["def_lang"];
@@ -52,7 +69,7 @@ else
  {
 
   $db = new connect ($config["ctype"], $config["db_host"], $config["db_name"], $config["db_user"], $config["db_upwd"]);
-  $content = new content("site",substr($_SESSION["mwclang"],0,3),0,$config["theme"]);
+  $content = new content($config["siteaddress"],"site",substr($_SESSION["mwclang"],0,3),0,$config["theme"]);
 
   autobans($db);
   if ($config["under_rec"]==1)
@@ -97,7 +114,7 @@ else
     $ct="";
     if ($contacts)
     {
-     $ct=$content->out_content("theme/".$config["theme"]."/them/contacts_h.html",1);
+     $ct=$content->out("contacts_h.html",1);
      foreach ($contacts as $templ)
      {
       list($typeZ,$contactZ) = explode("::",$templ);//??
@@ -109,9 +126,9 @@ else
 
       $content->set('|type|', $typeZ);
       $content->set('|contact|', $contactZ);
-      $ct.=$content->out_content("theme/".$config["theme"]."/them/contacts_c.html",1);
+      $ct.=$content->out("contacts_c.html",1);
      }
-     $ct.=$content->out_content("theme/".$config["theme"]."/them/contacts_f.html",1);
+     $ct.=$content->out("contacts_f.html",1);
     }
 
     $content->set('|contact|', $ct);
@@ -123,7 +140,7 @@ else
     }
 
     if (isset($_GET["p"]) && !isset($_GET["up"]) || !isset($_GET["up"]) && !isset($_GET["p"]))
-     $content->set('|pages|', pages($config));
+     $content->set('|pages|', pages($config,$db,$content));
 
     elseif (isset($_GET["up"]))
     {
@@ -155,7 +172,7 @@ else
     $totaltime = $mtime[0] + $mtime[1] - $starttime;
     $content->set('|generation|', round($totaltime,3)." seconds");
 
-    $content->out_content("theme/".$config["theme"]."/them/main.html");
+    $content->out("main.html");
    }
    else die("theme file is not found, check your site!");
   }
@@ -163,9 +180,9 @@ else
  }
  catch(Exception $ex)
  {
-  $agr = $ex->getTrace();
-  logs::WriteLogs("SQL","Connection type: [b]{$agr[0]["args"][0]}[/b], Error: [b]".iconv("Windows-1251","UTF-8",$agr[0]["args"][3])."[/b] ");
-  die("Wooow... something went wrong! check sql logs!");
+  $info =  $ex->getTrace();
+  logs::WriteLogs("errors",$ex->getMessage()." Frile:".$info[0]["file"]." Line:".$info[0]["line"]);
+  die("Wooow... something went wrong! check logs!");
  }
 }
 ob_end_flush();

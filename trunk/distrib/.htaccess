@@ -1,17 +1,7 @@
-Options -MultiViews
-
-
-ErrorDocument 403 /errors/er403.html
-ErrorDocument 404 /errors/er403.html
-ErrorDocument 500 /errors/er403.html
-
-
- 
-RewriteRule ^.htaccess$ - [F]
- 
-
 RewriteEngine on
-RewriteCond %{REQUEST_METHOD} ^TRACE 
+RewriteRule ^.htaccess$ - [F]
+RewriteCond %{REQUEST_METHOD} ^TRACE
+
 RewriteRule .* [F]
 RewriteRule news(.*)\.html$ index.php?news=$1
 
@@ -20,9 +10,3 @@ RewriteRule news(.*)\.html$ index.php?news=$1
 	Order deny,allow 
 	deny from all	
  </FilesMatch>
-  <FilesMatch "ChangeLog.txt"> 
-	Order deny,allow 
-	deny from all	
- </FilesMatch>
- 
-AddDefaultCharset windows-1251 

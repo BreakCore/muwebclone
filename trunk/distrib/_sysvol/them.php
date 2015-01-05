@@ -164,17 +164,9 @@ class content
      */
     public function out($tpl,$type=0,$gentime="no")
     {
-        $path = "theme/".$this->themName."/html/".$tpl;
+        $path = "theme/".$this->themName."/them/".$tpl;
 
-        //region подключаем ксс
-        $info = pathinfo($path);
-        $fname = basename($path,'.'.$info['extension']);
 
-        if(file_exists("theme/".$this->themName."/css/".$fname.".css"))
-        {
-            $this->vars["|global_css|"].= @file_get_contents("theme/".$this->themName."/css/".$fname.".css");
-        }
-        //endregion
         if ($gentime!="no")
             $this->vars["|gentime|"] = round($gentime,4);
 

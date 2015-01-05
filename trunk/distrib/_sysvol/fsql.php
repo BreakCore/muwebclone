@@ -1,7 +1,7 @@
 ﻿<?php
 
-require_once "_sysvol/adodb5/adodb5/adodb-exceptions.inc.php";
-require_once "_sysvol/adodb5/adodb5/adodb.inc.php";
+require_once "_sysvol/adodb5/adodb-exceptions.inc.php";
+require_once "_sysvol/adodb5/adodb.inc.php";
 
 class connect
 {
