@@ -204,7 +204,13 @@ function chk_user($config,$db,$type=0)
 function pages($config,$db,$content)
 {
     $pmnfile=file("_dat/pm.dat");
-    $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11));
+    if(isset($_GET["p"]))
+    {
+        $pagefile = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["p"],0,11));
+    }
+    else
+        $pagefile = "home";
+
     $pracces=0;
     $temp="";
     if(!isset($_GET["p"]) || $pagefile == "home")
@@ -959,11 +965,11 @@ function GuildLogo($hex,$name,$size=64,$livetime)
 */
 function timing($toptime,$content,$type=1)
 {
-    $forms=array( $content->getVal["caching_mins1"],  $content->getVal["caching_mins2"],  $content->getVal["caching_mins3"]);
+    $forms=array( $content->getVal("caching_mins1"),  $content->getVal("caching_mins2"),  $content->getVal("caching_mins3"));
     if ($type==1)
     {
         $toptime = round(($toptime/60),2);
-        echo "<div align=\"center\" class=\"cathtime\">*".$content->getVal["caching_time"]." ".$toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]))."</div>";
+        echo "<div align=\"center\" class=\"cathtime\">*".$content->getVal("caching_time")." ".$toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]))."</div>";
     }
     else
         return $toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]));
@@ -1104,17 +1110,17 @@ function know_csstate($db,$content)
     $Current_Time = time();
 
     if((@strtotime($CS_GUILD["SIEGE_START_DATE"])+86400) > $Current_Time)
-        $info_ar[1] = $content->getVal["cs_period"];       /* 0 00:00 - 0 23:59 */
+        $info_ar[1] = $content->getVal("cs_period");       /* 0 00:00 - 0 23:59 */
     elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+432000) > $Current_Time)
-        $info_ar[1] = $content->getVal["cs_period1"]; /* 1 00:00 - 4 23:59 */
+        $info_ar[1] = $content->getVal("cs_period1"); /* 1 00:00 - 4 23:59 */
     elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+500400) > $Current_Time)
-        $info_ar[1] = $content->getVal["cs_period2"]; /* 5 00:00 - 5 19:00 */
+        $info_ar[1] = $content->getVal("cs_period2"); /* 5 00:00 - 5 19:00 */
     elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+586800) > $Current_Time)
-        $info_ar[1] = $content->getVal["cs_period3"]; /* 5 19:00 - 6 19:00 */
+        $info_ar[1] = $content->getVal("cs_period3"); /* 5 19:00 - 6 19:00 */
     elseif	((@strtotime($CS_GUILD["SIEGE_START_DATE"])+594000) > $Current_Time)
-        $info_ar[1] = $content->getVal["cs_period4"]; /* 6 19:00 - 6 21:00 */
+        $info_ar[1] = $content->getVal("cs_period4"); /* 6 19:00 - 6 21:00 */
     else
-        $info_ar[1] = $content->getVal["cs_period5"];
+        $info_ar[1] = $content->getVal("cs_period5");
 
     $info_ar[2] = parsetime($CS_GUILD["SIEGE_START_DATE"],0,"d.m.Y");
     $info_ar[3] = parsetime($CS_GUILD["SIEGE_END_DATE"],0,"d.m.Y");
@@ -1122,6 +1128,10 @@ function know_csstate($db,$content)
     return $info_ar;
 }
 
+function debug($s)
+{
+    print "<pre>";print_r($s);print "</pre>";
+}
 /**
 * проверка на администратора
 */

@@ -16,6 +16,7 @@ else
         /**
          * server time
          */
+        echo $content->getVal("online_time");
         if(in_array("time",$list))
         {
             $content->set('|write|', $content->getVal("online_time"));

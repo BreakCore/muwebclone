@@ -44,9 +44,9 @@ if(is_array($strongest))
  CONVERT(varchar(max),ms.ConnectTM,120) as ConnectTM,
  CONVERT(varchar(max), ms.DisConnectTM ,120) as DisConnectTM
 FROM [Character] ch
- left join [GuildMember] gm ON gm.Name = ch.Name -- guild
- left join Guild gld on gm.G_Name = gld.G_Name -- guild info
- inner join MEMB_STAT ms on ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT-- online info
+ left join [GuildMember] gm ON gm.Name = ch.Name
+ left join Guild gld on gm.G_Name = gld.G_Name
+ inner join MEMB_STAT ms on ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT
 WHERE
  $show_gm CtlCode != 1 $hiden
  and CtlCode != 17  ".$strongest["str_sort"]);
@@ -57,9 +57,12 @@ WHERE
         {
             while($res = $resulttop5->FetchRow())
             {
+               // debug($res);
+
                 $res["Class"] = classname($res["Class"]);
                 if(empty($res["G_Name"]))
                     $res["G_Name"]="-/-";
+
                 if($res["ConnectStat"] == 1)
                 {
                     $status = "<span style=color:#04C200;font-weight:bold;font-size:12px;>Online</span> ".$content->getVal("sreongest_pr")." ".$res["ConnectTM"];
@@ -82,7 +85,7 @@ WHERE
                 $content->set("|level|", $res["cLevel"]);
                 $content->set("|reset|", $res[$strongest["res_colum"]]);
                 $content->set("|gstar|", $gr_star);
-                $content->set("|cname|",  $res["Name"]);
+                $content->set("|cname|", $res["Name"]);
                 $content->out("strongest.html");
             }
         }
@@ -156,7 +159,7 @@ WHERE
         else echo "error: in top_type!";
         $temp = ob_get_contents();
         write_catch ("_dat/cach/top_strongest",$temp);
-        ob_end_clean();
+        ob_clean();
     } else $temp = file_get_contents ('_dat/cach/top_strongest');
 }
 else
