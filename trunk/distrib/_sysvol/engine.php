@@ -350,60 +350,10 @@ function classname($classnum)
   return $classnum;
 }
 
-function q_chr_top($class)
+function q_chr_top($class,$config,$db)
 {
-	global $config;
-	global $db;
-		switch ($class)
-		{
-		case 0:$ch_name = "Dark Wizard";$ch_class="Class=0";break;		
-		case 1:$ch_name = "Soul Master";$ch_class="Class=1";break;		
-		case 2:$ch_name = "Grand Master"; $ch_class="Class=2";break;		
-		case 3:$ch_name = "Grand Master";$ch_class="Class=3";break;		
-		case 16:$ch_name = "Dark Knight";$ch_class="Class=16";break;
-		case 17:$ch_name = "Blade Knight";$ch_class="Class=17";break;
-		case 18:$ch_name = "Blade Master";$ch_class="Class=18";break;
-		case 19:$ch_name = "Blade Master";$ch_class="Class=19";break;
-		case 32:$ch_name = "Fairy Elf";$ch_class="Class=32";break;		
-		case 33:$ch_name = "Muse Elf";$ch_class="Class=33";break;		
-		case 34:$ch_name = "High Elf";$ch_class="Class=34";break;		
-		case 35:$ch_name = "High Elf";$ch_class="Class=35";break;		
-		case 48:$ch_name = "Magic Gladiator";$ch_class="Class=48";break;
-		case 49:$ch_name = "Duel Master";$ch_class="Class=49";break;
-		case 50:$ch_name = "Duel Master";$ch_class="Class=50";break;
-		case 64:$ch_name = "Dark Lord";$ch_class="Class=64";break;		
-		case 65:$ch_name = "Lord Emperor";$ch_class="Class=65";break;	
-		case 66:$ch_name = "Lord Emperor";$ch_class="Class=66";break;	
-		case 80:$ch_name = "Summoner";$ch_class="Class=80";break;
-		case 81:$ch_name = "Bloody Summoner";$ch_class="Class=81";break;
-		case 82:$ch_name = "Dimension Master";$ch_class="Class=82";break;
-		case 83:$ch_name = "Dimension Master";$ch_class="Class=83";break;
-		case 96:$ch_name = "Rage Fighter";$ch_class="Class=96";break;			
-		case 97:$ch_name = "Fist Master";$ch_class="Class=97";break;
-		case 98:$ch_name = "Fist Master";$ch_class="Class=98";break;	
-		default: return "<br>Wrong Character class!";
-		}
-	require "configs/strongest_cfg.php";
-	$sho_t = $db->fetchrow($db->query("SELECT TOP 1 Name,".$strongest["res_colum"].",cLevel, AccountID,gr_res from Character WHERE  CtlCode != 1 and CtlCode != 17 and ".$ch_class." ".$strongest["str_sort"]));
 
-	$g_name_s = $db->fetchrow($db->query("SELECT G_Name FROM GuildMember WHERE Name='$sho_t[0]'"));
-	if (strlen($g_name_s[0])<=1) $g_name_s[0]="no guild";
-	if (empty($sho_t[0]) or strlen($sho_t[0])<=1) {unset($sho_t);$sho_t[0]="no one"; }
-	$gr_star="&nbsp;";
-	if ($strongest["greset"]==1 && $strongest["greset_st"]==1)
-	{
-	 while ($sho_t[4]>0)
-	 {
-	  $gr_star.="<img src=\"imgs/gres.gif\"  border=\"0\" />";
-	  $sho_t[4]--;
-	 }
-	}
-	else if ($strongest["greset"]==1 && $strongest["greset_st"]==0)
-	{
-		$gr_star=" <br>Grand Reset: ".$sho_t[4];
-	}
-	if (isset($sho_t[2]) && isset($sho_t[1])) return "<br>".$ch_name." : <span title='Level: ".$sho_t[2]."<br>Reset: ".$sho_t[1].$gr_star."<br>Guild: ".$g_name_s[0]."'>".$sho_t[0]."</span>";
-	else return "<br>".$ch_name." : ".$sho_t[0]."";
+
 	
 }
 

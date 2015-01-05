@@ -2,7 +2,7 @@
 $strongest["cach"]=7205;
 $strongest["show_adm"]=0;
 $strongest["res_colum"]="Resets";
-$strongest["str_sort"]="order by Resets desc, cLevel desc, Name desc";
+$strongest["str_sort"]="order by ch.Resets desc, ch.cLevel desc, ch.Name desc";
 $strongest["top_type"]=1;
 $strongest["greset"]=1;
 $strongest["greset_st"]=1;
