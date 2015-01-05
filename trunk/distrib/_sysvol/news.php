@@ -8,7 +8,8 @@ $linksv = $news["newsf"];
 $linklen = $news["liklen"];
 $shownes = $news["shownews"];
 
-if ($_GET["n"]==0)unset($_GET["n"]);
+if (isset($_GET["n"]) && $_GET["n"]==0)
+ unset($_GET["n"]);
 
 $NewsBase=file("_dat/news.dat"); 
 $NewsCount = count($NewsBase);

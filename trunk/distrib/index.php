@@ -89,9 +89,6 @@ else
    if (file_exists("theme/".$config["theme"]."/index.php"))
    {
 
-    if ($config["show_adm"]==0)
-     $show_gm="CtlCode !=32 and"; else $show_gm="";
-
     if (isset($_POST["selectedchar"]))
      $_SESSION["character"] = substr($_POST["selectedchar"],0,10);
 

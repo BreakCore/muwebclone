@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 require_once "_sysvol/adodb5/adodb-exceptions.inc.php";
 require_once "_sysvol/adodb5/adodb.inc.php";
@@ -101,7 +101,7 @@ class connect
             $this->resId = &ADONewConnection('odbc_mssql');
             $dsn = "Driver={SQL Server};Server=".$host.";Database=".$base.";";
             $this->resId->debug=false;
-            $this->resId->PConnect($dsn,$user,$pwd);
+            $this->resId->Connect($dsn,$user,$pwd);
         }
         else
             throw new Exception("odbc_connect is NOT supported!");

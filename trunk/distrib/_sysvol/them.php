@@ -20,8 +20,8 @@ class content
     {
         $this->debug = $dbg;
         $this->clang = $language;
-        $this->add_dict($file);
         $this->themName=$thName;
+        $this->add_dict($file);
         $this->adr = $addres;
         $this->vars["|siteaddress|"]=$this->adr;
         $this->vars["|theme|"]=$this->themName;
@@ -63,16 +63,15 @@ class content
         }
         else
         {
-            if (file_exists("lang/{$this->clang}/{$file}.php"))
+            if (file_exists("lang/{$this->clang}/{$this->clang}_{$file}.php"))
             {
                 /** @var $lang array */
-                require_once "lang/{$this->clang}/{$file}.php";
+                require_once "lang/{$this->clang}/{$this->clang}_{$file}.php";
                 if (isset($lang) && is_array($lang))
                 {
                     $this->lng+=$lang;
                     foreach ($lang as $d=>$v)
                         $this->vars["|".$d."|"] = $v;
-
                 }
             }
         }
@@ -162,13 +161,9 @@ class content
      * @return mixed|string
      * @throws Exception
      */
-    public function out($tpl,$type=0,$gentime="no")
+    public function out($tpl,$type=0)
     {
         $path = "theme/".$this->themName."/them/".$tpl;
-
-
-        if ($gentime!="no")
-            $this->vars["|gentime|"] = round($gentime,4);
 
         if(file_exists($path))
         {
