@@ -1,6 +1,6 @@
 <?php
 /**
-* ìîäóëü èçìåíåíèÿ ïàðàìåòðîâ äîñòóïà ê ìîäóëÿì 
+* Ð¼Ð¾Ð´ÑƒÐ»ÑŒ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð² Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð° Ðº Ð¼Ð¾Ð´ÑƒÐ»ÑÐ¼ 
 * Mu Web Clone
 **/
 ob_start();
@@ -18,20 +18,20 @@ if($_REQUEST["add_a"])
  $dhandler = fopen("_dat/maccess.db","w");
  fputs($dhandler, implode("",$adb));
  fclose($dhandler);
- WriteLogs ("Adm_","àäìèíèñòðàòîð ".$_SESSION["sadmin"]." èçìåíèë óðîâåíü äîñòóïà ó ".$tmp[0]);
+ WriteLogs ("Adm_","Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€ ".$_SESSION["sadmin"]." Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð» ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð° Ñƒ ".$tmp[0]);
  header("Location: ".$config["siteaddress"]."/control.php?page=acccess");
 }
 elseif($_REQUEST["arefresh"])
 {
  $dhandler = fopen("_dat/maccess.db","w");
  fclose($dhandler);
- WriteLogs ("Adm_","àäìèíèñòðàòîð ".$_SESSION["sadmin"]." ñáðîñèë âñå ðàçðåøåíèÿ");
+ WriteLogs ("Adm_","Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€ ".$_SESSION["sadmin"]." ÑÐ±Ñ€Ð¾ÑÐ¸Ð» Ð²ÑÐµ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ñ");
  header("Location: ".$config["siteaddress"]."/control.php?page=acccess");
 }
 
 if($_REQUEST["acrefr"]) $adb="";
 
-if(strlen($adb)==0 or strlen(trim($adb[0]))==0) //åñëè ôàéëà íåò
+if(strlen($adb)==0 or strlen(trim($adb[0]))==0) //ÐµÑÐ»Ð¸ Ñ„Ð°Ð¹Ð»Ð° Ð½ÐµÑ‚
 {
 
  $whandle = fopen("_dat/maccess.db","w");

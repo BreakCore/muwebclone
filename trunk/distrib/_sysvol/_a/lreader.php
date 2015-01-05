@@ -13,23 +13,23 @@ if ($_REQUEST["delalog"])
  {
   if ($file != "." && $file != ".." && $file !=".htaccess" && substr($file,0,3)!="Adm") unlink("logZ/".$file);
  }
- WriteLogs("Adm_",$_SESSION["sadmin"]." удалил все логи");
+ WriteLogs("Adm_",$_SESSION["sadmin"]." СѓРґР°Р»РёР» РІСЃРµ Р»РѕРіРё");
 
 }
-if($_REQUEST["dellog"] && $_REQUEST["hvd"]) //удалить лог
+if($_REQUEST["dellog"] && $_REQUEST["hvd"]) //СѓРґР°Р»РёС‚СЊ Р»РѕРі
 {
  if(substr($_REQUEST["hvd"],0,3)=="Adm")
  { 
-  WriteLogs("Adm_",$_SESSION["sadmin"]." попытвлся удалить ".htmlspecialchars($_REQUEST["hvd"])." эти логи нельзя удалить через сайт!");
+  WriteLogs("Adm_",$_SESSION["sadmin"]." РїРѕРїС‹С‚РІР»СЃСЏ СѓРґР°Р»РёС‚СЊ ".htmlspecialchars($_REQUEST["hvd"])." СЌС‚Рё Р»РѕРіРё РЅРµР»СЊР·СЏ СѓРґР°Р»РёС‚СЊ С‡РµСЂРµР· СЃР°Р№С‚!");
  }
  else
  {
   @unlink("logZ/".$_REQUEST["hvd"]);
-  WriteLogs("Adm_",$_SESSION["sadmin"]." удалил ".htmlspecialchars($_REQUEST["hvd"]));
+  WriteLogs("Adm_",$_SESSION["sadmin"]." СѓРґР°Р»РёР» ".htmlspecialchars($_REQUEST["hvd"]));
  }
   header("Location: ".$config["siteaddress"]."/control.php?page=lreader");
 }
-if($_REQUEST["downl"] && $_REQUEST["hvd"]) //загрузить лог
+if($_REQUEST["downl"] && $_REQUEST["hvd"]) //Р·Р°РіСЂСѓР·РёС‚СЊ Р»РѕРі
 {
  if (file_exists("logZ/".$_REQUEST["hvd"]))
  {
@@ -126,9 +126,9 @@ function slogZ($text)
  (
  "/\[(.*)\](.*?)\[(.*)\][\r]*[\n]*/" => "<span style='font-weight:bold;font-size:14px;color:black;'>$1</span> - (<span style='font-size:14px;color:red;'>$3</span>)",
  "/Message:(.*?)[\r]*[\n]*/" =>"<span style='font-weight:bold;font-size:14px;color:red;'><![CDATA[$1]]></span>",
- "/адрес: \'(.*?)\'[\r]*[\n]*/" => " параметры GET: <span style='font-size:14px;color:green;'><![CDATA[$1]]></span>",
- "/рефер: \'(.*?)\'[\r]*[\n]*/" => "откуда попал <span style='font-weight:bold;font-size:14px;color:black;'><a href='$1'>$1</a>",
- "/браузер: \'(.*?)\'[\r]*[\n]*/" => "<span style='font-size:10px;'>$1</span>"
+ "/Р°РґСЂРµСЃ: \'(.*?)\'[\r]*[\n]*/" => " РїР°СЂР°РјРµС‚СЂС‹ GET: <span style='font-size:14px;color:green;'><![CDATA[$1]]></span>",
+ "/СЂРµС„РµСЂ: \'(.*?)\'[\r]*[\n]*/" => "РѕС‚РєСѓРґР° РїРѕРїР°Р» <span style='font-weight:bold;font-size:14px;color:black;'><a href='$1'>$1</a>",
+ "/Р±СЂР°СѓР·РµСЂ: \'(.*?)\'[\r]*[\n]*/" => "<span style='font-size:10px;'>$1</span>"
   );
  $text = preg_replace(array_keys($code), array_values($code), $text);
  return $text;

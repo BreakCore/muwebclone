@@ -1,4 +1,4 @@
-<?php if (!defined('insite')){die('11');} 
+﻿<?php if (!defined('insite')){die('11');} 
 $lang["coin_title"] = "Add credits";
 $lang["cred2zen"] = "Selling credits";
 $lang["lang_nav_wsell"] = "Sell";
@@ -49,7 +49,7 @@ $lang["title_statistic"]="About server";
 $lang["title_strongest"]="Strongest";
 $lang["title_top5items"]="Last items";
 $lang["title_cs"]="Castle Siege";
-$lang["title_forgot"]="�Forgot password";
+$lang["title_forgot"]="ФForgot password";
 $lang["title_register"]="Register";
 $lang["title_download"]="Download";
 $lang["title_online"]="Online";

@@ -1,8 +1,8 @@
-<?php if (!defined("insite")){die("no access");}
-$lang["topguild_score"]="Î÷êè ãèëüäèè";
-$lang["lang_g_status"]="Çâàíèå â ãèëüäèè";
-$lang["lang_gName"]="×ëåíû ãèëüäèè";
-$lang["topguild_name"] = "Íàçâàíèå ãèëüäèè";
-$lang["topguild_gm"] = "Ãëàâà ãèëüäèè";
-$lang["topguild_col"] = "×ëåíîâ â ãèëüäèè";
-$lang["topguild_ali"] = "Àëüÿíñ";
+ï»¿<?php if (!defined("insite")){die("no access");}
+$lang["topguild_score"]="ÐžÑ‡ÐºÐ¸ Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["lang_g_status"]="Ð—Ð²Ð°Ð½Ð¸Ðµ Ð² Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["lang_gName"]="Ð§Ð»ÐµÐ½Ñ‹ Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["topguild_name"] = "ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["topguild_gm"] = "Ð“Ð»Ð°Ð²Ð° Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["topguild_col"] = "Ð§Ð»ÐµÐ½Ð¾Ð² Ð² Ð³Ð¸Ð»ÑŒÐ´Ð¸Ð¸";
+$lang["topguild_ali"] = "ÐÐ»ÑŒÑÐ½Ñ";

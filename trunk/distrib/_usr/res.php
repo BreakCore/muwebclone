@@ -149,7 +149,7 @@ else
   { 
    if($db->query($queryres))
    {
-    WriteLogs ("Reset_","Аккаунт ".$_SESSION["user"]." персонаж: ".$_SESSION["character"]." сделал ресет");
+    WriteLogs ("Reset_","СРєРєР°СѓРЅС‚ ".$_SESSION["user"]." РїРµСЂСЃРѕРЅР°Р¶: ".$_SESSION["character"]." СЃРґРµР»Р°Р» СЂРµСЃРµС‚");
     unset($_REQUEST["do_reset"]);
     header("Location:".$config["siteaddress"]."/?p=usercp&up=stats");
     $reserror=1;

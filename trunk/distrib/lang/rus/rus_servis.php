@@ -1,4 +1,4 @@
-<?php if (!defined('insite')){die();} 
-$lang["serv_title"]="Óñëóãè";
-$lang["hidenik_f"]="Ñïðÿòàòü èíôîðìàöèþ î ïåðñîíàæå â òîïå";
-$lang["hide_inf"]="Ñòîèìîñòü: ";
+ï»¿<?php if (!defined('insite')){die();} 
+$lang["serv_title"]="Ð£ÑÐ»ÑƒÐ³Ð¸";
+$lang["hidenik_f"]="Ð¡Ð¿Ñ€ÑÑ‚Ð°Ñ‚ÑŒ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶Ðµ Ð² Ñ‚Ð¾Ð¿Ðµ";
+$lang["hide_inf"]="Ð¡Ñ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ: ";

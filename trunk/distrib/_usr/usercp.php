@@ -5,9 +5,9 @@ global $config;
 require "configs/referal_cfg.php";
 
 /**
- * строим панельку для вывода
- * @param массив с именами персонажей $users
- * @return возвращает изображение списка выбора и кнопку имя кнопки addwict, имя списка selchar
+ * СЃС‚СЂРѕРёРј РїР°РЅРµР»СЊРєСѓ РґР»В¤ РІС‹РІРѕРґР°
+ * @param РјР°СЃСЃРёРІ СЃ РёРјРµРЅР°РјРё РїРµСЂСЃРѕРЅР°Р¶РµР№ $users
+ * @return РІРѕР·РІСЂР°С‰Р°РµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёРµ СЃРїРёСЃРєР° РІС‹Р±РѕСЂР° Рё РєРЅРѕРїРєСѓ РёРјВ¤ РєРЅРѕРїРєРё addwict, РёРјВ¤ СЃРїРёСЃРєР° selchar
  */
 function getusrbox($users)
 {
@@ -60,7 +60,7 @@ if ($colvo>0)
  $invited = $db->numrows("Select * FROM MWC_invite Where memb___id='".$accname ."' and done!='1'");
  $invited=($invited=='' || $invited<0) ? 0:$invited;
  
- if($invited>0)//выдача плюшек
+ if($invited>0)//РІС‹РґР°С‡Р° РїР»СЋС€РµРє
  {
  	if ( $getpr==1) 
  	{
@@ -72,7 +72,7 @@ if ($colvo>0)
  $getprice = $db->numrows("SELECT * FROM MWC_invite Where memb___id='".$accname ."' and done='1'");
  $getprice=($getprice=='' || $getprice<0) ? 0:$getprice;
  
- if ($getprice>0)//если приглашенный и готов получать приз
+ if ($getprice>0)//РµСЃР»Рё РїСЂРёРіР»Р°С€РµРЅРЅС‹Р№ Рё РіРѕС‚РѕРІ РїРѕР»СѓС‡Р°С‚СЊ РїСЂРёР·
  {
  	if (!$_REQUEST["addwict"]) $out="<tr><td colspan='2'>".getusrbox($charmas)."</td></tr>";
  	else 
@@ -80,14 +80,14 @@ if ($colvo>0)
  	 $character = validate(substr($_POST["selchar"],0,10));
  	 own_char($character,$accname);
  	 $db->query("UPDATE Character Set LevelUpPoint=LevelUpPoint+".floor($referal["stats"]/2)." WHERE Name='".$character."' UPDATE MEMB_INFO SET bankZ=bankZ+".floor($referal["zen"]/2)." WHERE memb___id='".$accname."' DELETE FROM MWC_invite WHERE  memb___id='".$accname ."' and done='1'");
- 	 WriteLogs("RefSys_", "Приглашенный ".$character." получил вознаграждение");
+ 	 WriteLogs("RefSys_", "С•СЂРёРіР»Р°С€РµРЅРЅС‹Р№ ".$character." РїРѕР»СѓС‡РёР» РІРѕР·РЅР°РіСЂР°Р¶РґРµРЅРёРµ");
  	 header("Location:".$config["siteaddress"]."/?up=usercp");
  	}
  }
- else //не приглашен
+ else //РЅРµ РїСЂРёРіР»Р°С€РµРЅ
  {
  	$wins = $db->fetchrow("SELECT ref_acc FROM MEMB_INFO WHERE memb___id='".$accname."'");
- 	if ($wins[0]>0)//если пригласивший
+ 	if ($wins[0]>0)//РµСЃР»Рё РїСЂРёРіР»Р°СЃРёРІС€РёР№
  	{
  		if (!$_REQUEST["addwict"]) $out="<tr><td colspan='2'>".getusrbox($charmas)."</td></tr>";
  		else
@@ -95,7 +95,7 @@ if ($colvo>0)
  			$character = validate(substr($_POST["selchar"],0,10));
  			own_char($character,$accname);
  			$db->query("UPDATE Character Set LevelUpPoint=LevelUpPoint+".($referal["stats"]*$wins[0])." WHERE Name='".$character."' UPDATE MEMB_INFO SET bankZ=bankZ+".($referal["zen"]*$wins[0]).",ref_acc=ref_acc-".$wins[0]."  WHERE memb___id='".$accname."'");
- 			WriteLogs("RefSys_", "Пригласивший ".$character." получил вознаграждение");
+ 			WriteLogs("RefSys_", "С•СЂРёРіР»Р°СЃРёРІС€РёР№ ".$character." РїРѕР»СѓС‡РёР» РІРѕР·РЅР°РіСЂР°Р¶РґРµРЅРёРµ");
  			header("Location:".$config["siteaddress"]."/?up=usercp");	
  		}
  	}

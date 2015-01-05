@@ -29,7 +29,7 @@ ob_start();
 
 if($count>0)
 {
- if (isset($_GET["uid"])) //если нажата кнопулька установить/удалить
+ if (isset($_GET["uid"])) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєРЅРѕРїСѓР»СЊРєР° СѓСЃС‚Р°РЅРѕРІРёС‚СЊ/СѓРґР°Р»РёС‚СЊ
  {
    $id = checknum($_GET["uid"]);
    
@@ -39,11 +39,11 @@ if($count>0)
 	if ((int)$array[3]==$id) break;
    }
    
-   if(!in_array((int)$_GET["uid"],$anupd)) // устанваливаем
+   if(!in_array((int)$_GET["uid"],$anupd)) // СѓСЃС‚Р°РЅРІР°Р»РёРІР°РµРј
    {
     eval(unicontent($array[2]));
    }
-   else //удаляем
+   else //СѓРґР°Р»СЏРµРј
    {
     eval(unicontent($array[2]."u"));
    }

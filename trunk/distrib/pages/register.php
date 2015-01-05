@@ -1,6 +1,6 @@
 <?php
 /*
-Скрипт регистрации
+вЂ”РєСЂРёРїС‚ СЂРµРіРёСЃС‚СЂР°С†РёРё
 MWC 1.5.x
 */
 if (!defined('insite')) die("no access"); 
@@ -8,7 +8,7 @@ require 'opt.php';
 global $db;
 global $content;
 
-#region язык
+#region В¤Р·С‹Рє
 if (strlen($_SESSION["mwclang"])>1)
 {	 
 	if(is_file("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."rules.txt")) $rules = file_get_contents("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."rules.txt");
@@ -17,7 +17,7 @@ if (strlen($_SESSION["mwclang"])>1)
 else $rules = file_get_contents("lang/".$config["def_lang"]."/".$config["def_lang"]."rules.txt");
 #end
 
-#region вставки в шаблон
+#region РІСЃС‚Р°РІРєРё РІ С€Р°Р±Р»РѕРЅ
 $content->set('|rules|', $rules);
 $content->out_content("theme/".$config["theme"]."/them/reg_form.html");	
 
@@ -100,14 +100,14 @@ foreach ($_POST as $id=>$val)
 				{
 					require "configs/referal_cfg.php";
 					require "configs/top100_cfg.php";
-					$row = $db->fetchrow($db->query("SELECT AccountID, cLevel, ".$top100["t100res_colum"]." FROM Character WHERE Name='".$refer."'"));/*проверяем, что за перс пригласил*/
+					$row = $db->fetchrow($db->query("SELECT AccountID, cLevel, ".$top100["t100res_colum"]." FROM Character WHERE Name='".$refer."'"));/*РїСЂРѕРІРµСЂВ¤РµРј, С‡С‚Рѕ Р·Р° РїРµСЂСЃ РїСЂРёРіР»Р°СЃРёР»*/
 					$check = $db->fetchrow("SELECT memb___id FROM MWC_invite WHERE memb___id='".$row[0]."'");
 					if( $check[0]!=$row[0])
 					{
 						if($row[1]>=$referal["minlvl"] || $row[2]>0);
 						{
 							$db->query("INSERT INTO MWC_invite (memb___id,inviter)VALUES('".$loginname."','".$row[0]."')");
-							WriteLogs ("RefSys_",$row[0]." пригласил $loginname");
+							WriteLogs ("RefSys_",$row[0]." РїСЂРёРіР»Р°СЃРёР» $loginname");
 						}
 					}
 				}

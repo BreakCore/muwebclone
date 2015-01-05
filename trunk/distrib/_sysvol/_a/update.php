@@ -17,8 +17,8 @@ $nupdate = @file("_dat/updates.dat");
 foreach ($nupdate as $n=>$v)
 {
  $tmpz = explode(",",$v);
- $anupd[]=$tmpz[0]; //номер патча
- $avupd[]=$tmpz[1]; //версия сайта
+ $anupd[]=$tmpz[0]; //РЅРѕРјРµСЂ РїР°С‚С‡Р°
+ $avupd[]=$tmpz[1]; //РІРµСЂСЃРёСЏ СЃР°Р№С‚Р°
 }
 
 
@@ -36,11 +36,11 @@ $count = @count($file);
 ob_start();
 if($count>0)
 {
- if (isset($_GET["uid"]))//установка модуля
+ if (isset($_GET["uid"]))//СѓСЃС‚Р°РЅРѕРІРєР° РјРѕРґСѓР»СЏ
  {
   $id = checknum($_GET["uid"]);
   $array = explode("|",$file[$id]);
-  if(trim((int)$array[3])==(int)$ver[0])//версия сайта подходит
+  if(trim((int)$array[3])==(int)$ver[0])//РІРµСЂСЃРёСЏ СЃР°Р№С‚Р° РїРѕРґС…РѕРґРёС‚
     eval(unicontent("http://muwebclone.googlecode.com/svn/trunk/patches/".(int)$ver[0]."/patch".trim($array[2])."/patch.mwc"));
   
   else echo "error during update".$id;
@@ -52,12 +52,12 @@ if($count>0)
   {
    $array = explode("|",$file[$i]);
 
-   if($ver[0]==trim($array[3]))//если версии совпадают
+   if($ver[0]==trim($array[3]))//РµСЃР»Рё РІРµСЂСЃРёРё СЃРѕРІРїР°РґР°СЋС‚
    {
     //@in_array((int)$array[3],$avupd) &&
-    if (@in_array((int)$array[2],$anupd))//если есть в списке установленных
+    if (@in_array((int)$array[2],$anupd))//РµСЃР»Рё РµСЃС‚СЊ РІ СЃРїРёСЃРєРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹С…
      $insert="<div align='center' style='font-weight:bold;color:green'>Installed</div>";
-    else if ($array[2]==-1)//новость
+    else if ($array[2]==-1)//РЅРѕРІРѕСЃС‚СЊ
    	 $insert="<div align='center' style='font-weight:bold;color:red'>News</div>";
 	else if (((int)$array[2])>0 && @in_array((int)$array[2]-1,$anupd) || ((int)$array[2])==0)
 	 $insert="<form method='POST' action='".$config["siteaddress"]."/control.php?page=update&uid=".$i."'><input type='submit' value='Install' class='button'></form>";

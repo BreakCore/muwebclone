@@ -1,13 +1,13 @@
 <?php
 /**
-* Класс для чтения опций вещей
+* РљР»Р°СЃСЃ РґР»СЏ С‡С‚РµРЅРёСЏ РѕРїС†РёР№ РІРµС‰РµР№
 **/
 class items
 {
  
   /**
-  * добавление бинарного кода вещей в переменную в классе
-  * @bighex - бинарный код, может быть с 0х.. но обязательно должен быть более 99 символов
+  * РґРѕР±Р°РІР»РµРЅРёРµ Р±РёРЅР°СЂРЅРѕРіРѕ РєРѕРґР° РІРµС‰РµР№ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РІ РєР»Р°СЃСЃРµ
+  * @bighex - Р±РёРЅР°СЂРЅС‹Р№ РєРѕРґ, РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃ 0С….. РЅРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р±РѕР»РµРµ 99 СЃРёРјРІРѕР»РѕРІ
   **/
   public function additmz($bighex)
   {
@@ -23,11 +23,11 @@ class items
   }
   
   /**
-  * функция чтения вещи для вывода на экран
-  * @hex - Бинарный код вещи
-  * @itembd - массив с описанием вещей
-  * @ancbd - массив с описанием анц названия вещей
-  * @type - Тип вывода на экран
+  * С„СѓРЅРєС†РёСЏ С‡С‚РµРЅРёСЏ РІРµС‰Рё РґР»СЏ РІС‹РІРѕРґР° РЅР° СЌРєСЂР°РЅ
+  * @hex - Р‘РёРЅР°СЂРЅС‹Р№ РєРѕРґ РІРµС‰Рё
+  * @itembd - РјР°СЃСЃРёРІ СЃ РѕРїРёСЃР°РЅРёРµРј РІРµС‰РµР№
+  * @ancbd - РјР°СЃСЃРёРІ СЃ РѕРїРёСЃР°РЅРёРµРј Р°РЅС† РЅР°Р·РІР°РЅРёСЏ РІРµС‰РµР№
+  * @type - РўРёРї РІС‹РІРѕРґР° РЅР° СЌРєСЂР°РЅ
   **/
   public function readitems($hex,$itembd,$ancbd)
   {
@@ -40,7 +40,7 @@ class items
 	else $is32=true;
      
 	 
-   if($is32) //если вещи хотя бы 2го сезона
+   if($is32) //РµСЃР»Рё РІРµС‰Рё С…РѕС‚СЏ Р±С‹ 2РіРѕ СЃРµР·РѕРЅР°
    {
     $result["hex"]=$hex;
    	$result["id"] = items::dehex($hex,0,2);
@@ -89,10 +89,10 @@ class items
  }
   
   /**
-  * возвращает хармони опции
-  * @g группа вещи
-  * @opt номер опции
-  * @hlvl уровень опции
+  * РІРѕР·РІСЂР°С‰Р°РµС‚ С…Р°СЂРјРѕРЅРё РѕРїС†РёРё
+  * @g РіСЂСѓРїРїР° РІРµС‰Рё
+  * @opt РЅРѕРјРµСЂ РѕРїС†РёРё
+  * @hlvl СѓСЂРѕРІРµРЅСЊ РѕРїС†РёРё
   **/
   
   private function GetHarmony($g,$opt,$hlvl)
@@ -365,7 +365,7 @@ class items
   
   
  /**
- * функция возвращает сокеты, если они есть на вещи
+ * С„СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРѕРєРµС‚С‹, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ РЅР° РІРµС‰Рё
  **/
  private function Sockets($hex)
  {
@@ -461,8 +461,8 @@ class items
  }
  
  /**
- *фозвращает массив с опциями, вписав имя и исправив в некоторых случаях уровень
- *@g - группа @id - номер @opt - массив с уже известными опциями @itembd - база имен вещей
+ *С„РѕР·РІСЂР°С‰Р°РµС‚ РјР°СЃСЃРёРІ СЃ РѕРїС†РёСЏРјРё, РІРїРёСЃР°РІ РёРјСЏ Рё РёСЃРїСЂР°РІРёРІ РІ РЅРµРєРѕС‚РѕСЂС‹С… СЃР»СѓС‡Р°СЏС… СѓСЂРѕРІРµРЅСЊ
+ *@g - РіСЂСѓРїРїР° @id - РЅРѕРјРµСЂ @opt - РјР°СЃСЃРёРІ СЃ СѓР¶Рµ РёР·РІРµСЃС‚РЅС‹РјРё РѕРїС†РёСЏРјРё @itembd - Р±Р°Р·Р° РёРјРµРЅ РІРµС‰РµР№
  **/
  public function GetName($opt,$itembd)
  {
@@ -590,11 +590,11 @@ class items
  }
  
  /**
- * показывает, на кого вещь
+ * РїРѕРєР°Р·С‹РІР°РµС‚, РЅР° РєРѕРіРѕ РІРµС‰СЊ
  **/
  private function showEq($g,$id,$itembd)
  {
-  $group12 = array(12,15,26,31); // база вещей, в группе, на которые нужно подцеплять надпись эквипмента 12 группа
+  $group12 = array(12,15,26,31); // Р±Р°Р·Р° РІРµС‰РµР№, РІ РіСЂСѓРїРїРµ, РЅР° РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РїРѕРґС†РµРїР»СЏС‚СЊ РЅР°РґРїРёСЃСЊ СЌРєРІРёРїРјРµРЅС‚Р° 12 РіСЂСѓРїРїР°
   $group13 = array(11,14,15,29,31,31,33,34,35,36,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61); //13
   if ($g==12 and in_array($id,$group12) or $g==13 and in_array($id,$group13)  or $g==14 ) unset($array["equip"]);
   else if (items::can_equip( substr($itembd[$g][$id][1],2))!="")	$show= "Can be equipment by  ".items::can_equip( substr($itembd[$g][$id][1],2));
@@ -602,7 +602,7 @@ class items
  }
  
  /**
- * функсия определения классов
+ * С„СѓРЅРєСЃРёСЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РєР»Р°СЃСЃРѕРІ
  */
  public function can_equip($array)
  {
@@ -633,11 +633,11 @@ class items
 }
  
  /**
- * определяет anc опции
+ * РѕРїСЂРµРґРµР»СЏРµС‚ anc РѕРїС†РёРё
  * @g group
  * @id
- * @anc - цифра опций
- * @ancnamez массив с названиями опций
+ * @anc - С†РёС„СЂР° РѕРїС†РёР№
+ * @ancnamez РјР°СЃСЃРёРІ СЃ РЅР°Р·РІР°РЅРёСЏРјРё РѕРїС†РёР№
  **/
  private function isAncient($g,$id,$anc,$ancnamez)
  {
@@ -663,11 +663,11 @@ class items
  
  
  /**
- * функция для работы с опциями вещей: узнает все опции
+ * С„СѓРЅРєС†РёСЏ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РѕРїС†РёСЏРјРё РІРµС‰РµР№: СѓР·РЅР°РµС‚ РІСЃРµ РѕРїС†РёРё
  * @g group
  * @id
- * @option цифра опций
- * @ex цифра экс опций
+ * @option С†РёС„СЂР° РѕРїС†РёР№
+ * @ex С†РёС„СЂР° СЌРєСЃ РѕРїС†РёР№
  **/
  private function getOptions($g,$id,$option,$ex)
  {
@@ -700,7 +700,7 @@ class items
    $option-=4;
   }
 
-  $m_array = items::getMn($g,$id);  // получаем множители для вычисления опций
+  $m_array = items::getMn($g,$id);  // РїРѕР»СѓС‡Р°РµРј РјРЅРѕР¶РёС‚РµР»Рё РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РѕРїС†РёР№
 
 	
   if ($g==13 && $id!=30)
@@ -724,11 +724,11 @@ class items
 	 $dw_wing = array(1,4,41,42); //wings sum & dw
 	 $dk_wing = array(2,5); // dk
 	 $elf_wing = array(3,0); // elf
-	 $thss = array(36,37,38,39,40,43);//винги для 3-го класса
+	 $thss = array(36,37,38,39,40,43);//РІРёРЅРіРё РґР»СЏ 3-РіРѕ РєР»Р°СЃСЃР°
 	
 	 if ($g==12 or ($g==13 and $id==30))
 	 {
-	  if (in_array($id,$dw_wing)) // опции на винги дв
+	  if (in_array($id,$dw_wing)) // РѕРїС†РёРё РЅР° РІРёРЅРіРё РґРІ
 	  {
 	   if (($ex>=31 and $ex<=64 and $ex!=32)  or $ex==0)
 	   {
@@ -755,7 +755,7 @@ class items
 	     }
 	   }
 	  }
-	  else if(in_array($id,$dk_wing)) //опции на винги дк
+	  else if(in_array($id,$dk_wing)) //РѕРїС†РёРё РЅР° РІРёРЅРіРё РґРє
 	  {
 	   if ($ex>=32 or $ex>=96)//add dmg
 	   {
@@ -839,7 +839,7 @@ class items
 	    $itemsopt[12]=$wing_opt[3];
 	   }
 	  }
-	  else // все остальные винги
+	  else // РІСЃРµ РѕСЃС‚Р°Р»СЊРЅС‹Рµ РІРёРЅРіРё
 	  {
 	   if ($ex <32 or ($ex>=64 && $ex<96) ) // wizardy dmg
 	   {
@@ -867,7 +867,7 @@ class items
 	   }
 	  }
 	 }
-	 else // обычные вещи
+	 else // РѕР±С‹С‡РЅС‹Рµ РІРµС‰Рё
 	 {
 	  if ($ex>63)
 	  {
@@ -890,10 +890,10 @@ class items
  }
  
  /**
-  * возврашает список экселлентных опций(если есть)
-  * @group - группа вещи
-  * @id - номер вещи в группе
-  * @ex - цифра экс опций
+  * РІРѕР·РІСЂР°С€Р°РµС‚ СЃРїРёСЃРѕРє СЌРєСЃРµР»Р»РµРЅС‚РЅС‹С… РѕРїС†РёР№(РµСЃР»Рё РµСЃС‚СЊ)
+  * @group - РіСЂСѓРїРїР° РІРµС‰Рё
+  * @id - РЅРѕРјРµСЂ РІРµС‰Рё РІ РіСЂСѓРїРїРµ
+  * @ex - С†РёС„СЂР° СЌРєСЃ РѕРїС†РёР№
   **/
  private function isExcelent ($group,$id,$ex=0)
  {
@@ -902,7 +902,7 @@ class items
   
   if($ex>=0 && $group<=15 && $id<255)
   {				
-	 if (($group<=5)||($group==13 && ($id==12 || $id==13 || $id>=25 && $id<=28)))//если это оружие или пенданты
+	 if (($group<=5)||($group==13 && ($id==12 || $id==13 || $id>=25 && $id<=28)))//РµСЃР»Рё СЌС‚Рѕ РѕСЂСѓР¶РёРµ РёР»Рё РїРµРЅРґР°РЅС‚С‹
 	 {
  	  $excoptar[0]="<div class=\"excellent\">Mana After Hunting Monsters +mana/8</div>";
 	  $excoptar[1]="<div class=\"excellent\">Life After Hunting Monsters +life/8</div>";
@@ -911,7 +911,7 @@ class items
 	  $excoptar[4]="<div class=\"excellent\">Increase Damage +Level/20</div>";
 	  $excoptar[5]="<div class=\"excellent\">Excellent Damage Rate +10%</div>";
 	 }
-	 elseif(($group>=6 && $group<=11)||(($group==13 && $id!=30)&&(($id>=8 && $id<=10) || ($id>=20 && $id<=24)||($id>=38 && $id<=41))))	// щиты, сеты, кольца
+	 elseif(($group>=6 && $group<=11)||(($group==13 && $id!=30)&&(($id>=8 && $id<=10) || ($id>=20 && $id<=24)||($id>=38 && $id<=41))))	// С‰РёС‚С‹, СЃРµС‚С‹, РєРѕР»СЊС†Р°
 	 {
 	  $excoptar[0]="<div class=\"excellent\">Increase Rate of Zen 40%</div>";
 	  $excoptar[1]="<div class=\"excellent\">Defense Success Rate +10%</div>";
@@ -920,7 +920,7 @@ class items
 	  $excoptar[4]="<div class=\"excellent\">Increase Max Mana +4%</div>";
 	  $excoptar[5]="<div class=\"excellent\" >Increase Max Hp +4%</div>";
 	 }
-	 elseif($group==12 || ($group==13 && $id==30))// винги и плащи
+	 elseif($group==12 || ($group==13 && $id==30))// РІРёРЅРіРё Рё РїР»Р°С‰Рё
 	 {
 	  $excoptar[0]="<div class=\"excellent\" >+ 115 HP</div>";
 	  $excoptar[1]="<div class=\"excellent\">+ 115 MP</div>";
@@ -947,11 +947,11 @@ class items
   if(count($Excellent)>0)return $Excellent;
  }
   /**
-  * переводит хекс в цифры
-  * @hex - бинарный код, требующий расшифровки
-  * @begin - с какого сомвола начинать(от 0)
-  * @length - на сколько символов
-  * возвращает цифры
+  * РїРµСЂРµРІРѕРґРёС‚ С…РµРєСЃ РІ С†РёС„СЂС‹
+  * @hex - Р±РёРЅР°СЂРЅС‹Р№ РєРѕРґ, С‚СЂРµР±СѓСЋС‰РёР№ СЂР°СЃС€РёС„СЂРѕРІРєРё
+  * @begin - СЃ РєР°РєРѕРіРѕ СЃРѕРјРІРѕР»Р° РЅР°С‡РёРЅР°С‚СЊ(РѕС‚ 0)
+  * @length - РЅР° СЃРєРѕР»СЊРєРѕ СЃРёРјРІРѕР»РѕРІ
+  * РІРѕР·РІСЂР°С‰Р°РµС‚ С†РёС„СЂС‹
   **/
   static function dehex($hex,$begin,$length)
   {
@@ -959,14 +959,14 @@ class items
   }
 
   /**
-  * Возвращает множители для рассчета опций с лайфов
-  * @group - шруппа вещи
-  * @id - номер вещи в группе
-  * возвращает массив mnoz - множитель sum- сумма
+  * Р’РѕР·РІСЂР°С‰Р°РµС‚ РјРЅРѕР¶РёС‚РµР»Рё РґР»СЏ СЂР°СЃСЃС‡РµС‚Р° РѕРїС†РёР№ СЃ Р»Р°Р№С„РѕРІ
+  * @group - С€СЂСѓРїРїР° РІРµС‰Рё
+  * @id - РЅРѕРјРµСЂ РІРµС‰Рё РІ РіСЂСѓРїРїРµ
+  * РІРѕР·РІСЂР°С‰Р°РµС‚ РјР°СЃСЃРёРІ mnoz - РјРЅРѕР¶РёС‚РµР»СЊ sum- СЃСѓРјРјР°
   **/
   private function getMn ($group,$id)
   {
-   $bezuter = array(8,9,10,20,21,22,23,24,38,39,40,41,42,12,13,25,26,27,28);//номера колец и пендантов в 13 группе
+   $bezuter = array(8,9,10,20,21,22,23,24,38,39,40,41,42,12,13,25,26,27,28);//РЅРѕРјРµСЂР° РєРѕР»РµС† Рё РїРµРЅРґР°РЅС‚РѕРІ РІ 13 РіСЂСѓРїРїРµ
    $mn = array();
    if ( $group < 6 or ($group==12)||($group==13 && $group==30))
    {
@@ -976,7 +976,7 @@ class items
    {
 	$mn["mnoz"] = 5; $mn["sum"] = 20;
    }
-   elseif($group==13 && in_array($id,$bezuter))//бижутерия
+   elseif($group==13 && in_array($id,$bezuter))//Р±РёР¶СѓС‚РµСЂРёСЏ
    {
     $mn["mnoz"] = 1; $mn["sum"] = 4;
    }
@@ -1042,7 +1042,7 @@ class items
    $str = $i;
    $x1=0;
    $found=0;		
-   $ind = ((floor($i/8)+1)*8)-1; // правый конец строки
+   $ind = ((floor($i/8)+1)*8)-1; // РїСЂР°РІС‹Р№ РєРѕРЅРµС† СЃС‚СЂРѕРєРё
    $raz = $i+($x-1);
    
    while($j>0)
@@ -1069,13 +1069,13 @@ class items
 }
 
 /**
-* клас, описывающий возвращаемые значения
+* РєР»Р°СЃ, РѕРїРёСЃС‹РІР°СЋС‰РёР№ РІРѕР·РІСЂР°С‰Р°РµРјС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 **/
 class Iitems
 {
  /**
-  * добавление бинарного кода вещей в переменную в классе
-  * @bighex - бинарный код, может быть с 0х.. но обязательно должен быть более 99 символов
+  * РґРѕР±Р°РІР»РµРЅРёРµ Р±РёРЅР°СЂРЅРѕРіРѕ РєРѕРґР° РІРµС‰РµР№ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РІ РєР»Р°СЃСЃРµ
+  * @bighex - Р±РёРЅР°СЂРЅС‹Р№ РєРѕРґ, РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃ 0С….. РЅРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р±РѕР»РµРµ 99 СЃРёРјРІРѕР»РѕРІ
   **/
   public function additmz($bighex)
   {
@@ -1093,8 +1093,8 @@ class Iitems
   public function  Iitems (){} 
   
   /**
-  * показывает изображение инвентаря
-  * @hex бинарный код вещи @link линк при нажатии на вещь
+  * РїРѕРєР°Р·С‹РІР°РµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РёРЅРІРµРЅС‚Р°СЂСЏ
+  * @hex Р±РёРЅР°СЂРЅС‹Р№ РєРѕРґ РІРµС‰Рё @link Р»РёРЅРє РїСЂРё РЅР°Р¶Р°С‚РёРё РЅР° РІРµС‰СЊ
   **/
   public function showWH($hex,$link="")
   { 
@@ -1106,9 +1106,9 @@ class Iitems
 	$col_i = strlen($hex)/32;
 	for ($i=0;$i<$col_i;$i++) 
     {
-     if (!$itemarr[$i] || strlen($itemarr[$i]==32))$itemarr[$i] = substr($hex,$i*32, 32); //вещь
+     if (!$itemarr[$i] || strlen($itemarr[$i]==32))$itemarr[$i] = substr($hex,$i*32, 32); //РІРµС‰СЊ
 
-     if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==32) //если не пустая ячейка
+     if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==32) //РµСЃР»Рё РЅРµ РїСѓСЃС‚Р°СЏ СЏС‡РµР№РєР°
      {
 	  $items = items::readitems($itemarr[$i],$itembd,$anc);
 	  $this->getOptions($items);
@@ -1123,7 +1123,7 @@ class Iitems
 	   $x = substr($itembd[$items["group"]][$items["id"]][1],0,1);
 	   $y = substr($itembd[$items["group"]][$items["id"]][1],1,1);
 	  }
-	  if (!$x || !$y){$x=1;$y=1;}//если нет в базе вещи
+	  if (!$x || !$y){$x=1;$y=1;}//РµСЃР»Рё РЅРµС‚ РІ Р±Р°Р·Рµ РІРµС‰Рё
 	  
 	  $j=$x*$y;
       $str=$i;
@@ -1138,7 +1138,7 @@ class Iitems
 	 $items["intopt"] = knowop($items["id"],$items["group"],$items["intopt"]);
 	 $img = "imgs/items/".$items["group"].$items["id"].$items["intopt"].".gif"; // looking for item img
 	  
-	   if (!file_exists($img))$img="<span style='font-size:8px;'>".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //если нет изображения
+	   if (!file_exists($img))$img="<span style='font-size:8px;'>".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	   else $img = "<img title = '".$title."' src='".$img."' id='tooltiper' alt='".$items["name"]."' align='center' style='width:".($x*32)."px; height:".($y*32)."px;'>";			
 
 	 while($j>0)
@@ -1171,13 +1171,13 @@ class Iitems
   }
   
   /**
-  * возвращает свормированную таблицу опций
-  * @item - бинарный код вещи
-  * @type = 0 - показывает название вещи и список опций
-  * 1 = то же что и 0, только с изображением вещи
-  * 2 = показывает название вещи, при наведении отображает полную информацию
-  * 3 = краткая информация о вещи, при навиедении на изобрадение полная информация
-  * 4 = показывает вещь в развертке
+  * РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРІРѕСЂРјРёСЂРѕРІР°РЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ РѕРїС†РёР№
+  * @item - Р±РёРЅР°СЂРЅС‹Р№ РєРѕРґ РІРµС‰Рё
+  * @type = 0 - РїРѕРєР°Р·С‹РІР°РµС‚ РЅР°Р·РІР°РЅРёРµ РІРµС‰Рё Рё СЃРїРёСЃРѕРє РѕРїС†РёР№
+  * 1 = С‚Рѕ Р¶Рµ С‡С‚Рѕ Рё 0, С‚РѕР»СЊРєРѕ СЃ РёР·РѕР±СЂР°Р¶РµРЅРёРµРј РІРµС‰Рё
+  * 2 = РїРѕРєР°Р·С‹РІР°РµС‚ РЅР°Р·РІР°РЅРёРµ РІРµС‰Рё, РїСЂРё РЅР°РІРµРґРµРЅРёРё РѕС‚РѕР±СЂР°Р¶Р°РµС‚ РїРѕР»РЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ
+  * 3 = РєСЂР°С‚РєР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РІРµС‰Рё, РїСЂРё РЅР°РІРёРµРґРµРЅРёРё РЅР° РёР·РѕР±СЂР°РґРµРЅРёРµ РїРѕР»РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ
+  * 4 = РїРѕРєР°Р·С‹РІР°РµС‚ РІРµС‰СЊ РІ СЂР°Р·РІРµСЂС‚РєРµ
   **/
   public function getOptions($item,$type=0)
   {
@@ -1241,7 +1241,7 @@ class Iitems
 	  if ($item["intopt"]>128) {$item["intopt"] -=128; $item["lopt"]=(int)($item["intopt"]/8);} 
 	  $item["intopt"] = $this->knowop($item["id"],$item["group"],$item["intopt"]);
 	  $img = "imgs/items/".$item["group"].$item["id"].$item["intopt"].".gif"; // looking for item img
-	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //если нет изображения
+	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	  else $img = "<img src=\"".$img."\" align=\"center\" >";			
 	  $display.="<tr><td align=\"center\" valign=\"center\" >".$img."</td></tr>";
 
@@ -1270,7 +1270,7 @@ class Iitems
 	  if ($item["intopt"]>128) {$item["intopt"] -=128; $item["lopt"]=(int)($item["intopt"]/8);} 
 	  $item["intopt"] = $this->knowop($item["id"],$item["group"],$item["intopt"]);
 	  $img = "imgs/items/".$item["group"].$item["id"].$item["intopt"].".gif"; // looking for item img
-	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //если нет изображения
+	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	  else $img = "<img src=\"".$img."\" align=\"center\" >";			
 	  $display.="<tr><td align=\"center\" valign=\"center\" >".$img."</td></tr>";
 
@@ -1334,7 +1334,7 @@ class Iitems
 	  if ($item["intopt"]>128) {$item["intopt"] -=128; $item["lopt"]=(int)($item["intopt"]/8);} 
 	  $item["intopt"] = $this->knowop($item["id"],$item["group"],$item["intopt"]);
 	  $img = "imgs/items/".$item["group"].$item["id"].$item["intopt"].".gif"; // looking for item img
-	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //если нет изображения
+	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	  //title='$display1'
 	  else $img = "<img id=\"tooltiper\"  src=\"".$img."\" align=\"center\" >";		
 
@@ -1351,7 +1351,7 @@ class Iitems
 	  if ($item["intopt"]>128) {$item["intopt"] -=128; $item["lopt"]=(int)($item["intopt"]/8);} 
 	  $item["intopt"] = $this->knowop($item["id"],$item["group"],$item["intopt"]);
 	  $img = "imgs/items/".$item["group"].$item["id"].$item["intopt"].".gif"; // looking for item img
-	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //если нет изображения
+	  if (!file_exists($img))$img="<span style=\"font-size:8px;\">".$items["group"].".".$items["id"].".".$items["intopt"]."</span>"; //РµСЃР»Рё РЅРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	  else $img = "<img src=\"".$img."\" align=\"center\" >";			
 	  $display.="<tr><td align=\"center\" valign=\"center\" >".$img."</td></tr>";
 
@@ -1374,11 +1374,11 @@ class Iitems
 	return $display;
   }
   /*
-  * узнать опции на вингах
-  * @exnum - цифра эксел
-  * @n - номер опции в массиве wing_opt
-  * @n1 - номер опции в массиве wing_opt
-  * @show_info - остатки опции на вывод
+  * СѓР·РЅР°С‚СЊ РѕРїС†РёРё РЅР° РІРёРЅРіР°С…
+  * @exnum - С†РёС„СЂР° СЌРєСЃРµР»
+  * @n - РЅРѕРјРµСЂ РѕРїС†РёРё РІ РјР°СЃСЃРёРІРµ wing_opt
+  * @n1 - РЅРѕРјРµСЂ РѕРїС†РёРё РІ РјР°СЃСЃРёРІРµ wing_opt
+  * @show_info - РѕСЃС‚Р°С‚РєРё РѕРїС†РёРё РЅР° РІС‹РІРѕРґ
   */
  function knowWopt($exnum,$n,$n1,$show_info, $sum,$mnoz)
  {
@@ -1418,10 +1418,10 @@ class Iitems
  }
  
  /**
- * функция возвращает цифру, учавтсвующую в генерации имени изображения(опции) 
- * @num - id вещи
- * @group - группа вещи
- * @opt - опции что есть
+ * С„СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ С†РёС„СЂСѓ, СѓС‡Р°РІС‚СЃРІСѓСЋС‰СѓСЋ РІ РіРµРЅРµСЂР°С†РёРё РёРјРµРЅРё РёР·РѕР±СЂР°Р¶РµРЅРёСЏ(РѕРїС†РёРё) 
+ * @num - id РІРµС‰Рё
+ * @group - РіСЂСѓРїРїР° РІРµС‰Рё
+ * @opt - РѕРїС†РёРё С‡С‚Рѕ РµСЃС‚СЊ
  **/
  function knowop($num,$group,$opt)
  {

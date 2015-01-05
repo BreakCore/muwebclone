@@ -1,4 +1,4 @@
-<?php if (!defined('insite')){die();} 
+﻿<?php if (!defined('insite')){die();} 
 $lang["error_no404"]="Page not found";
 $lang["reset_msg1"]; 
 $lang["reset_msg2"]; 

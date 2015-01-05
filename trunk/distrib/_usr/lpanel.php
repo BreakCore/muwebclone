@@ -1,22 +1,26 @@
-<?php if (!defined('insite')) die("no access"); 
-global $config;
-global $db;
-global $content;
+﻿<?php if (!defined('insite')) die("no access");
+/**
+ * user panel
+ */
 ob_start();
 
-$planame = $db->fetchrow($db->query("SELECT memb_name FROM MEMB_INFO Where memb___id='".substr($_SESSION["user"],0,10)."'")); 
-$content->set('|planame0|', $planame[0]);
+$planame = $db->query("SELECT memb_name FROM MEMB_INFO Where memb___id='{$_SESSION["user"]}'")->FetchRow();
+$content->set('|planame0|', $planame["memb_name"]);
 $content->out_content("theme/".$config["theme"]."/them/lpanel_h.html");
 
-$checkU = chkc_char(validate($_SESSION["user"]));
+$checkU = chkc_char($_SESSION["user"]);
 
 if($checkU>0)
 { 
- $mmm=$db->query("SELECT Name FROM character WHERE AccountID='".validate($_SESSION["user"])."'");
+ $mmm = $db->query("SELECT Name FROM character WHERE AccountID='{$_SESSION["user"]}'");
  $tempo ="";
- while($resultc = $db->fetchrow($mmm))
+ while($resultc = $mmm->FetchRow())
  {
-  $tempo.="<option value=".$resultc[0]; if($_SESSION["character"]==$resultc[0]){$tempo.=" selected";} $tempo.=">".$resultc[0]."</option>";
+  $tempo.="<option value=".$resultc["Name"];
+  if(isset($_SESSION["character"]) && $_SESSION["character"] == $resultc["Name"])
+   $tempo.=" selected";
+
+  $tempo.=">".$resultc["Name"]."</option>";
  }
  $content->set('|option|', $tempo);
  $content->out_content("theme/".$config["theme"]."/them/lpanel_c.html");
@@ -25,10 +29,10 @@ else
  $content->out_content("theme/".$config["theme"]."/them/lpanel_fail.html");
 
 
-$content->set('|bankZ_show|', bankZ_show());
-$content->set('|wareg_show|', wareg_show());
-$content->set('|cred_show|', cred_show());
-$content->set('|getusrmenu|', getusrmenu());
+$content->set('|bankZ_show|', bankZ_show($db));
+$content->set('|wareg_show|', wareg_show($db));
+$content->set('|cred_show|', cred_show($db,$config));
+$content->set('|getusrmenu|', getusrmenu($content,$config));
 $content->out_content("theme/".$config["theme"]."/them/lpanel_f.html");
 $temp = ob_get_contents();
 ob_end_clean();

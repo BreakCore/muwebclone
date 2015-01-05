@@ -1,6 +1,6 @@
 <?php if (!defined('insite')) die("no access"); 
 /**
-* Услуги
+* вЂќСЃР»СѓРіРё
 **/
 global $config;
 global $db;
@@ -15,25 +15,25 @@ if(isset($_POST["hidech"]))
  
  $credits = know_kredits();
  
- if ($knowopt["opt_inv"]!=$value && $value == 1)//если включаем
+ if ($knowopt["opt_inv"]!=$value && $value == 1)//РµСЃР»Рё РІРєР»СЋС‡Р°РµРј
  {
   if ($credits>=$servis["servis_credit"])
   {
    $credits-=$servis["servis_credit"];
    $db->query("UPDATE MEMB_INFO SET  opt_inv='1' WHERE memb___id='".$_SESSION["user"]."' UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." ='".$credits."' WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'");
-   WriteLogs("Servises_",$_SESSION["user"]." спрятал в топе статы");
+   WriteLogs("Servises_",$_SESSION["user"]." СЃРїСЂВ¤С‚Р°Р» РІ С‚РѕРїРµ СЃС‚Р°С‚С‹");
   }
  }
- else if ($knowopt["opt_inv"]!=$value && $value == 0)//выключаем
+ else if ($knowopt["opt_inv"]!=$value && $value == 0)//РІС‹РєР»СЋС‡Р°РµРј
  {
     $db->query("UPDATE MEMB_INFO SET opt_inv='0' WHERE memb___id='".$_SESSION["user"]."'");
-   WriteLogs("Servises_",$_SESSION["user"]." сделал видимыми в топе статы");
+   WriteLogs("Servises_",$_SESSION["user"]." СЃРґРµР»Р°Р» РІРёРґРёРјС‹РјРё РІ С‚РѕРїРµ СЃС‚Р°С‚С‹");
  }
  header("Location: ".$config["siteaddress"]."/?up=servis");
 }
 
 ob_start();
-//генерация страницы
+//РіРµРЅРµСЂР°С†РёВ¤ СЃС‚СЂР°РЅРёС†С‹
 $content->out_content("theme/".$config["theme"]."/them/servis_h.html");
 
 if(!$_REQUEST["deluxe1"])
@@ -52,7 +52,7 @@ else
    $db->query("INSERT INTO smsdeluxe (memb___id,dateonpay,credits)VALUES('".validate($_SESSION["user"])."','".$timZ."','".($getcred*10)."')");
    $uid=$db->fetchrow("Select id FROM smsdeluxe WHERE memb___id='".validate($_SESSION["user"])."' and dateonpay='".$timZ."'");
    $db->query("DELETE FROM smsdeluxe WHERE datepayed='0' and  dateonpay!='".$timZ."' and memb___id='".validate($_SESSION["user"])."'");
-   WriteLogs("SMSDeluxe", $_SESSION["user"]." перешел на сайт платежной системы для плаежа, уникальный номер операции ".$uid[0]);
+   WriteLogs("SMSDeluxe", $_SESSION["user"]." РїРµСЂРµС€РµР» РЅР° СЃР°Р№С‚ РїР»Р°С‚РµР¶РЅРѕР№ СЃРёСЃС‚РµРјС‹ РґР»В¤ РїР»Р°РµР¶Р°, СѓРЅРёРєР°Р»СЊРЅС‹Р№ РЅРѕРјРµСЂ РѕРїРµСЂР°С†РёРё ".$uid[0]);
    if($uid[0])
    {
    $getcred*=$servis["smscost"];

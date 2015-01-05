@@ -14,7 +14,7 @@ if($_REQUEST["cpwd"] && trim($_POST["opwd"])==$_SESSION["pwd"])
   else $suserp = "'". $n_pwd ."'";	
  $db->query("UPDATE MEMB_INFO SET memb__pwd=".$suserp.", recpwd ='".$n_pwd ."' WHERE memb___id='".$_SESSION["user"]."'");
  $_SESSION["pwd"]=$n_pwd;
- WriteLogs ("Chwpd_",$_SESSION["user"]." поменял пароль с ".trim($_POST["opwd"])." на ".$_SESSION["pwd"]);  
+ WriteLogs ("Chwpd_",$_SESSION["user"]." РїРѕРјРµРЅСЏР» РїР°СЂРѕР»СЊ СЃ ".trim($_POST["opwd"])." РЅР° ".$_SESSION["pwd"]);  
  echo "<script>alert('Password changed!')</script>";
 }
 

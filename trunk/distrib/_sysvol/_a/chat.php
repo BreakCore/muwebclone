@@ -15,9 +15,9 @@ else
   if(get_accesslvl()==100)
   {
    if($db->query("DELETE FROM MWC_chat WHERE time<".(time()-20).""))
-      WriteLogs("chat","àäìèíèñòðàòîð ".$_SESSION["sadmin"]." î÷èñòèë èñòîðèþ ÷àòà");
+      WriteLogs("chat","Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€ ".$_SESSION["sadmin"]." Ð¾Ñ‡Ð¸ÑÑ‚Ð¸Ð» Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ Ñ‡Ð°Ñ‚Ð°");
    else
-      WriteLogs("chat","àäìèíèñòðàòîð ".$_SESSION["sadmin"]." gïûòàëñÿ î÷èñòèòü èñòîðèþ ÷àòà, íî ïðîèçîøëà îøèáêà");
+      WriteLogs("chat","Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€ ".$_SESSION["sadmin"]." gÐ¿Ñ‹Ñ‚Ð°Ð»ÑÑ Ð¾Ñ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ Ñ‡Ð°Ñ‚Ð°, Ð½Ð¾ Ð¿Ñ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°");
   }
   $needt = time()-3600;
 }

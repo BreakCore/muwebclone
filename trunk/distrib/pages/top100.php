@@ -102,7 +102,7 @@ if(!$ntime or time() - $ntime >$top100["t100cach"])
    if ($hideronot[0]==0)
    {
 	/**
-	* отслеживание 65к статов
+	* РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ 65Рє СЃС‚Р°С‚РѕРІ
 	*/
 	$rowop[4] = stats65($rowop[4]);
 	$rowop[5] = stats65($rowop[5]);

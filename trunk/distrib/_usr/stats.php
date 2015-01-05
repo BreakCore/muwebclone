@@ -61,7 +61,7 @@ if ($_REQUEST["dostat"] && chck_online($perem)==0)
 	$new_agi = restats65($gagi + $dexterity);
 	$new_com = restats65($gcom  + $command);
 	$msresults = $db->query("UPDATE dbo.Character SET Vitality = '$new_vit', Strength = '$new_str', Energy = '$new_eng', Dexterity = '$new_agi', LevelUpPoint = '$per', Leadership = '$new_com' WHERE Name = '$char'");echo "<span class='succes'>Ok</span>"; 
-	WriteLogs ("stats_","Аккаунт ".$_SESSION["user"]." персонаж ".$char." было ".$row[4]." свободных поинтов, стало ".$per." ".$vitality." - ".$strength." - ".$energy." - ".$dexterity." - ".$command."");
+	WriteLogs ("stats_","СРєРєР°СѓРЅС‚ ".$_SESSION["user"]." РїРµСЂСЃРѕРЅР°Р¶ ".$char." Р±С‹Р»Рѕ ".$row[4]." СЃРІРѕР±РѕРґРЅС‹С… РїРѕРёРЅС‚РѕРІ, СЃС‚Р°Р»Рѕ ".$per." ".$vitality." - ".$strength." - ".$energy." - ".$dexterity." - ".$command."");
 	unset($new_vit,$new_str,$new_eng,$new_agi,$new_com,$msresults,$_POST["str"],$_POST["vit"],$_POST["agi"],$_POST["ene"],$_POST["com"]);
   }
   if ($per >1) header( 'location:'.$config["siteaddress"].'/?up=stats' ); 

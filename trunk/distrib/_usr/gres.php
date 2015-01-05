@@ -114,7 +114,7 @@ if($gres["greset"]==1)
 	else $out_nitems.=$n_items;	
      }
      $newh = $db->query("UPDATE warehouse SET Items=0x".$out_nitems." WHERE AccountID='".validate($_SESSION["user"])."'");
-     WriteLogs ("GReset_","Àêêàóíò ".$_SESSION["user"]." ïåðñîíàæ: ".$_SESSION["character"]." ñåé÷àñ äåëàåò ãðåñåò, íàãðàäà ñãåíåðèðîâàíà è ïîëîæåíà â ñóíäóê. Hex:".$newitem);
+     WriteLogs ("GReset_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶: ".$_SESSION["character"]." ÑÐµÐ¹Ñ‡Ð°Ñ Ð´ÐµÐ»Ð°ÐµÑ‚ Ð³Ñ€ÐµÑÐµÑ‚, Ð½Ð°Ð³Ñ€Ð°Ð´Ð° ÑÐ³ÐµÐ½ÐµÑ€Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð° Ð¸ Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð° Ð² ÑÑƒÐ½Ð´ÑƒÐº. Hex:".$newitem);
    }
    else 
      die("no free space in warehouse!");	
@@ -122,12 +122,12 @@ if($gres["greset"]==1)
   elseif($gres["greset_reward"]==2)
   {
    if ($db->query("UPDATE ".$config["cr_table"]." SET ".$config["cr_column"]." = ".$config["cr_column"]."+ '".$gres["credits_reward"]."' WHERE ".$config["cr_acc"]."='".$_SESSION["user"]."'"))
-   WriteLogs ("GReset_","Àêêàóíò ".$_SESSION["user"]." ïåðñîíàæ: ".$_SESSION["character"]." ñåé÷àñ äåëàåò ãðåñåò, íàãðàäà ".$gres["credits_reward"]." credits");
+   WriteLogs ("GReset_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶: ".$_SESSION["character"]." ÑÐµÐ¹Ñ‡Ð°Ñ Ð´ÐµÐ»Ð°ÐµÑ‚ Ð³Ñ€ÐµÑÐµÑ‚, Ð½Ð°Ð³Ñ€Ð°Ð´Ð° ".$gres["credits_reward"]." credits");
   }
 	
   if($db->query($queryres))
   {
-   WriteLogs ("GReset_","Àêêàóíò ".$_SESSION["user"]." ïåðñîíàæ: ".$_SESSION["character"]." ñäåëàë ãðåñåò >".$gres["greset_reward"]);
+   WriteLogs ("GReset_","Ñ˜ÐºÐºÐ°ÑƒÐ½Ñ‚ ".$_SESSION["user"]." Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶: ".$_SESSION["character"]." ÑÐ´ÐµÐ»Ð°Ð» Ð³Ñ€ÐµÑÐµÑ‚ >".$gres["greset_reward"]);
    unset($_REQUEST["do_greset"]);header("Location:".$config["siteaddress"]."/?p=usercp&up=stats");$reserror=1;
   }
   else echo"error!";	
