@@ -1,9 +1,8 @@
 <?php if (!defined('insite')) die("no access");  
-if (isset ($_GET["error"])) $errnum = checknum(substr($_GET["error"],0,3));
-else $errnum =404;
-
-global $config;
-global $content;
+if (isset ($_GET["error"]))
+ $errnum = (int)$_GET["error"];
+else
+ $errnum =404;
 
 
 require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_errors.php";
@@ -34,5 +33,8 @@ switch($errnum)
  case 404: $content->set("|text|",$lang["error_no404"]); break;
  default: $content->set("|text|",$lang["error_no404"]);
 }
-if ($errnum!=19) $temp = $content->out_content("theme/".$config["theme"]."/them/shoerr.html",1);
-else $temp = $content->out_content("theme/".$config["theme"]."/them/logininpage.html",1);
+
+if ($errnum!=19)
+ $temp = $content->out("shoerr.html",1);
+else
+ $temp = $content->out("logininpage.html",1);

@@ -1,5 +1,5 @@
 <?php session_start();
-define ('insite', 1);
+define ('insite',1);
 
 ob_start();
 include "opt.php";

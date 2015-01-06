@@ -1,17 +1,15 @@
 <?php if (!defined('insite')) die("no access"); 
-global $config;
-global $db;
-global $content;
+
 require "configs/top100_cfg.php";
 require "configs/topguild_cfg.php";
-if ($_GET["guild"])
+if (isset($_GET["guild"]))
 {
- 
- $content->add_dict($_SESSION["mwclang"],"guildtop");
- $nedd_g = validate(substr($_GET["guild"],0,10));
- $g_result = $db->fetcharray($db->query("SELECT G_Name,G_Score,G_Mark,G_Master,G_Union, number FROM guild Where G_Name='". $nedd_g."'"));
 
- if ( $g_result["G_Name"]!="")
+ $content->add_dict($_SESSION["mwclang"]."_guildtop");
+ $nedd_g = substr($_GET["guild"],0,10);
+ $g_result = $db->query("SELECT G_Name,G_Score,G_Mark,G_Master,G_Union, number FROM guild Where G_Name='$nedd_g'")->FetchRow();
+
+ if (!empty($g_result["G_Name"]))
  {
   $g_result["G_Mark"] = GuildLogo($g_result["G_Mark"],$g_result["G_Name"],64,$topguild["topgcache"]);
  
@@ -19,59 +17,78 @@ if ($_GET["guild"])
   $content->set('|G_Mark|', $g_result["G_Mark"]);
   $content->set('|G_Score|', $g_result["G_Score"]);
 
-  $temp = $content->out_content("theme/".$config["theme"]."/them/search_h.html",1);
+  $temp = $content->out("search_h.html",1);
  
-  $m_result = $db->query("SELECT Name,G_Status FROM GuildMember WHERE G_Name= '".$g_result["G_Name"]."' ORDER BY G_Status DESC, Name DESC");
+  $m_result = $db->query("SELECT Name,G_Status FROM GuildMember WHERE G_Name= '{$g_result["G_Name"]}' ORDER BY G_Status DESC, Name DESC");
 
-  while ($gmember = $db->fetchrow($m_result))
+  while ($gmember = $m_result->FetchRow())
   {
-	$content->set('|guild_stat|', $topguild[$gmember[1]]);
-	$content->set('|gmname|', $gmember[0]);
-	$temp.=$content->out_content("theme/".$config["theme"]."/them/search_c.html",1);
+	$content->set('|guild_stat|', $topguild[$gmember["G_Status"]]);
+	$content->set('|gmname|', $gmember["Name"]);
+	$temp.=$content->out("search_c.html",1);
   }
  
   $aliance="";
   if ($g_result["G_Union"]!=0)
   {
-   $guilds = $db->query("SELECT G_Name FROM Guild WHERE G_Union='".$g_result["G_Union"]."' or number='".$g_result["G_Union"]."' or G_Union='".$g_result["number"]."'");
+    $guilds = $db->query("SELECT G_Name FROM Guild WHERE G_Union='{$g_result["G_Union"]}' or number='{$g_result["G_Union"]}' or G_Union='{$g_result["number"]}'");
 
-	while ($g_data = $db->fetcharray($guilds))
-	 if($g_data["G_Name"]!=$g_result["G_Union"])$aliance .= "<div><a href='#".$g_data["G_Name"]."'>".$g_data["G_Name"]."</a></div>";
+	while ($g_data = $guilds->FetchRow())
+		if($g_data["G_Name"] != $g_result["G_Union"])
+			$aliance .= "<div><a href='#".$g_data["G_Name"]."'>".$g_data["G_Name"]."</a></div>";
   }  
 
   $content->set('|aliance|', $aliance);
-  $temp.= $content->out_content("theme/".$config["theme"]."/them/search_f.html",1);		
+  $temp.= $content->out("search_f.html",1);
  }		
 }
-elseif($_GET["caracter"])
+elseif(isset($_GET["caracter"]))
 {
-	$show_ch = validate(substr($_GET["caracter"],0,10));
-	$array = $db->fetchrow($db->query("select inventory, class , cLevel,".$top100["t100res_colum"].",gr_res,Strength,Dexterity,Vitality,Energy,AccountID,Leadership from character where name='".$show_ch."'"));
-	$inguild = $db->fetchrow("SELECT G_name FROM GuildMember WHERE Name='".$show_ch."'");
-	(strlen($inguild[0])>1)? $guild=$inguild[0]:$guild="-";
-	if (strlen($array[1])>0)
+	$show_ch = substr($_GET["caracter"],0,10);
+	$array = $db->query("Select
+ch.inventory,
+ch.class,
+ch.cLevel,
+ch.{$top100["t100res_colum"]},
+ch.gr_res,
+ch.Strength,
+ch.Dexterity,
+ch.Vitality,
+ch.Energy,
+ch.AccountID,
+ch.Leadership,
+gm.G_name,
+ms.Connectstat
+FROM
+ Character ch
+ left JOIN GuildMember gm ON gm.Name COLLATE DATABASE_DEFAULT = ch.Name COLLATE DATABASE_DEFAULT
+ inner join MEMB_STAT ms ON ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT
+WHERE
+ch.Name='$show_ch'")->FetchRow();
+
+	$guild = (empty($array["G_name"])) ? "-" : $array["G_name"];
+
+	if (!empty($array["class"]))
 	{
 		//center
-		$hideronot = $db->fetchrow($db->query("SELECT opt_inv FROM MEMB_INFO WHERE memb___id='$array[9]'"));
+		$hideronot = $db->fetchrow($db->query("SELECT opt_inv FROM MEMB_INFO WHERE memb___id='{$array["AccountID"]}'"));
 		
 		$content->set('|name|', $show_ch);
-		$content->set('|level|', $array[2]);
-		$content->set('|res|', $array[3]);
-		$content->set('|grres|', $array[4]);
+		$content->set('|level|', $array["cLevel"]);
+		$content->set('|res|', $array[$top100["t100res_colum"]]);
+		$content->set('|grres|', $array["gr_res"]);
 		if ($hideronot[0]==0)
 		{
-		 $content->set('|str|', stats65($array[5]));
-		 $content->set('|agi|', stats65($array[6]));
-		 $content->set('|vit|', stats65($array[7]));
-		 $content->set('|ene|', stats65($array[8]));
-		 $content->set('|cmd|', stats65($array[10]));
-    
-	     $ff=$db->fetchrow("SELECT AccountID FROM Character Where Name='".$show_ch."'");
-		 
-	     $only = $db->fetchrow("Select ConnectStat FROM MEMB_STAT WHERE ConnectStat =1 and  memb___id='".$ff[0]."'");
-	 
-         if($only[0]==1)  $state="<span style='color:green;'>Online</span>"; 
-		 else $state="<span style='color:red;'>Offline</span>";
+		 $content->set('|str|', stats65($array["Strength"]));
+		 $content->set('|agi|', stats65($array["Dexterity"]));
+		 $content->set('|vit|', stats65($array["Vitality"]));
+		 $content->set('|ene|', stats65($array["Energy"]));
+		 $content->set('|cmd|', stats65($array["Leadership"]));
+
+         if($array["Connectstat"]==1)
+			 $state="<span style='color:green;'>Online</span>";
+		 else
+			 $state="<span style='color:red;'>Offline</span>";
          $content->set('|onlin|', $state);
 		}
 		else
@@ -84,17 +101,17 @@ elseif($_GET["caracter"])
 		 $content->set('|onlin|', "<img src='imgs/lock.png' border='0' alt='hide'>");
 		}
 		$content->set('|guild|',$guild);
-		$content->set('|classname|', classname($array[1]));
-		$temp.=$content->out_content("theme/".$config["theme"]."/them/search_ch_c.html",1);
+		$content->set('|classname|', classname($array["class"]));
+		$temp.=$content->out("search_ch_c.html",1);
 		
 		//footer
-		$temp.=$content->out_content("theme/".$config["theme"]."/them/search_ch_f.html",1);
+		$temp.=$content->out("search_ch_f.html",1);
 
 	}
 }
 else 
 {
- if (!$_REQUEST["ok"])
+ if (!isset($_REQUEST["ok"]))
    $temp.=$content->out_content("theme/".$config["theme"]."/them/search.html",1);
  else 
  {
