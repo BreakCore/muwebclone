@@ -249,7 +249,6 @@ function pages($config,$db,$content)
             ob_end_clean();
             if (!isset($temp) || empty($temp))
                 return $temp_p;
-
             return $temp;
         }
         else

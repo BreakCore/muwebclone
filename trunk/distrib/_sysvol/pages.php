@@ -63,7 +63,7 @@ function showst($var,$content,$config,$db)
             ob_start();
             require "_sysvol/plugins/".$var.".php";
             $temp_p = ob_get_contents();
-            ob_end_clean();
+            ob_clean();
             if (!isset($temp) || empty($temp)) // если внутри плагина не было кеширования, то отображаем все то, что в нем, если было, то выводим $temp в которой оно должно быть
                 return $temp_p;
             return $temp;

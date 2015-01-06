@@ -1,20 +1,19 @@
 <?php  if (!defined('insite')) die("no access"); 
 $contacts = @file("_dat/contact.dat");
-$temp="";
-if ($contacts)
-{
- global $content;
- global $config;
 
- $temp=$content->out_content("theme/".$config["theme"]."/them/contacts_h.html",1);
- foreach ($contacts as $templ)
- {
-  list($typeZ,$contactZ) = split("::",$templ);
-  if ($typeZ=="skype") $contactZ="<a href ='skype:".$contactZ."'>".$contactZ."</a>";
-  elseif ($typeZ=="gmail") $contactZ= "<a href='mailto:".$contactZ."'>".$contactZ."</a>";
-  $content->set('|type|', $typeZ);
-  $content->set('|contact|', $contactZ);		
-  $temp.=$content->out_content("theme/".$config["theme"]."/them/contacts_c.html",1);
- }
- $temp.=$content->out_content("theme/".$config["theme"]."/them/contacts_f.html",1);
+if (!empty($contacts))
+{
+     $content->out("contacts_h.html");
+     foreach ($contacts as $templ)
+     {
+      list($typeZ,$contactZ) = explode("::",$templ);
+      if ($typeZ=="skype")
+       $contactZ="<a href ='skype:".$contactZ."'>".$contactZ."</a>";
+      elseif ($typeZ=="gmail")
+       $contactZ= "<a href='mailto:".$contactZ."'>".$contactZ."</a>";
+      $content->set('|type|', $typeZ);
+      $content->set('|contact|', $contactZ);
+      $content->out("contacts_c.html");
+     }
+ $content->out("contacts_f.html");
 }

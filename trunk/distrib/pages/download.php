@@ -1,9 +1,6 @@
 <?php 
 if (!defined('insite')) die("no access"); 
 $nowitime = time();
-global $config;
-global $content;
-global $lang;
 
 if (isset($_GET["link"]))
 {
@@ -35,8 +32,8 @@ if (isset($_GET["link"]))
   header("location:".$tempa[3]);
  }
 }
- $cachtime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_download");
-if(!$cachtime || ($nowitime-$cachtime > 3))
+ $cachtime = load_cache("_dat/cach/".$_SESSION["mwclang"]."_download",true);
+if($nowitime-$cachtime > 3)
 {
  ob_start();
  $filedl = @file("_dat/dl.dat");
@@ -65,11 +62,11 @@ if(!$cachtime || ($nowitime-$cachtime > 3))
   }
   $cs=0;
   if(!$filedl or empty($filedl))
-   echo "<div align='center' class='warnms'>".$content->lng["donwn_empty"]."</div>";
+   echo "<div align='center' class='warnms'>".$content->getVal("donwn_empty")."</div>";
    else
    {
   
-    $content->out_content("theme/".$config["theme"]."/them/donloadns_h.html");
+    $content->out("donloadns_h.html");
 
     foreach ($filedl as $f=>$n)
     {
@@ -80,12 +77,16 @@ if(!$cachtime || ($nowitime-$cachtime > 3))
      $content->set('|dowload_dwn|', $tempa[5]);
      $content->set('|file|', $f);
      $content->set('|d_capt|', $tempa[2]);
-     $content->out_content("theme/".$config["theme"]."/them/donloadns_c.html");
+     $content->out("donloadns_c.html");
      $cs++;
     }
-    $content->out_content("theme/".$config["theme"]."/them/donloadns_f.html");
+    $content->out("donloadns_f.html");
    }
  }
  $temp = ob_get_contents();
- write_catch("_dat/cach/".$_SESSION["mwclang"]."_download",$temp);ob_end_clean(); 	
-}else $temp = file_get_contents("_dat/cach/".$_SESSION["mwclang"]."_download");
+ write_catch("_dat/cach/".$_SESSION["mwclang"]."_download",$temp);
+ ob_clean();
+}
+else
+ $temp = load_cache("_dat/cach/{$_SESSION["mwclang"]}_download");
+//todo: переписать этот маразм НАФИГ!!!!

@@ -3,61 +3,76 @@
 * scrypt by Leyas(hastlegames.com) 
 * redecoded by epmak for MuWebClone 
 */
-$gettime = time();
-$ntime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_cs"); 
-if(!$ntime or time() - $ntime >3600)
-{
- ob_start(); 
 
- global $content;
- global $config;
- global $db;
+$gettime = time();
+if(time() - load_cache("_dat/cach/{$_SESSION["mwclang"]}_cs",true) >0)
+{
+
+ ob_start();
 	
- $content->out_content("theme/".$config["theme"]."/them/cs_h.html");	
+ $content->out("cs_h.html");
 	
- $rowm = $db->fetchrow($db->query("SELECT top 1 MAP_SVR_GROUP, SIEGE_START_DATE, SIEGE_END_DATE, SIEGE_GUILDLIST_SETTED, SIEGE_ENDED, CASTLE_OCCUPY, OWNER_GUILD, MONEY, TAX_RATE_CHAOS, TAX_RATE_STORE, TAX_HUNT_ZONE FROM MuCastle_DATA"));
- $rowp = $db->fetchrow($db->query("SELECT G_Master,G_Mark FROM Guild WHERE G_Name = '$rowm[6]'"));
- $cs_info = know_csstate();	
+ $owners = $db->query("SELECT TOP 1
+ md.MAP_SVR_GROUP,
+ md.SIEGE_START_DATE,
+ md.SIEGE_END_DATE,
+ md.SIEGE_GUILDLIST_SETTED,
+ md.SIEGE_ENDED,
+ md.CASTLE_OCCUPY,
+ md.OWNER_GUILD,
+ md.MONEY,
+ md.TAX_RATE_CHAOS,
+ md.TAX_RATE_STORE,
+ md.TAX_HUNT_ZONE,
+ g.G_Mark,
+ g.G_Master
+FROM
+ MuCastle_DATA md left join Guild g on g.G_Name = md.OWNER_GUILD")->FetchRow();
+
+
+ $cs_info = know_csstate($db,$content);
+
 	
- if (strlen($rowm[6])>2)
+ if (!empty($owners["OWNER_GUILD"]))
  {
-  $logo = GuildLogo($rowp[1],$rowm[6],32,$config["logotime"]);
-  $content->set('|gname|', $rowm[6]);
-  $content->set('|gmast|', $rowp[0]);
+  $logo = GuildLogo($owners["G_Mark"],$owners["OWNER_GUILD"],32,$config["logotime"]);
+  $content->set('|gname|', $owners["OWNER_GUILD"]);
+  $content->set('|gmast|', $owners["G_Master"]);
   $content->set('|logo|', $logo);
-  $content->out_content("theme/".$config["theme"]."/them/cs_guild.html");	
+  $content->out("cs_guild.html");
  } 
- if ($rowm[7]>0)
+ if ((float)$owners["MONEY"]>0)
  {	
-  $content->set('|zenmoney|', print_price($rowm[7]));	
-  $content->set('|ttax|', $rowm[8]);	
-  $content->set('|ttax_r|', $rowm[9]);		
-  $content->set('|priceenter|', print_price($rowm[10]));	
-  $content->out_content("theme/".$config["theme"]."/them/cs_info.html");
+  $content->set('|zenmoney|', print_price($owners["MONEY"]));
+  $content->set('|ttax|', $owners["TAX_RATE_CHAOS"]);
+  $content->set('|ttax_r|', $owners["TAX_RATE_STORE"]);
+  $content->set('|priceenter|', print_price($owners["TAX_HUNT_ZONE"]));
+  $content->out("cs_info.html");
  }
 				
  $content->set('|begin|', $cs_info[2]);		
- $content->set('|cs_period|', $content->lng["cs_statez"]);		
+ $content->set('|cs_period|', $content->getVal("cs_statez"));
  $content->set('|period|', $cs_info[1]);		
  $content->set('|end|', $cs_info[3]);
- $content->out_content("theme/".$config["theme"]."/them/cs_attack.html");		
+ $content->out("cs_attack.html");
 
  $gildie = $db->query("SELECT top 50 MAP_SVR_GROUP, REG_SIEGE_GUILD, REG_MARKS, IS_GIVEUP, SEQ_NUM FROM MuCastle_REG_SIEGE ORDER BY REG_MARKS desc, REG_SIEGE_GUILD asc");
- $atguild_c = $db->numrows($gildie);
- if($atguild_c>0)
+
+ $content->out("cs_attackers_h.html");
+ while ($res = $gildie->FetchRow())
  {
-  $content->out_content("theme/".$config["theme"]."/them/cs_attackers_h.html");
-  for($i=0;$i<$atguild_c;$i++)
-  {
-   $rowg = $db->fetchrow($gildie);
-   $content->set('|name|', $rowg[1]);
-   $content->set('|marks|', $rowg[2]);
-   $content->out_content("theme/".$config["theme"]."/them/cs_attackers_c.html");
-  }
+
+  $content->set('|name|', $res["REG_SIEGE_GUILD"]);
+  $content->set('|marks|', $res["REG_MARKS"]);
+  $content->out("cs_attackers_c.html");
  }
- $content->out_content("theme/".$config["theme"]."/them/cs_f.html");
- $temp = ob_get_contents();
- write_catch("_dat/cach/".$_SESSION["mwclang"]."_cs",$temp);
- ob_end_clean();
+
+ $content->out("cs_f.html");
+
+ $temp_ = ob_get_contents();
+ write_catch("_dat/cach/".$_SESSION["mwclang"]."_cs",$temp_);
+ ob_clean();
+ echo $temp_;
 }
-else $temp = file_get_contents("_dat/cach/".$_SESSION["mwclang"]."_cs");
+else
+ echo load_cache("_dat/cach/".$_SESSION["mwclang"]."_cs");

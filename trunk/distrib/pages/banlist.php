@@ -1,21 +1,21 @@
-<?php if (!defined('insite')) die("no access"); 
+<?php
+/**
+ * Банлист
+ */
+
+if (!defined('insite')) die("no access");
 
 require("configs/banlist_cfg.php");
-$gettime = time();
-$ntime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_ban"); 
 
-if(!$ntime or time() - $ntime > $banlist["cach"])
+$gettime = time();
+if( time() - load_cache("_dat/cach/{$_SESSION["mwclang"]}_ban",true) > $banlist["cach"])
 {
- autobans();
  ob_start();
- global $content;
- global $config;
- global $db;
- $content->out_content("theme/".$config["theme"]."/them/banlist_h.html");	
+ $content->out("banlist_h.html");
 
  $query_s = $db->query("SELECT memb___id,bloc_code,mwcban_time,ban_des FROM memb_info where ban_des!='0'");
 	
- while ($show_ar = $db->fetcharray($query_s))
+ while ($show_ar = $query_s->FetchRow())
  {
   if ($show_ar["bloc_code"]==0) 
   {
@@ -29,12 +29,14 @@ if(!$ntime or time() - $ntime > $banlist["cach"])
   $content->set('|who|', $show_ar["memb___id"]);
   $content->set('|des|', $show_ar["ban_des"]);	
   $content->set('|date|', @date('G:i j-m-Y',$show_ar["mwcban_time"]));
-  $content->out_content("theme/".$config["theme"]."/them/banlist_c.html");
+  $content->out("banlist_c.html");
  }
- $content->out_content("theme/".$config["theme"]."/them/banlist_f.html");
+
+ $content->out("banlist_f.html");
 
  $temp = ob_get_contents();
  write_catch("_dat/cach/".$_SESSION["mwclang"]."_ban",$temp);
  ob_end_clean();
 }
-else $temp = file_get_contents("_dat/cach/".$_SESSION["mwclang"]."_ban");
+else
+ $temp = load_cache("_dat/cach/".$_SESSION["mwclang"]."_ban");

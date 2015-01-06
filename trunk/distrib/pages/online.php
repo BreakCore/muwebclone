@@ -3,39 +3,46 @@
 require "configs/top100_cfg.php";
 require "configs/online_cfg.php";
 $gettime = time();
-$ntime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_toponline"); 	
-if(!$ntime || ($gettime-$ntime>300))
-{
-global $db;
-global $config;
-global $content;
-ob_start();
-$i=0;
-$acc_online = $db->query ("SELECT memb___id FROM MEMB_STAT WHERE Connectstat=1 order by  ConnectTM desc");
-if($db->numrows($acc_online)>0)
-{
- $content->out_content("theme/".$config["theme"]."/them/online_h.html");
+$ntime = load_cache("_dat/cach/".$_SESSION["mwclang"]."_toponline",true);
 
- while ($racc_on = $db->fetchrow($acc_online))
+if($gettime-$ntime>300)
+{
+ ob_start();
+ $i=0;
+ $acc_online = $db->query("SELECT
+ ac.GameIDC,
+ ch.Class,
+ ch.cLevel,
+ ch.{$top100["t100res_colum"]}
+FROM
+ MEMB_STAT ms,
+ AccountCharacter ac,
+ [Character] ch
+WHERE
+ ac.Id COLLATE DATABASE_DEFAULT = ms.memb___id COLLATE DATABASE_DEFAULT
+ AND ac.GameIDC COLLATE DATABASE_DEFAULT = ch.Name COLLATE DATABASE_DEFAULT
+ AND ms.Connectstat=1
+ order by  ms.ConnectTM desc");
+
+ $content->out("online_h.html");
+
+ while ($racc_on = $acc_online->FetchRow())
  {
-  if ($i % 2 ==0) $sh_pl = "class='lighter1'"; else $sh_pl="";	
-		
-  $charact = $db->fetchrow($db->query("SELECT GameIDC FROM AccountCharacter WHERE Id='".$racc_on[0]."'"));
-  $shoc = $db->fetchrow($db->query("SELECT Class, cLevel, ".$top100["t100res_colum"]." FROM Character WHERE Name='".$charact[0]."'"));
-  $shoc[0] = classname($shoc[0]);
+  ($i % 2 == 0) ? $sh_pl = "class='lighter1'" : $sh_pl="";
+
   $content->set('|style|', $sh_pl);
-  $content->set('|name|', $charact[0]);
-  $content->set('|class|', $shoc[0]);
-  $content->set('|level|', $shoc[1]);
-  $content->set('|reset|', $shoc[2]);
-  $content->out_content("theme/".$config["theme"]."/them/online_c.html");
+  $content->set('|name|',  $racc_on["GameIDC"]);
+  $content->set('|class|', classname($racc_on["Class"]));
+  $content->set('|level|', $racc_on["cLevel"]);
+  $content->set('|reset|', $racc_on[$top100["t100res_colum"]]);
+  $content->out("online_c.html");
   $i++;
  }
- $content->out_content("theme/".$config["theme"]."/them/online_f.html");
- timing(300);
-} else echo "<div class='succes' style='text-align=center'>List is empty</div>"; 
-$temp = ob_get_contents();
-write_catch("_dat/cach/".$_SESSION["mwclang"]."_toponline",$temp);
-ob_end_clean(); 
+ $content->out("online_f.html");
+ timing(300,$content);
+ $temp = ob_get_contents();
+ ob_clean();
+ write_catch("_dat/cach/".$_SESSION["mwclang"]."_toponline",$temp);
 }
-else $temp = file_get_contents ( "_dat/cach/".$_SESSION["mwclang"]."_toponline");
+else
+ $temp = load_cache( "_dat/cach/".$_SESSION["mwclang"]."_toponline");
