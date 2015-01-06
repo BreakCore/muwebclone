@@ -1,39 +1,78 @@
 <?php
-if (!defined('insite')) die("no access"); 
-global $config;
+if (!defined('insite')) die("no access");
 require "configs/top100_cfg.php";
-global $db;		
-unset($okon,$ntime);
 
 $gettime = time();
-if ($_GET["class"])
+if (isset($_GET["class"]) && !empty($_GET["class"]))
 {
- $classtop = validate($_GET["class"]);
- 
- switch($classtop) 
+ switch($_GET["class"])
  {
-  case "dw": $texq="and Class = 0 or Class = 1 or Class = 2 or Class = 3";  $okon = "sm"; break;
-  case "dk": $texq="and Class = 16 or Class = 17 or Class = 18 or Class = 19 "; $okon = "bm"; break;
-  case "elf":$texq="and Class = 32 or Class = 33 or Class = 34 or Class = 35 "; $okon = "he"; break;
-  case "mg": $texq="and Class = 48 or Class = 49 or Class = 50 "; $okon = "mg"; break;
-  case "dl": $texq="and Class = 64 or Class = 65 or Class = 66 "; $okon = "dl"; break;
-  case "sum":$texq="and Class = 80 or Class = 81 or Class = 82 or Class = 83 "; $okon = "sum";break;
-  case "rf": $texq="and Class = 96 or Class = 97 or Class = 98 or Class = 99 "; $okon = "rf"; break;
+  case "dw": $texq="and ch.Class in (0,1,2,3)";  $okon = "sm"; break;
+  case "dk": $texq="and ch.Class in (16,17,18,19) "; $okon = "bm"; break;
+  case "elf":$texq="and ch.Class in (32,33,34,35) "; $okon = "he"; break;
+  case "mg": $texq="and ch.Class in (48,49,50) "; $okon = "mg"; break;
+  case "dl": $texq="and ch.Class in (64,65,66) "; $okon = "dl"; break;
+  case "sum":$texq="and ch.Class in (80,81,82,83) "; $okon = "sum";break;
+  case "rf": $texq="and ch.Class in (96,97,98,99) "; $okon = "rf"; break;
   default: die("no such class!");
  }
 }
-elseif($_GET["class"]==NULL || empty($_GET["class"])){$okon="";$texq = "";}
-
-$resultop = "SELECT TOP 100 Name, Class, cLevel, ".$top100["t100res_colum"].", Strength, Dexterity, Vitality, Energy, Leadership, AccountID,gr_res FROM Character WHERE  CtlCode != '1' and CtlCode != '17' ".$texq.$top100["t100str_sort"];
-
-$ntime = @filemtime("_dat/cach/top_100".$okon); 
-if(!$ntime or time() - $ntime >$top100["t100cach"])
+else
 {
- $hidead = explode(",",$top100["hidenicks"]);
+ $okon="";
+ $texq = "";
+}
+
+$hidead = explode(",",$top100["hidenicks"]);
+$hide = "";
+$j=0;
+foreach ($hidead as $id=>$val)
+{
+ if($j>0)
+  $hide.=",";
+ $hide.="'$val'";
+
+ $j++;
+}
+if(!empty($hide))
+{
+ $hidead = " AND ch.Name not in($hide) ";
+}
+$resultop = "SELECT TOP 100
+ ch.Name,
+ ch.Class,
+ ch.cLevel,
+ ch.{$top100["t100res_colum"]},
+ ch.Strength,
+ ch.Dexterity,
+ ch.Vitality,
+ ch.Energy,
+ ch.Leadership,
+ ch.AccountID,
+ ch.gr_res,
+ mi.opt_inv,
+ gld.G_Name,
+ CONVERT(varchar(max),gld.G_Mark,2) as g_mark,
+ ms.ConnectStat,
+ CONVERT(varchar(max),ms.ConnectTM,120) as ConnectTM,
+ CONVERT(varchar(max),ms.DisConnectTM ,120) as DisConnectTM,ms.ServerName
+FROM
+ [Character] ch
+ left join [GuildMember] gm ON gm.Name = ch.Name
+ left join [Guild] gld on gld.G_Name = gm.G_Name
+ left join AccountCharacter ac on ac.Id = ch.AccountID
+ inner join MEMB_STAT ms on ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT,
+ MEMB_INFO mi
+WHERE
+ mi.memb___id=ch.AccountID
+ AND ch.CtlCode not in (1,17) ".$hidead.$texq.$top100["t100str_sort"];
+
+
+if(time() - load_cache("_dat/cach/top_100".$okon,true) > $top100["t100cach"])
+{
  ob_start();
- $content = new content();
  $content->set('|siteaddress|', $config["siteaddress"]);
- $content->out_content("theme/".$config["theme"]."/them/top100_h.html");
+ $content->out("top100_h.html");
 			
  $show_chrs = explode(",",$top100["t100show_class"]);
  if (count($show_chrs)>0)
@@ -62,11 +101,11 @@ if(!$ntime or time() - $ntime >$top100["t100cach"])
    if ($val !="all") $lval= "&class=".$val; else $lval="";
    $content->set('|lval|', $lval);
    $content->set('|cl_n|', s_cl($val));
-   $content->out_content("theme/".$config["theme"]."/them/top100_m_chrs.html");
+   $content->out("top100_m_chrs.html");
   }
  }
  
- $content->out_content("theme/".$config["theme"]."/them/top100_h1.html");
+ $content->out("top100_h1.html");
 			
  $columns = explode(",",$top100["t100_titles"]);
  if (in_array("imggres",$columns))
@@ -74,108 +113,125 @@ if(!$ntime or time() - $ntime >$top100["t100cach"])
 			
  foreach ($columns as $n=>$c)
  {
-
   if ($c) 
   {
 	$content->set('|cap|', $c);
-	$content->out_content("theme/".$config["theme"]."/them/top100_h1_c.html");
+	$content->out("top100_h1_c.html");
   }
  }
 	
- $content->out_content("theme/".$config["theme"]."/them/top100_h1_f.html");
+ $content->out("top100_h1_f.html");
  $rank = 1;
- $resultop = $db->query($resultop);		
- for($i=0;$i < $db->numrows($resultop);++$i)
+ $i = 1;
+ $resultop_ = $db->query($resultop);
+
+ while($rowop = $resultop_->FetchRow())
  {
-  $rowop = $db->fetchrow($resultop);
-  if (in_array($rowop[0],$hidead)==false)
+
+  if (isset($rowop["G_Name"]) && !empty($rowop["G_Name"]))
   {
-   $resultop2 = $db->query("Select MEMB_STAT.ConnectStat, AccountCharacter.GameIDC FROM MEMB_STAT,AccountCharacter WHERE MEMB_STAT.ConnectStat =1 and MEMB_STAT.memb___id='".$rowop[9]."' and AccountCharacter.GameIDC='".$rowop[0]."'");
-   $rowop2 = $db->numrows($resultop2);				
-   $rowop[1] = classname($rowop[1]);
-
-   if ($rowop[8]==NULL || empty($rowop[8])){$rowop[8]="0";}
-   if($rowop2 == 0){ $mresult = $db->fetchrow($db->query("SELECT DisConnectTM FROM MEMB_STAT WHERE memb___id='$rowop[9]'"));if($mresult[0]){$mresult[0] = "Disconnected  ".$mresult[0];} $bgcol="background:#fd7272;"; $statz = "offline";}
-   if($rowop2 == 1){ $mresult = $db->fetchrow($db->query("SELECT ConnectTM FROM MEMB_STAT WHERE memb___id='$rowop[9]'"));if($mresult[0]){$mresult[0] = "Connected ".$mresult[0];} $bgcol="background:#b0fdab;"; $statz = "online";}
-   $hideronot = $db->fetchrow($db->query("SELECT opt_inv FROM MEMB_INFO WHERE memb___id='$rowop[9]'"));
-   
-   if ($hideronot[0]==0)
-   {
-	/**
-	* отслеживание 65к статов
-	*/
-	$rowop[4] = stats65($rowop[4]);
-	$rowop[5] = stats65($rowop[5]);
-	$rowop[6] = stats65($rowop[6]);
-	$rowop[7] = stats65($rowop[7]);
-	$rowop[8] = stats65($rowop[8]);
-   }
-   else
-   {
-    $rowop[4] = "<img src='imgs/lock.png' border='0' alt='hide'>";
-    $rowop[5] = "<img src='imgs/lock.png' border='0' alt='hide'>";
-    $rowop[6] = "<img src='imgs/lock.png' border='0' alt='hide'>";
-    $rowop[7] = "<img src='imgs/lock.png' border='0' alt='hide'>";
-    $rowop[8] = "<img src='imgs/lock.png' border='0' alt='hide'>";
-   }
-
-   if ($rank % 2 ==0) $sh_pl = "class='lighter1'"; else $sh_pl="";	
-					
-   $queryguildm = $db->query("SELECT G_Name FROM GuildMember WHERE Name = '".$rowop[0]."'");
-   $guildmres = $db->fetchrow($queryguildm);
-   if (strlen($guildmres[0])>1)
-   {
-	$quildm = $db->fetchrow($db->query("SELECT G_Mark FROM guild where G_Name='".$guildmres[0]."'"));
-	$mark = GuildLogo($quildm[0],$guildmres[0],10,$config["logotime"]);
-	$guildmres[0] = "<a href='".$config["siteaddress"]."/?p=topguild#".$guildmres[0]."'>".$mark.$guildmres[0]."</a>";
-   }
-   else 
-   {
-    $guildmres[0]="&nbsp;";
-	$mark="";
-   }
-   //header center
-   $content->set('|style|', $sh_pl);
-   $content->out_content("theme/".$config["theme"]."/them/top100_c_h.html");
-
-   $assoc["num"] = "<a href='#".$rank."' id='tooltiper' title='".$statz." ".$mresult[0]."'>".$rank."</a>";
-   $assoc["Name"] = $rowop[0];
-   $assoc["Class"] = $rowop[1];
-   $assoc["Lvl"] = $rowop[2];
-   $assoc["Res"] = $rowop[3];
-   $assoc["imggres"] = $rowop[10]; //greset
-   $assoc["Str"] = $rowop[4];
-   $assoc["Agi"] = $rowop[5];
-   $assoc["Vit"] = $rowop[6];
-   $assoc["Ene"] = $rowop[7];
-   $assoc["Com"] = $rowop[8];
-   $assoc["Guild"] = $guildmres[0];
-   $assoc["MLvl"] = $rowop[11];
-
-   //center center
-   foreach ($columns as $id=>$val)
-   {
-     if ($val=="#")
-	 { 
-	  $content->set('|style|', $bgcol); 
-	  $val="num";
-	 }
-	 else $content->set('|style|', "");
-	 if (strlen($val)>25) $val="imggres";
-	 
-	 if ($val=="Name") $content->set('|data|', "<a href='".$config["siteaddress"]."/?p=search&caracter=".$assoc["Name"]."'>".$assoc["Name"]."</a>");
-	 else $content->set('|data|', $assoc[$val]);
-	 $content->out_content("theme/".$config["theme"]."/them/top100_c_c.html");	
-   }
-
-   $rank++;
+   $mark = GuildLogo($rowop["g_mark"],$rowop["G_Name"],10,$top100["t100logotime"]);
+   $rowop["G_Name"] = "<a href='".$config["siteaddress"]."/?p=topguild#".$rowop["G_Name"]."'>".$mark.$rowop["G_Name"]."</a>";
   }
-  unset ($show_h);				
- }		
+  else
+  {
+   $rowop["G_Name"]=" ";
+  }
+
+  $rowop["Class"] = classname($rowop["Class"]);
+  if(empty($rowop["Leadership"]) || !isset($rowop["Leadership"]))
+   $rowop["Leadership"]=0;
+
+  if($rowop["ConnectStat"] == 0)
+  {
+   $contime = "Disconnected  ".$rowop["DisConnectTM"];
+   $bgcol="background:#fd7272;";
+   $statz = "offline";
+  }
+  else
+  {
+   $contime = "Connected  ".$rowop["ConnectTM"];
+   $bgcol="background:#b0fdab;";
+   $statz = "online";
+  }
+
+  if ($rowop["opt_inv"] == 0)
+  {
+   /**
+    * отслеживание 65к статов
+    */
+   $rowop["Strength"] = stats65($rowop["Strength"]);
+   $rowop["Dexterity"] = stats65($rowop["Dexterity"]);
+   $rowop["Vitality"] = stats65($rowop["Vitality"]);
+   $rowop["Energy"] = stats65($rowop["Energy"]);
+   $rowop["Leadership"] = stats65($rowop["Leadership"]);
+  }
+  else
+  {
+   $rowop["Strength"] = "<img src='imgs/lock.png' border='0' alt='hide'>";
+   $rowop["Dexterity"] = "<img src='imgs/lock.png' border='0' alt='hide'>";
+   $rowop["Vitality"] = "<img src='imgs/lock.png' border='0' alt='hide'>";
+   $rowop["Energy"] = "<img src='imgs/lock.png' border='0' alt='hide'>";
+   $rowop["Leadership"] = "<img src='imgs/lock.png' border='0' alt='hide'>";
+  }
+
+  if ($rank % 2 ==0)
+   $sh_pl = "class='lighter1'";
+  else
+   $sh_pl="";
+
+
+  //header center
+  $content->set('|style|', $sh_pl);
+  $content->out("top100_c_h.html");
+
+  if ($rowop["gr_res"]>0)
+   $assoc["imggres"] = $rowop["gr_res"];//$rowop[10]; //greset
+  else
+   $assoc["imggres"]="";
+
+  $assoc["num"] = "<a href='#".$rank."' id='tooltiper' title='".$statz." ".$contime."'>".$rank."</a>";
+  $assoc["Name"] = $rowop["Name"];
+  $assoc["Class"] = $rowop["Class"];
+  $assoc["Lvl"] = $rowop["cLevel"];
+  $assoc["Res"] = $rowop[$top100["t100res_colum"]];
+  $assoc["Str"] = $rowop["Strength"];
+  $assoc["Agi"] = $rowop["Dexterity"];
+  $assoc["Vit"] = $rowop["Vitality"];
+  $assoc["Ene"] = $rowop["Energy"];
+  $assoc["Com"] = $rowop["Leadership"];
+  $assoc["Guild"] = $rowop["G_Name"];
+  $assoc["MLvl"] = "-/-";
+
+  //center center
+  foreach ($columns as $id=>$val)
+  {
+
+   if ($val=="#")
+   {
+    $content->set('|style|', $bgcol);
+    $val="num";
+   }
+   else $content->set('|style|', "");
+   if (strlen($val)>25)
+    $val="imggres";
+
+   if ($val=="Name")
+    $content->set('|data|', "<a href='".$config["siteaddress"]."/?p=search&caracter=".$assoc["Name"]."'>".$assoc["Name"]."</a>");
+   else
+    $content->set('|data|', $assoc[$val]);
+
+   $content->out_content("theme/".$config["theme"]."/them/top100_c_c.html");
+  }
+
+  $rank++;
+ }
+
  $content->out_content("theme/".$config["theme"]."/them/top100_f.html");
- timing($top100["t100cach"]);
+ timing($top100["t100cach"],$content);
  $temp = ob_get_contents();
- write_catch("_dat/cach/top_100".$okon,$temp);ob_end_clean(); 
+ write_catch("_dat/cach/top_100".$okon,$temp);
+ ob_clean();
 }
-else $temp = file_get_contents( "_dat/cach/top_100".$okon);
+else $temp = load_cache( "_dat/cach/top_100".$okon);
 			
