@@ -2,13 +2,12 @@
 /**
  * топ сильнейших
  */
-$ntime =  @filemtime("_dat/cach/top_strongest");
+
 require "configs/strongest_cfg.php";
 if(is_array($strongest))
 {
-    if(!$ntime || (time()-$ntime>$strongest["cach"]))
+    if(time() - load_cache("_dat/cach/top_strongest",true) > $strongest["cach"])
     {
-
         if ($strongest["show_adm"]==0)
             $show_gm="CtlCode !=32 and";
         else
@@ -156,11 +155,14 @@ WHERE
             }
             echo $st_show;
         }
-        else echo "error: in top_type!";
+        else
+            echo "error: in top_type!";
         $temp = ob_get_contents();
         write_catch ("_dat/cach/top_strongest",$temp);
         ob_clean();
-    } else $temp = file_get_contents ('_dat/cach/top_strongest');
+    }
+    else
+        $temp = load_cache("_dat/cach/top_strongest");
 }
 else
 {

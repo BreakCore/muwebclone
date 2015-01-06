@@ -1,15 +1,13 @@
-<?php if (!defined('insite')) die("no access");
+<?php
 /**
  * top 5 strongest guilds
  */
+
 require "configs/topguild_cfg.php";
 if(is_array($topguild))
 {
- $gettime = time();
- $filetime = @filemtime("_dat/cach/top5guild");
- if($gettime-$filetime > $topguild["topgcache"])
+ if(time() - load_cache("_dat/cach/top5guild",true) > $topguild["topgcache"])
  {
-
   require "configs/top100_cfg.php";
   ob_start();
   $gtop_r = $db->query("SELECT TOP 5 G_Name,G_Mark, G_Master FROM Guild  order by G_Score desc,G_Count desc,G_Name desc ");
@@ -26,7 +24,8 @@ if(is_array($topguild))
   ob_end_clean();
   write_catch("_dat/cach/top5guild",$temp);
  }
- else $temp = file_get_contents("_dat/cach/top5guild");
+ else
+  $temp = load_cache("_dat/cach/top5guild");
 }
 else
 {

@@ -30,3 +30,4 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_NOSUCHDB           => 'ไม่มีข้อมูลนี้',
             DB_ERROR_ACCESS_VIOLATION   => 'permissions ไม่พอ'
 );
+?>

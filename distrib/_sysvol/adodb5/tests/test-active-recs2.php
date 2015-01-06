@@ -74,3 +74,4 @@ $rec->Save();
 $rec->Delete();
 
 echo "<p>Affected Rows after delete=".$db->Affected_Rows()."</p>";
+?>

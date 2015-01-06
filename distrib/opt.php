@@ -4,7 +4,7 @@
 * ver 1.5.3
 * Special thx to: Magistr,{8bit}DoS.Ninja, eg-network.ru & Deathless(MuAntrum(DEW)),Vaflan(MyMuWeb), Platinum(for tests), muhard.ru
 **/
-$config["db_host"]= "MAINTANCE\LOCALDBS";
+$config["db_host"]= 'MAINTANCE\LOCALDBS';
 $config["db_user"]= "sa";
 $config["db_upwd"]= "epmak";
 $config["ctype"]= "ODBC";
@@ -24,7 +24,7 @@ $config["server_name"]="p4f";
 $config["server_team"]="p4f";
 $config["description"]="MuWebClone";
 $config["keywords"]="MuWebClone";
-$config["mainmod"]="qinfo,strongest,questtop";
+$config["mainmod"]="qinfo,strongest,questtop,top5guild";
 $config["mainmod_def"]="qinfo,strongest,questtop,top5guild,baners";
 $config["cr_table"]="MEMB_INFO";
 $config["cr_column"]="credits";

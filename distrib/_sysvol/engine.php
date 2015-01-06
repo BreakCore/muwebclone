@@ -864,6 +864,33 @@ function write_catch($file,$content)
 }
 
 /**
+ * функция вытаскивания контента
+ * придумана специально для профессора, чтобы вписывал сервера в write_catch и load_cache
+ * @param $path адрес до файла
+ * @param bool $istime если true, то возрващает время создания в секундах от 1970 года
+ * @return int|string содержимое файла или время создания в секундах с 1970
+ */
+function load_cache($path,$istime = false)
+{
+    if(!$istime)
+    {
+        if(file_exists($path))
+        {
+            return file_get_contents($path);
+        }
+        return "no cache file";
+    }
+    else
+    {
+        if(file_exists($path))
+        {
+            return filemtime($path);
+        }
+        return 0;
+    }
+}
+
+/**
 * bb-codes catch
 */
 function bbcode($text) {

@@ -1,7 +1,7 @@
 var MuEvents = {};
 MuEvents.text = [
-        ["Начнётся через", "Открыт, до начала"],
-        ["Появится через", "Торопись, осталось"]
+        ["РќР°С‡РЅС‘С‚СЃСЏ С‡РµСЂРµР·", "РћС‚РєСЂС‹С‚, РґРѕ РЅР°С‡Р°Р»Р°"],
+        ["РџРѕСЏРІРёС‚СЃСЏ С‡РµСЂРµР·", "РўРѕСЂРѕРїРёСЃСЊ, РѕСЃС‚Р°Р»РѕСЃСЊ"]
 ];
 
 MuEvents.sked = [
@@ -18,7 +18,8 @@ MuEvents.sked = [
 
 MuEvents.init = function (e) {
 
-        if (typeof e == "string") var g = new Date(new Date().toString().replace(/\d+:\d+:\d+/g, e));
+        if (typeof e == "string")
+            var g = new Date(new Date().toString().replace(/\d+:\d+:\d+/g, e));
         var f = (typeof e == "number" ? e : (g.getHours() * 60 + g.getMinutes()) * 60 + g.getSeconds()), q = MuEvents.sked, j = [];
       
         for (var a = 0; a < q.length; a++) {

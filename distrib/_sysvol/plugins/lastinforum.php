@@ -3,8 +3,8 @@
  * Плагин "последнее с форума"
  * версия для IPB
  */
-$ntime =  @filemtime("_dat/cach/lastinforum");
-if(!$ntime || (time()-$ntime >3600)) //раз в час обновл¤ет данные с форума
+
+if(time()- load_cache("_dat/cach/lastinforum",true) >3600) //раз в час обновл¤ет данные с форума
 {
 	ob_start();
 	$ipb_mysql_data_base_name="forum";  //им¤ базы данных форму IPB
@@ -103,4 +103,4 @@ if(!$ntime || (time()-$ntime >3600)) //раз в час обновл¤ет да�
 	ob_end_clean();
 }
 else
-	$temp = file_get_contents ('_dat/cach/lastinforum');
+	$temp = load_cache ('_dat/cach/lastinforum');
