@@ -1,7 +1,7 @@
 <?php
 
-require_once "_sysvol/adodb5/adodb-exceptions.inc.php";
-require_once "_sysvol/adodb5/adodb.inc.php";
+include "adodb5/adodb-exceptions.inc.php";
+include "adodb5/adodb.inc.php";
 
 class connect
 {
@@ -99,9 +99,9 @@ class connect
         if (function_exists("odbc_connect"))
         {
             $this->resId = &ADONewConnection('odbc_mssql');
-            $dsn = "Driver={SQL Server};Server=".$host.";Database=".$base.";";
+            $dsn = "Driver={SQL Server};Server=$host;Database=$base;";
             $this->resId->debug=false;
-            $this->resId->Connect($dsn,$user,$pwd);
+            $this->resId->PConnect($dsn,$user,$pwd);
         }
         else
             throw new Exception("odbc_connect is NOT supported!");

@@ -9,7 +9,7 @@
 // ADOdb  - Database Abstraction Library for PHP                         //
 //          http://adodb.sourceforge.net/                                //
 //                                                                       //
-// Copyright (c) 2000-2014 John Lim (jlim\@natsoft.com.my)               //
+// Copyright (c) 2000-2012 John Lim (jlim\@natsoft.com.my)               //
 //          All rights reserved.                                         //
 //          Released under both BSD license and LGPL library license.    //
 //          Whenever there is any discrepancy between the two licenses,  //
@@ -52,7 +52,7 @@ include_once(ADODB_DIR.'/drivers/adodb-mssql.inc.php');
 
 class ADODB_mssql_n extends ADODB_mssql {
 	var $databaseType = "mssql_n";
-
+	
 	function ADODB_mssqlpo()
 	{
 		ADODB_mssql::ADODB_mssql();
@@ -65,7 +65,7 @@ class ADODB_mssql_n extends ADODB_mssql {
 	}
 
     /**
-     * This function will intercept all the literals used in the SQL, prepending the "N" char to them
+     * This function will intercept all the literals used in the SQL, prepending the "N" char to html
      * in order to allow mssql to store properly data sent in the correct UCS-2 encoding (by freeTDS
      * and ODBTP) keeping SQL compatibility at ADOdb level (instead of hacking every project to add
      * the "N" notation when working against MSSQL.
@@ -128,7 +128,7 @@ class ADODB_mssql_n extends ADODB_mssql {
         }
 
 
-    /// Analyse literals to prepend the N char to them if their contents aren't numeric
+    /// Analyse literals to prepend the N char to html if their contents aren't numeric
         if (!empty($literals)) {
             foreach ($literals as $key=>$value) {
                 if (!is_numeric(trim($value, SINGLEQUOTE))) {
@@ -168,3 +168,4 @@ class ADORecordset_mssql_n extends ADORecordset_mssql {
 		$this->ADORecordset_mssql($id,$mode);
 	}
 }
+?>

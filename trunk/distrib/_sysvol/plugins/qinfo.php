@@ -1,13 +1,14 @@
 <?php if (!defined('insite')) die("no access"); 
 require_once "configs/qinfo_cfg.php";
-$ntime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_quickinfo");
+
+
 if(!is_array($qinfo))
 {
     echo "wrong config for qinfo";
 }
 else
 {
-    if (!$ntime or time()- $ntime >$qinfo["cach"])
+    if (time()- load_cache("_dat/cach/{$_SESSION["mwclang"]}_quickinfo",true) > $qinfo["cach"])
     {
         $list = explode(",",$qinfo["list"]);
         ob_start();
@@ -154,5 +155,5 @@ else
         write_catch ("_dat/cach/".$_SESSION["mwclang"]."_quickinfo",$temp);
         ob_end_clean();
     }
-    else $temp = file_get_contents ('_dat/cach/'.$_SESSION["mwclang"].'_quickinfo');
+    else $temp = load_cache ('_dat/cach/'.$_SESSION["mwclang"].'_quickinfo');
 }
