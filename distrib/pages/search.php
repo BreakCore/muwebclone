@@ -44,6 +44,7 @@ if (isset($_GET["guild"]))
 }
 elseif(isset($_GET["caracter"]))
 {
+
 	$show_ch = substr($_GET["caracter"],0,10);
 	$array = $db->query("Select
 ch.inventory,
@@ -58,26 +59,27 @@ ch.Energy,
 ch.AccountID,
 ch.Leadership,
 gm.G_name,
-ms.Connectstat
+ms.Connectstat,
+mi.opt_inv
 FROM
  Character ch
  left JOIN GuildMember gm ON gm.Name COLLATE DATABASE_DEFAULT = ch.Name COLLATE DATABASE_DEFAULT
- inner join MEMB_STAT ms ON ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT
+ inner join MEMB_STAT ms ON ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT,
+ MEMB_INFO mi
 WHERE
-ch.Name='$show_ch'")->FetchRow();
+ch.Name='$show_ch'
+AND mi.memb___id=ch.AccountID")->FetchRow();
 
 	$guild = (empty($array["G_name"])) ? "-" : $array["G_name"];
 
 	if (!empty($array["class"]))
 	{
 		//center
-		$hideronot = $db->fetchrow($db->query("SELECT opt_inv FROM MEMB_INFO WHERE memb___id='{$array["AccountID"]}'"));
-		
 		$content->set('|name|', $show_ch);
 		$content->set('|level|', $array["cLevel"]);
 		$content->set('|res|', $array[$top100["t100res_colum"]]);
 		$content->set('|grres|', $array["gr_res"]);
-		if ($hideronot[0]==0)
+		if ($array["opt_inv"]==0)
 		{
 		 $content->set('|str|', stats65($array["Strength"]));
 		 $content->set('|agi|', stats65($array["Dexterity"]));
