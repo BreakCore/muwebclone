@@ -1,4 +1,4 @@
-﻿<?php if (!defined("insite")){die("no access");}
+<?php if (!defined("insite")){die("no access");}
 $lang["topguild_score"]="Очки гильдии";
 $lang["lang_g_status"]="Звание в гильдии";
 $lang["lang_gName"]="Члены гильдии";
