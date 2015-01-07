@@ -1,30 +1,60 @@
 <?php if (!defined('insite')) die("no access"); 
 require "configs/topguild_cfg.php";
-global $db;
-global $content;
-global $config;
- $content->add_dict($_SESSION["mwclang"],"guildtop");
- 
+
+
+ error_reporting(E_ALL);
 $gettime = time();
-$filetime = @filemtime("_dat/cach/".$_SESSION["mwclang"]."_topguild");
-if(!$filetime || ($gettime-$filetime >$topguild["topgcache"]))
+function rond($text,$num)
+{
+ $numz[32]="class='bms'";
+ $numz[64]="class='agms'";
+ $numz[128]="class='gms'";
+ $numz[0] = "";
+ return "<span ".$numz[$num].">".$text."</span>";
+}
+
+if($gettime-load_cache("_dat/cach/".$_SESSION["mwclang"]."_topguild",true) > $topguild["topgcache"])
 {
  ob_start();
- $content->out_content("theme/".$config["theme"]."/them/topguild_h.html");
+ $content->add_dict("guildtop");
+ $content->out("topguild_h.html");
 
- $result12 = $db->query("SELECT TOP 100 G_Name,G_Score,G_Mark,G_Master,G_Union, number FROM guild order by G_score desc");
- $num_gx=$db->numrows($result12);
 
- function rond($text,$num)
+ $guildtop = $db->query("SELECT TOP 100
+ gg.G_Name,
+ gg.G_Score,
+ CONVERT(varchar(66),gg.G_Mark,2) as G_Mark,
+ gg.G_Master,
+ gg.G_Union,
+ gg.number,
+ CONVERT(varchar(max),(SELECT G_Name + ',,' FROM guild  WHERE (G_Union = gg.G_Union or  G_Union = gg.number or number=gg.G_Union) and G_Union >0 and G_Name <> gg.G_Name FOR XML PATH('')),2) as alianses,
+ gm.Name,
+ (SELECT count(*)  FROM GuildMember WHERE G_Name = gg.G_Name) as kolvo
+FROM
+ guild gg,
+ GuildMember gm
+WHERE
+ gm.G_Name = gg.G_Name
+ AND gm.G_Status = 128
+order by gg.G_score desc");
+
+ $rank = 1;
+ while($res = $guildtop->FetchRow())
  {
-  $numz[32]="class='bms'";
-  $numz[64]="class='agms'";
-  $numz[128]="class='gms'";
-  $numz[0] = "";
-  return "<span ".$numz[$num].">".$text."</span>";
+  if ($rank % 2 ==0)
+   $sh_pl = "class='lighter1'";
+  else
+   $sh_pl="";
+
+  $content->add_dict($res);
+  $content->set("|logo|",GuildLogo($res["G_Mark"],$res["G_Name"],20,$topguild["topgcache"]));
+  $content->set("|rank|",$rank);
+  $content->set("|style|",$sh_pl);
+  $content->out("topguild_c.html");
+  $rank ++;
  }
- 
- for($i=0;$i < $num_gx ;$i++)
+ $content->out("topguild_f.html");
+/* for($i=0;$i < $num_gx ;$i++)
  {
   $row4 = $db->fetchrow($result12);
   $rank = $i+1;
@@ -48,23 +78,13 @@ if(!$filetime || ($gettime-$filetime >$topguild["topgcache"]))
 	 if($g_data["G_Name"]!=$row4[0])$aliance .= "<div><a href='#".$g_data["G_Name"]."'>".$g_data["G_Name"]."</a></div>";
   }
 
-  if ($rank % 2 ==0) $sh_pl = "class='lighter1'"; else $sh_pl="";
-  ($row4[1]=="")?$row4[1]=0:"";
-  $content->set('|style|', $sh_pl);
-  $content->set('|rank|', $rank);
-  $content->set('|g_name|', $row4[0]);
-  $content->set('|sostav|', $sostav);
-  $content->set('|gm|', $row4[3]);
-  $content->set('|logo|', $row4[2]);
-  $content->set('|kolvo|', $kolvo);
-  $content->set('|score|', $row4[1]);
-  $content->set('|aliance|', $aliance);
-  $content->out_content("theme/".$config["theme"]."/them/topguild_c.html");			
+
  }
  $content->out_content("theme/".$config["theme"]."/them/topguild_f.html");
- timing($topguild["topgcache"]);
+ timing($topguild["topgcache"]);*/
  $temp = ob_get_contents();
  write_catch("_dat/cach/".$_SESSION["mwclang"]."_topguild",$temp);
- ob_end_clean(); 
+ ob_clean();
 }
-else $temp = file_get_contents( "_dat/cach/".$_SESSION["mwclang"]."_topguild");
+else
+ $temp = load_cache( "_dat/cach/".$_SESSION["mwclang"]."_topguild");
