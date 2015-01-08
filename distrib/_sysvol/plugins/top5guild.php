@@ -21,7 +21,7 @@ if(is_array($topguild))
   }
   $content->out("top5guild_f.html");
   $temp = ob_get_contents();
-  ob_end_clean();
+  ob_clean();
   write_catch("_dat/cach/top5guild",$temp);
  }
  else

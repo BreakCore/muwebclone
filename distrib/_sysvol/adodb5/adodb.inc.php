@@ -1,4 +1,4 @@
-<?php ERROR_REPORTING( E_ALL ^ E_WARNING ^ E_NOTICE ^ E_ERROR);
+<?php
 /*
  * Set tabs to 4 for best viewing.
  * 

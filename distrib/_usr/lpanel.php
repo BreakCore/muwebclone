@@ -2,13 +2,14 @@
 /**
  * user panel
  */
-ob_start();
+error_reporting(E_ALL);
 
+$checkU = chkc_char($_SESSION["user"],$db);
 $planame = $db->query("SELECT memb_name FROM MEMB_INFO Where memb___id='{$_SESSION["user"]}'")->FetchRow();
 $content->set('|planame0|', $planame["memb_name"]);
-$content->out_content("theme/".$config["theme"]."/them/lpanel_h.html");
+$content->out("lpanel_h.html");
 
-$checkU = chkc_char($_SESSION["user"]);
+
 
 if($checkU>0)
 { 
@@ -23,16 +24,14 @@ if($checkU>0)
   $tempo.=">".$resultc["Name"]."</option>";
  }
  $content->set('|option|', $tempo);
- $content->out_content("theme/".$config["theme"]."/them/lpanel_c.html");
+ $content->out("lpanel_c.html");
 }
 else 
- $content->out_content("theme/".$config["theme"]."/them/lpanel_fail.html");
+ $content->out("lpanel_fail.html");
 
 
 $content->set('|bankZ_show|', bankZ_show($db));
 $content->set('|wareg_show|', wareg_show($db));
 $content->set('|cred_show|', cred_show($db,$config));
-$content->set('|getusrmenu|', getusrmenu($content,$config));
-$content->out_content("theme/".$config["theme"]."/them/lpanel_f.html");
-$temp = ob_get_contents();
-ob_end_clean();
+$content->set('|getusrmenu|', getusrmenu($content,$config,$db));
+$content->out("lpanel_f.html");

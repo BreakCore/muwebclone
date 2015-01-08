@@ -34,7 +34,7 @@ if(!file_exists("opt.php"))
 }
 else
 {
- require_once "opt.php";
+ require "opt.php";
  if(!is_array($config) or empty($config))
  {
   if(file_exists("_dat/install.php"))
@@ -143,7 +143,7 @@ else
     {
      //страницы пользователя
      chk_user($config,$db,1);
-     if (chkc_char($_SESSION["user"])==0)
+     if (chkc_char($_SESSION["user"],$db)==0)
       $content->set('|pages|', "<div align='center'>Your account haven't characters!</div>");
      else
      {
@@ -152,7 +152,7 @@ else
        case 0:
         header("Location:".$config["siteaddress"]."/?p=not&error=7"); die(); break;
        case 1:
-        if(chck_online($db,$_SESSION["user"])!=1) $content->set('|pages|', userpages());
+        if(chck_online($db,$_SESSION["user"])!=1) $content->set('|pages|', userpages($config,$db,$content));
         else  header("location:".$config["siteaddress"]."/?p=not&error=20");
         break;
        case 3: header("location:".$config["siteaddress"]."/?p=not&error=14"); die(); break;

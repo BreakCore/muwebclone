@@ -3,7 +3,7 @@
  * Плагин "последнее с форума"
  * версия для IPB
  */
-
+error_reporting(E_ALL);
 if(time()- load_cache("_dat/cach/lastinforum",true) >3600) //раз в час обновл¤ет данные с форума
 {
 	ob_start();
@@ -62,16 +62,17 @@ if(time()- load_cache("_dat/cach/lastinforum",true) >3600) //раз в час о
 			$title2 = $title1;									//если меньше или равна, то оставл¤ем
 
 		//‘ормат выводимого даты и времени
-		switch (date("d.m.Y",$row["last_post"])):
+		switch (date("d.m.Y",$row["last_post"]))
+		{
 			case date("d.m.Y"):
-				$day=date("—егодн¤ в H:i",$row["last_post"]);	//пост был написан сегодн¤
+				$day = date("—егодн¤ в H:i", $row["last_post"]);    //пост был написан сегодн¤
 				break;
-			case date("d.m.Y",time()-86400):
-				$day=date("¬чера в H:i",$row["last_post"]);		//пост был написан вчера
+			case date("d.m.Y", time() - 86400):
+				$day = date("¬чера в H:i", $row["last_post"]);        //пост был написан вчера
 				break;
 			default:
-				$day=date("d.m.Y H:i",$row["last_post"]);		//пост был написан более двух дней назад
-		endswitch;
+				$day = date("d.m.Y H:i", $row["last_post"]);        //пост был написан более двух дней назад
+		}
 
 
 		//¬ывод URL на профиль юзера
@@ -100,7 +101,7 @@ if(time()- load_cache("_dat/cach/lastinforum",true) >3600) //раз в час о
 	mysql_free_result($sql_12354);
 	$temp = ob_get_contents();
 	write_catch ("_dat/cach/lastinforum",$temp);
-	ob_end_clean();
+	ob_clean();
 }
 else
 	$temp = load_cache ('_dat/cach/lastinforum');
