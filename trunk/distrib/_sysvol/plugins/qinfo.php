@@ -1,4 +1,5 @@
-<?php if (!defined('insite')) die("no access"); 
+<?php if (!defined('insite')) die("no access");
+error_reporting(E_ALL);
 require_once "configs/qinfo_cfg.php";
 
 
@@ -153,7 +154,7 @@ else
         $content->out("qinfo_f.html");
         $temp = ob_get_contents();
         write_catch ("_dat/cach/".$_SESSION["mwclang"]."_quickinfo",$temp);
-        ob_end_clean();
+        ob_clean();
     }
     else $temp = load_cache ('_dat/cach/'.$_SESSION["mwclang"].'_quickinfo');
 }

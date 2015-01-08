@@ -3,17 +3,21 @@
 * MuWebClone engine script 1.5.x
 * current 1.5.3
 **/
-
+error_reporting(E_ALL);
 /**
 * отображение панели пользователя 
 */
+
 function show_login($config,$db,$content)
 {
- if(isset($_SESSION["user"]) && isset($_SESSION["pwd"]) && !isset($_REQUEST["usrout"]))
-  {
-   require_once "_usr/lpanel.php";
-   return $temp;
-  }
+    if(isset($_SESSION["user"]) && isset($_SESSION["pwd"]) && !isset($_REQUEST["usrout"]))
+    {
+        ob_start();
+        require "_usr/lpanel.php";
+        $trm = ob_get_contents();
+        ob_clean();
+        return $trm;
+    }
 }
 
 /**
@@ -246,7 +250,7 @@ function pages($config,$db,$content)
             ob_start();
             require_once("pages/".$pagefile.".php");
             $temp_p = ob_get_contents();
-            ob_end_clean();
+            ob_clean();
             if (!isset($temp) || empty($temp))
                 return $temp_p;
             return $temp;
@@ -279,7 +283,7 @@ function show_chars($accname,$db)
     return $names;
 }
 
-function userpages()
+function userpages($config,$db,$content)
 {
     if(isset($_GET["up"]))
     {
@@ -309,7 +313,7 @@ function userpages()
                 ob_start();
                 require "_usr/".$userpage.".php";
                 $tempZ = ob_get_contents();
-                ob_end_clean();
+                ob_clean();
                 if (!isset($temp))
                     return $tempZ;
                 return $temp;
@@ -720,6 +724,9 @@ function getcharmenu($config,$type=0, $name="non")
     {
         if ($name != "non")
             $namel = "&chname=".$name;
+        else
+            $namel = "";
+
         unset($name);
         include ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
         $let_num = count($loadfile);

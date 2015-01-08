@@ -4,6 +4,7 @@
  */
 
 require "configs/strongest_cfg.php";
+error_reporting(E_ALL);
 if(is_array($strongest))
 {
     if(time() - load_cache("_dat/cach/top_strongest",true) > $strongest["cach"])

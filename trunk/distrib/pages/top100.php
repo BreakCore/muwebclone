@@ -67,7 +67,6 @@ WHERE
  mi.memb___id=ch.AccountID
  AND ch.CtlCode not in (1,17) ".$hidead.$texq.$top100["t100str_sort"];
 
-
 if(time() - load_cache("_dat/cach/top_100".$okon,true) > $top100["t100cach"])
 {
  ob_start();

@@ -1,50 +1,55 @@
-<?php if (!defined('insite')) die("no access"); 
-global $db;
-global $content;
-global $config;
+<?php if (!defined('insite')) die("no access");
 require "configs/bank_cfg.php";
-ob_start();
+error_reporting(E_ALL);
 
 //header
-$content->out_content("theme/".$config["theme"]."/them/bank_h.html");
-
+$content->out("bank_h.html");
+if(!isset($_GET["step"]))
+ $_GET["step"] = "";
 //center
-switch(validate(substr($_GET["step"],0,10)))	
+switch(substr($_GET["step"],0,10))
 {
  //из банка в сундук
  case "zen2war":
-  $content->out_content("theme/".$config["theme"]."/them/bank_b2w.html");
- if($_REQUEST["waregok"])
+  $content->out("bank_b2w.html");
+ if(isset($_REQUEST["waregok"]))
   {
-   if(strlen($_POST["Zen2warhouse"])>0 && strlen($_POST["Zen2warhouse"])<20)
+   if(isset($_POST["Zen2warhouse"]))
    {
-    $zenbank = $db->fetchrow($db->query("SELECT bankZ FROM memb_info WHERE memb___id = '".validate($_SESSION["user"])."'"));
-    $countzen = checknum(valute($_POST["Zen2warhouse"]));
+    $zenbank = $db->query("
+SELECT
+mi.bankZ,
+wh.Money
+FROM
+memb_info mi,
+warehouse wh
+WHERE mi.memb___id = '{$_SESSION["user"]}' and wh.AccountID='{$_SESSION["user"]}'")->FetchRow();
+
+    $countzen = (int)valute($_POST["Zen2warhouse"]);
 
     $whatlimit = $db->fetchrow($db->query("SELECT Money FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));	
-    $vwareg = $zenbank[0] - $countzen;
-    if ($vwareg<0){header("Location:".$config["siteaddress"]."/?p=not&error=4");}
+    $vwareg = $zenbank["bankZ"] - $countzen;
+    if ($vwareg<0)
+     header("Location:".$config["siteaddress"]."/?p=not&error=4");
     else
     {
-     if (($countzen+$whatlimit[0])>$bank["maxwzen"] && $countzen>=0)
+     if (($countzen+$zenbank["Money"]) > $bank["maxwzen"] && $countzen>=0)
      {
-	$vich =($countzen+$whatlimit[0])-$bank["maxwzen"];
-	$countzen1 = $countzen - $vich;
+      $vich =($countzen+$zenbank["Money"]) - $bank["maxwzen"];
+      $countzen1 = $countzen - $vich;
      }
      else
         $countzen1=$countzen;
     if ($countzen1>0)
     {
-     if($db->query("UPDATE memb_info SET bankZ=bankZ-".$countzen1." WHERE memb___id ='".validate($_SESSION["user"])."' 
-     UPDATE warehouse SET Money=Money+".$countzen1." WHERE AccountID ='".validate($_SESSION["user"])."'"))
+     if($db->query("UPDATE memb_info SET bankZ=bankZ - $countzen1 WHERE memb___id ='{$_SESSION["user"]}'
+     UPDATE warehouse SET Money=Money + $countzen1  WHERE AccountID ='{$_SESSION["user"]}'"))
      {
-     WriteLogs ("Bank_","јккаунт ".$_SESSION["user"]." зен в сундук в банке было: ".$zenbank[0].", осталось: ".$vwareg.", сн¤то: ".$countzen);
-     unset($checkstep, $countzen, $_REQUEST["waregok"]);
-     $vwareg= -1;
-     header("Location:".$config["siteaddress"]."/index.php?up=bank");
-     die();
+      logs::WriteLogs ("Bank_","јккаунт ".$_SESSION["user"]." зен в сундук в банке было: ".$zenbank["bankZ"].", осталось: ".$vwareg.", снято: ".$countzen);
+      header("Location:".$config["siteaddress"]."/index.php?up=bank");
+      die();
      }
-     echo "ошибка!";
+     echo "error";
     }
     }
    }
@@ -57,19 +62,18 @@ switch(validate(substr($_GET["step"],0,10)))
  break;
  //из сундука в банк
  case "zen2bank":
-  $content->out_content("theme/".$config["theme"]."/them/bank_w2b.html");
-  if($_REQUEST["bankok"])
+  $content->out("bank_w2b.html");
+  if(isset($_REQUEST["bankok"]))
   {
-   if(strlen($_POST["Zen2bank1"])>0 && strlen($_POST["Zen2bank1"])<20)
+   if(isset($_POST["Zen2bank1"]))
    {
-    $countzen = checknum(valute($_POST["Zen2bank1"]));
-    $zenwar = $db->fetchrow($db->query("SELECT Money FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'"));
-    $vwareg = $zenwar[0] - $countzen;
+    $countzen = (int)valute($_POST["Zen2bank1"]);
+    $zenwar = $db->query("SELECT Money FROM warehouse WHERE AccountID='".validate($_SESSION["user"])."'")->FetchRow();
+    $vwareg = $zenwar["Money"] - $countzen;
     if($vwareg>=0 && $countzen>=0)
     {
-     $updatess =$db->query("UPDATE memb_info SET bankZ=bankZ+$countzen WHERE memb___id ='".validate($_SESSION["user"])."' UPDATE warehouse SET Money=Money-$countzen WHERE AccountID ='".$_SESSION["user"]."'");
-     WriteLogs ("Bank_","јккаунт ".$_SESSION["user"]." зен в банк в инвентаре было: ".$zenwar[0].", осталось: ".$vwareg);
-     unset($updatess, $checkstep, $_REQUEST["bankok"],$countzen);
+     $updatess =$db->query("UPDATE memb_info SET bankZ=bankZ+$countzen WHERE memb___id ='{$_SESSION["user"]}' UPDATE warehouse SET Money=Money-$countzen WHERE AccountID ='{$_SESSION["user"]}'");
+     logs::WriteLogs ("Bank_","јккаунт ".$_SESSION["user"]." зен в банк в инвентаре было: ".$zenwar[0].", осталось: ".$vwareg);
      header("Location:".$config["siteaddress"]."/index.php?up=bank");
     }
     else
@@ -80,25 +84,35 @@ switch(validate(substr($_GET["step"],0,10)))
    }
    else
    {
-    die();
     header("Location:".$config["siteaddress"]."/?p=not&error=5");
+    die();
    }
   }
  break;
  case "bank_char":
-  if ($_REQUEST["sel_chr"] && $_REQUEST["type_tr"] && $_REQUEST["do_trans"])
+  if (isset($_REQUEST["sel_chr"]) && isset($_REQUEST["type_tr"]) && isset($_REQUEST["do_trans"]))
   {
-   $ned_crh = validate(substr($_POST["sel_chr"],0,11));
-   $money = checknum(valute(substr($_POST["m_tr"],0,11)));
-   own_char($ned_crh,$_SESSION["user"]);
+   $ned_crh = substr($_POST["sel_chr"],0,11);
+   $money = (int)valute(substr($_POST["m_tr"],0,11));
+   own_char($ned_crh,$_SESSION["user"],$db,$config);
+   $zenbank = $db->query("
+SELECT
+mi.bankZ,
+ch.Money
+FROM
+memb_info mi,
+Character ch
+WHERE mi.memb___id = '{$_SESSION["user"]}' and ch.Name='".$ned_crh."'")->FetchRow();
+
+
    $invzen = $db->fetchrow($db->query("Select Money FROM Character WHERE Name='".$ned_crh."'"));
    $bankzen = $db->fetchrow($db->query("Select bankZ FROM MEMB_INFO WHERE memb___id='".validate($_SESSION["user"])."'"));
-   if ($_POST["type_tr"]=="bank")// in bank
+   if (isset($_POST["type_tr"]) && $_POST["type_tr"] == "bank")// in bank
    {
-    if ($money>0 && $invzen[0]-$money >=0)
+    if ($money>0 && $zenbank["Money"]-$money >=0)
     {
-     $upd_q = "UPDATE Character SET Money=Money-".$money." Where Name='".$ned_crh."'  UPDATE MEMB_INFO SET bankZ=bankZ+".$money." Where memb___id='".$_SESSION["user"]."'";
-     $msg_log = "Zen из инвентар¤ ".$ned_crh." в банк";		  
+     $upd_q = "UPDATE Character SET Money=Money-$money Where Name='$ned_crh';  UPDATE MEMB_INFO SET bankZ=bankZ+$money Where memb___id='{$_SESSION["user"]}'";
+     $msg_log = "Zen из инвентаря $ned_crh в банк";
     }
     else 
     {
@@ -108,10 +122,10 @@ switch(validate(substr($_GET["step"],0,10)))
    }
    elseif($_POST["type_tr"]=="inventory")//in inventory
    {
-    if ($money>0 && ($bankzen[0]-$money >=0) && ($invzen[0]+$money <=2000000000))
+    if ($money>0 && ($zenbank["bankZ"]-$money >=0) && ($zenbank["Money"]+$money <=2000000000))
     {
-     $msg_log = "Zen из банка ".$ned_crh." в инвентарь";		  
-     $upd_q = "UPDATE Character SET Money=Money+".$money." Where Name='".$ned_crh."' UPDATE MEMB_INFO SET bankZ=bankZ-".$money." Where memb___id='".$_SESSION["user"]."'";
+     $msg_log = "Zen из банка $ned_crh в инвентарь";
+     $upd_q = "UPDATE Character SET Money=Money+$money Where Name='$ned_crh'; UPDATE MEMB_INFO SET bankZ=bankZ-$money Where memb___id='{$_SESSION["user"]}'";
     }
     else
     {    
@@ -124,24 +138,23 @@ switch(validate(substr($_GET["step"],0,10)))
   if($db->query($upd_q))
   {				
    echo "<script>alert('Done');</script>";
-   WriteLogs ("Bank_",$msg_log);
+   logs::WriteLogs ("Bank_",$msg_log);
    header("Location:".$config["siteaddress"]."/index.php?up=bank");
    die();
   }
  }
 
  $onchar="";
- $pers = $db->query("Select Name, Money FROM Character WHERE  AccountID='".validate($_SESSION["user"])."'");
+ $pers = $db->query("Select Name, Money FROM Character WHERE  AccountID='{$_SESSION["user"]}'");
  
- while ($ch_date=$db->fetchrow($pers))	$onchar.="<option value='".$ch_date[0]."'>".$ch_date[0].", ".print_price($ch_date[1])." Zen</value>";
+ while ($ch_date = $pers->FetchRow())
+  $onchar.="<option value='".$ch_date["Name"]."'>".$ch_date["Name"].", ".print_price($ch_date["Money"])." Zen</value>";
  
  $content->set("|onselect|",$onchar);
- $content->out_content("theme/".$config["theme"]."/them/bank_chars.html");
+ $content->out("bank_chars.html");
  break;
  
- default: $content->out_content("theme/".$config["theme"]."/them/bank_links.html");
+ default: $content->out("bank_links.html");
 }
 //footer
-$content->out_content("theme/".$config["theme"]."/them/bank_f.html");
-$temp = ob_get_contents();
-ob_end_clean();
+$content->out("bank_f.html");

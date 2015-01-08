@@ -2,7 +2,7 @@
 
 include "adodb5/adodb-exceptions.inc.php";
 include "adodb5/adodb.inc.php";
-
+error_reporting(E_ALL);
 class connect
 {
     private $resId; // идентификатор ресурсов

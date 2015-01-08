@@ -1,5 +1,5 @@
 <?php if (!defined('insite')) die("no access");
-
+error_reporting(E_ALL);
 /**
  * отображение "плагинов"
  * @param string $var название файла
