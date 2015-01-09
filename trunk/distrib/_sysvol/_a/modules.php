@@ -1,7 +1,7 @@
 <?php
+die("under construction in this moment");
 $time = @filemtime("_dat/updates/mlist");
-global $config;
-global $content;
+
 require "_sysvol/imbrowser.php";
 
 $nupdate = @file("_dat/modules.dat");

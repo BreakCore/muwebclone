@@ -2,18 +2,62 @@
 
 require "configs/news_cfg.php";
 
-$inpage = $news["shownews"]; /*количество новостей на странице*/
-$t = $news["shownews"];
-$linksv = $news["newsf"];
-$linklen = $news["liklen"];
-$shownes = $news["shownews"];
+//$inpage = $news["shownews"]; /*количество новостей на странице*/
+$newsList = array();
+$listCont = file_get_contents("_dat/news/newslist");
+if(!empty($listCont))
+{
+ $newsList = unserialize($listCont);
+ $ncount = count($newsList);
+}
+else
+ $ncount = 0;
 
+
+
+if($ncount > 0)
+{
+ if($ncount == 1)
+ {
+  $content->set("|title|",valid::decode($newsList[0]["title"]));
+  $link = valid::decode($newsList[0]["link"]);
+  if($link !="none")
+   $content->set("|nforumlink|","<a href='$link' target='_blank'>forum</a>");
+  else
+   $content->set("|nforumlink|","");
+  $content->set("|news|",valid::decode(file_get_contents("_dat/news/0")));
+  $content->out("news.html");
+ }
+ else
+ {
+  for($i = $ncount-1;$i > $ncount - $news["shownews"];$i--)
+  {
+   $content->set("|title|",valid::decode($newsList[$i]["title"]));
+   $link = valid::decode($newsList[$i]["link"]);
+   if($link !="none")
+    $content->set("|nforumlink|","<a href='$link' target='_blank'>forum</a>");
+   else
+    $content->set("|nforumlink|","");
+   $content->set("|news|",valid::decode(file_get_contents("_dat/news/$i")));
+   $content->out("news.html");
+  }
+ }
+}
+
+
+
+
+
+
+
+
+/*
 if (isset($_GET["n"]) && $_GET["n"]==0)
  unset($_GET["n"]);
 
 $NewsBase=file("_dat/news.dat"); 
 $NewsCount = count($NewsBase);
-ob_start();
+
 if ($NewsCount>0)
 {
  if (isset($_GET["n"])) $inpost=($NewsCount-1)-($shownes*checknum(substr($_GET["n"],0,5)));
@@ -85,6 +129,4 @@ if ($NewsCount>0)
  }
 }
 else echo "<div align='center'>No avaliable news, sorry.</div>";	
-
- $temp = ob_get_contents();
- ob_end_clean();
+*/

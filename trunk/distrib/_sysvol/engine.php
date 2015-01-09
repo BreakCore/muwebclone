@@ -219,7 +219,12 @@ function pages($config,$db,$content)
     $temp="";
     if(!isset($_GET["p"]) || $pagefile == "home")
     {
+        ob_start();
         require_once("_sysvol/news.php");
+        $temp_p = ob_get_contents();
+        ob_clean();
+        if (!isset($temp) || empty($temp))
+            return $temp_p;
         return $temp;
     }
     elseif($pagefile=="theme")
