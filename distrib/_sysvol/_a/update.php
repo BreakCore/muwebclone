@@ -5,7 +5,7 @@
 2 number
 3 ver
 */
-global $config;
+die("under construction");
 require "_sysvol/imbrowser.php";
 if ($_REQUEST["refresh"]) @unlink("_dat/updates/updlist");
 $time = @filemtime("_dat/updates/updlist");
