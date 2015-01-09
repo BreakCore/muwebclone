@@ -1,16 +1,14 @@
 <html>
 <head>
 <title>|admtitle|</title>
- <meta charset="windows-1251" />
- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
- <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
- <link rel="stylesheet" type="text/css" href="imgs/css/index.css" />
- <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.alerts.js"></script>
-<script language="Javascript" type="text/javascript" src="scripts/editarea/edit_area_full.js"></script>
-<link href="imgs/alerts/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
- <script type="text/javascript" src="scripts/nicEdit.js"></script>
- <script language='javascript'>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="imgs/css/index.css" />
+	<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.js"></script>
+	<script language="Javascript" type="text/javascript" src="scripts/editarea/edit_area_full.js"></script>
+	<script type="text/javascript" src="scripts/nicEdit.js"></script>
+	<script language='javascript'>
 <!--
 var nicEditorConfig = bkClass.extend({
 	buttons : {
@@ -36,69 +34,45 @@ var nicEditorConfig = bkClass.extend({
 	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"upload":26}
 	
 });
-;
-
 
 function open(id_v)
 {
 
  $("#modules").empty();
- $("#modules").append('<img src=\"../imgs/loading.gif \" border="0", alt="0" align="center"/>');
-
-$.ajax({
-	url:	 'listen.php?action='+id_v, 
-	type:	 'GET', 
-//	data: 'text',
-	cache: false,
-	success: function(response){ 
-
-	 $("#modules").empty();
-	 $("#modules").append(response);
-	 get_t(id_v);
-	 new nicEditor({maxWidth : 100}).panelInstance('NewNews');
-	},
-	error:  function(){
-	 $("#modules").empty();
-	 $("#modules").append("Can't connect to server!");
-	}
+ $("#modules").append('<img src=\"|siteaddress|/imgs/loading.gif \" border="0", alt="0" align="center"/>');
+	$.ajax({
+		url:	 'listen.php?action='+id_v,
+		type:	 'GET',
+		cache: false,
+		success: function(response){
+			$("#modules").empty();
+			$("#modules").append(response);
+			get_t(id_v);
+			//new nicEditor({maxWidth : 100}).panelInstance('NewNews');
+		},
+		error:  function(){
+			$("#modules").empty();
+			$("#modules").append("Can't connect to server!");
+		}
 	});
 }
 function get_t(op)
 {
- $("#titleZ").empty();
- $.ajax({
-	url:	 'listen.php?title='+op, 
-	type:	 'GET', 
-	cache: false,
-	success: function(response){ 
-     $("#titleZ").append(response); 
-	},
-	error:  function(){
-	 $("#titleZ").empty();
-	 $("#titleZ").append("Can't connect to server!");
-	}
+	$("#titleZ").empty();
+	$.ajax({
+		url:	 'listen.php?title='+op,
+		type:	 'GET',
+		cache: false,
+		success: function(response){
+			$("#titleZ").append(response);
+		},
+		error:  function(){
+			$("#titleZ").empty();
+			$("#titleZ").append("Can't connect to server!");
+		}
 	});
 }
-function chat()
-{
-$.ajax({
-	url:	 'listen.php?chat=add&smasg='+escape(document.getElementById("msG").value), 
-	type:	 'GET', 
-	cache: false,
-	success: function(response,code){ 
-	if(response.length>0)
-	{
-	// document.getElementById("chmsG").innerHTML +=response;
-	document.getElementById("chmsG").value +=response;
-	}
-	document.getElementById("msG").value="";
-	},
-	error:  function(){
-	document.getElementById("chmsG").value +="can't connect to server \r\n";
-	//document.getElementById("chmsG").innerHTML +="can't connect to server \r\n";
-	}
-	});
-}
+
 
 var trans = [];
 for (var i = 0x410; i <= 0x44F; i++)
@@ -124,44 +98,9 @@ window.escape = function(str)
   }
   return escapeOrig(String.fromCharCode.apply(null, ret));
 }
-
-function chat1()
-{
-response="";
-$.ajax({
-	url:	 'listen.php?chat=refresh', 
-	type:	 'GET', 
-	cache: false,
-	success: function(response,code){ 
-	 if(response.length)
-	 {
-	  //document.getElementById("chmsG").innerHTML +=response;
-	  document.getElementById("chmsG").value +=response;
-	 }
-	},
-	error:  function(){
-/*ss*/
-	}
-	});
-}
-
-setInterval('chat1()', 10000);
-
-document.onkeydown=function(e) 
-{
-    if(e.which == 13) 
-    {
-    chat();
-    return false;
-    }
-}
 //-->
-
-
 </script>
 </head>
-
-
 <body>
 <div id="origin">
 

@@ -61,13 +61,13 @@ function getadmenu($config,$content)
     $showarr[1]=trim($showarr[1]);
     $content->set('|modulename|', $showarr[0]);
     $content->set('|modulecapt|', $lang[$showarr[1]]);
-    $content->out_content("_sysvol/_a/theme/admmenu.html");
+    $content->out("admmenu.html");
    }
-    $content->set('|modulecapt|', $content->lng["admm_onsite"]);
-    $content->out_content("_sysvol/_a/theme/admmenu_u.html");
+    $content->set('|modulecapt|', $content->getVal("admm_onsite"));
+    $content->out("admmenu_u.html");
    $bufer = ob_get_contents();
    write_catch("_dat/menus/".$_SESSION["mwclang"]."_admmenu",$bufer);
-   ob_end_clean(); 
+   ob_clean();
    return $bufer;	
   }
   else 
@@ -77,7 +77,7 @@ function getadmenu($config,$content)
 /*
 * показать модули админа
 */
-function a_modul($mname,$db)
+function a_modul($mname,$db,$content)
 {
  if( strlen($mname)>1)
  {
@@ -89,7 +89,7 @@ function a_modul($mname,$db)
     ob_start();
      require "_sysvol/_a/".$apages.".php";
 	 $temp_a = ob_get_contents(); 
-    ob_end_clean();
+    ob_clean();
     if (empty($temp))
      return $temp_a;
     return $temp;
@@ -113,15 +113,14 @@ function ainfo($db,$content)
  ($letters["cnt"] < 1) ? $letters=0 : true;
  $content->set('|lnum|', $letters);
  $content->set('|admin|', $_SESSION["sadmin"]);
- $content->set('|gradm|', get_group());
- 
+ $content->set('|gradm|', get_group($db,$content));
  $content->set('|upd_msg|',"");
  $warn = array("Inject","MaybeP","Connec","ALARMA","Pages_");
  $Lhandle = opendir("logZ");
 
  $gfile="";
  $id=0;
- if (get_accesslvl()>=checacc("lreader"))
+ if (get_accesslvl($db)>=checacc("lreader"))
  {
   while ($file = readdir($Lhandle))
   {
@@ -139,7 +138,7 @@ function ainfo($db,$content)
  if($alert>0)
  {
 
-  $content->set('|alert_msg|', "<img src=\"imgs/x.gif\" border=\"0\" alt=\"сообщения\" style=\"position:relative;top:4px;left:0px;\">".$content->lng["adm_warn"]);
+  $content->set('|alert_msg|', "<img src=\"imgs/x.gif\" border=\"0\" alt=\"сообщения\" style=\"position:relative;top:4px;left:0px;\">".$content->getVal("adm_warn"));
  $content->set('|vari|', 1);
  $content->set('|numb|', $gfile);
  }
@@ -157,13 +156,13 @@ function ainfo($db,$content)
   $cwriters = @file("_dat/updates/updlist");
   if (count($cwriters)>(int)$writers[0])
   {
-    $content->set('|upd_msg|',$content->lng["upd_msg"]);
+    $content->set('|upd_msg|',$content->getVal("upd_msg"));
 	$handle = fopen("_dat/updates/ut","w");
 	fwrite($handle,count($cwriters));
 	fclose($handle);
   }
  }
- return $content->out_content("_sysvol/_a/theme/ainfo.html",1);
+ return $content->out("ainfo.html",1);
 }
 
 /**
@@ -187,12 +186,12 @@ function get_group($db,$content)
   if(isset($_SESSION["sadmin"]))
   {
    $acclevel = get_accesslvl($db);
-   if ($acclevel>0 && $acclevel<=10) return $content->lng["adm_gr1"]; //gm
-   elseif ($acclevel>10 && $acclevel<=20) return $content->lng["adm_gr2"]; //moders
-   elseif ($acclevel>20 && $acclevel<=30) return $content->lng["adm_gr3"]; //adm helpers
-   elseif ($acclevel>30 && $acclevel<=50) return $content->lng["adm_gr4"]; //adm 
+   if ($acclevel>0 && $acclevel<=10) return $content->getVal("adm_gr1"); //gm
+   elseif ($acclevel>10 && $acclevel<=20) return $content->getVal("adm_gr2"); //moders
+   elseif ($acclevel>20 && $acclevel<=30) return $content->getVal("adm_gr3"); //adm helpers
+   elseif ($acclevel>30 && $acclevel<=50) return $content->getVal("adm_gr4"); //adm
    elseif ($acclevel>50 && $acclevel<100) return "helper guy"; //adm ?
-   elseif ($acclevel==100) return $content->lng["adm_gr5"]; //main adm 
+   elseif ($acclevel==100) return $content->getVal("adm_gr5"); //main adm
    else die("access error!");
   }
 }
@@ -223,10 +222,9 @@ function checacc($mname)
 */
 function show_t($tt,$t=1)
 {
- define ('insite', 1);
  include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
-if ($t==1)
- echo  $lang["title_".trim($tt)];
-else
- return $lang["title_".trim($tt)];
+ if ($t==1)
+  echo  $lang["title_".trim($tt)];
+ else
+  return $lang["title_".trim($tt)];
 }
