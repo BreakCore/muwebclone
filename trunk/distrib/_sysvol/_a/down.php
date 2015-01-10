@@ -1,106 +1,156 @@
 <?php if (!defined('inpanel')) die("no access"); 
-ob_start();
-global $config;
-global $content;
+error_reporting(E_ALL);
+$button = "name='addlink' value=".$content->getVal("dl_manager_bt1")."";
+$titleZ = "";
+$ggiz = "";
+$glin = "";
+$linki = "";
 
-$button = "name='addlink' value=".$content->lng["dl_manager_bt1"]."";
+if(!file_exists("_dat/dl.dat"))
+{
+ $fne = fopen("_dat/dl.dat","w");
+ fclose($fne);
+}
+
+$downloads = array();
+$listCont = file_get_contents("_dat/dl.dat");
+if(!empty($listCont))
+{
+ $downloads = unserialize($listCont);
+ /*
+  * если есть загрузки, ТО достаем список вида
+  * array[номер загрузки]
+  * =>[title] заголово
+  * =>[desc] описание
+  * =>[link] линк на скачивание
+  * =>[linkName] название линка
+  * =>[aways] кликов
+  */
+}
 
 
-$filedl = @file("_dat/dl.dat");
-$linkZ = "_dat/dl.dat";
+$content->out("donwload_h.html");
 
-$content->out_content("_sysvol/_a/theme/donwload_h.html");
-
-if ($_REQUEST["addlink"])//добавить ссыль на скачку
+if (isset($_REQUEST["addlink"]))//добавить ссыль на скачку
 {
  $titleZ = htmlspecialchars($_POST["title"]);
-  if(get_magic_quotes_gpc()==1)  $glin=stripslashes($glin);
- $glin = htmlspecialchars($_POST["nlink"]);
- if(substr($glin,0,4)=="http") $glin = substr($glin,7);
- $ggiz = htmlspecialchars($_POST["opis"]);
+  if(get_magic_quotes_gpc()==1)
+   $glin = stripslashes($_POST["nlink"]);
+  else
+   $glin = $_POST["nlink"];
+
+ $glin = valid::decode($glin);
+
+ if(substr($glin,0,4)=="http")
+  $glin = substr($glin,7);
+ $ggiz = $_POST["opis"];
  $linki = $_POST["links"];
 
  if(strlen($titleZ)>1 && strlen($glin)>1 && strlen($ggiz)>1 && strlen($linki)>1)
  {
-   $button = "name='addlink' value=".$content->lng["dl_manager_bt1"]."";		
-   $dhandler = fopen($linkZ,"a+");
-   fwrite($dhandler,$titleZ."||".$ggiz."||".$linki."||".$glin."||0||0 \n");
-   fclose($dhandler);
+  $button = "name='addlink' value=".$content->getVal("dl_manager_bt1")."";
+  $downloads[] = array(
+      "title" => $titleZ,
+      "desc" => $ggiz,
+      "link" => $glin,
+      "linkName" =>$linki,
+      "aways" => 0
+  );
+  $dhandler = fopen("_dat/dl.dat","w");
+  fwrite($dhandler,serialize($downloads));
+  fclose($dhandler);
  }
- header("Location:".$config["siteaddress"]."/control.php?page=down"); 
+ header("Location:".$config["siteaddress"]."/control.php?page=down");
+ die();
 }
 
-if($_GET["edit"]==1 && isset($_GET["pos"]) && !$_REQUEST["editlink"])
+if(isset($_GET["edit"]) && $_GET["edit"]==1 && isset($_GET["pos"]) && !isset($_REQUEST["editlink"]))//редактирование
 {	
- $position = checknum(substr($_GET["pos"],0,3));
- $temp = explode("||",$filedl[$position]);
- $titleZ=$temp[0];$ggiz=$temp[1];$linki=$temp[2];$glin=$temp[3];
- $button = "name='editlink' value=".$content->lng["dl_manager_bt2"]."";
+ $position = (int)$_GET["pos"];
+ if(isset($downloads[$position]))
+ {
+  $titleZ = $downloads[$position]["title"];
+  $ggiz = $downloads[$position]["desc"];
+  $linki = $downloads[$position]["linkName"];
+  $glin = $downloads[$position]["link"];
+  $button = "name='editlink' value=".$content->getVal("dl_manager_bt2")."";
+ }
+ else
+ {
+  header("Location:".$config["siteaddress"]."/control.php?page=down");
+  die();
+ }
 }
 
-if($_GET["edit"]==1 && $_REQUEST["editlink"])
+if(isset($_GET["edit"]) && $_GET["edit"] == 1 && isset($_REQUEST["editlink"]))
 {
- $button = "name='addlink' value=".$content->lng["dl_manager_bt1"]."";
- $position = checknum(substr($_GET["pos"],0,3));
- $titleZ = htmlspecialchars($_POST["title"]);
-  if(get_magic_quotes_gpc()==1)  $glin=stripslashes($glin);
- $glin = htmlspecialchars($_POST["nlink"]);
- if(substr($glin,0,4)=="http") $glin = substr($glin,7);
- $ggiz = htmlspecialchars($_POST["opis"]);
+
+ $button = "name='addlink' value=".$content->getVal("dl_manager_bt1")."";
+ $position = (int)$_GET["pos"];
+ $titleZ = $_POST["title"];
+  if(get_magic_quotes_gpc()==1)
+   $glin=stripslashes($_POST["nlink"]);
+ else
+  $glin = $_POST["nlink"];
+ $glin = valid::decode($glin);
+ if(substr($glin,0,4)=="http")
+  $glin = substr($glin,7);
+ $ggiz = $_POST["opis"];
  $linki = $_POST["links"];
  
  if(strlen($titleZ)>1 && strlen($glin)>1 && strlen($ggiz)>1 && strlen($linki)>1)
  {
-  $position = (count($filedl)-1);
-  if($position>=0)
-     $filedl[$position]= $titleZ."||".$ggiz."||".$linki."||".$glin."||0||0 \n";
+  $position = count($downloads);
 
-  $dhandler = fopen($linkZ,"w");
-  fputs($dhandler, implode("",$filedl));
+  $downloads[] = array(
+      "title" => $titleZ,
+      "desc" => $ggiz,
+      "link" => $glin,
+      "linkName" => $linki,
+      "aways" => 0
+  );
+  $dhandler = fopen("_dat/dl.dat","w");
+  fwrite($dhandler,serialize($downloads));
   fclose($dhandler);
-  header("Location:".$config["siteaddress"]."/control.php?page=down"); 
+
+  header("Location:".$config["siteaddress"]."/control.php?page=down");
+  die();
  }
  else
   echo "некоторые поля остались незаполненными";
  
 }
-if($_GET["edit"]==0 && isset($_GET["pos"]))
+if(isset($_GET["edit"]) && $_GET["edit"]==0 && isset($_GET["pos"])) //удаление
 {
- $position = checknum(substr($_GET["pos"],0,3));
- unset($filedl[$position]);
- $dhandler = fopen($linkZ,"w");
- fwrite($dhandler, implode("",$filedl));
- //fputs($dhandler, implode("",$filedl));
- //fputs($dhandler, "\r\n");
+
+ $position = (int)$_GET["pos"];
+ unset($downloads[$position]);
+ $dhandler = fopen("_dat/dl.dat","w");
+ fwrite($dhandler,serialize($downloads));
  fclose($dhandler);
- header("Location:".$config["siteaddress"]."/control.php?page=down"); 
+ header("Location:".$config["siteaddress"]."/control.php?page=down");
+ die();
 }
 	
-if(count($filedl)> 0 or $filedl)
+
+foreach ($downloads as $id=>$array)
 {
- $cs=0;
- foreach ($filedl as $f=>$n)
- {
-  $tempa = explode("||",$n);
-  if ($tempa[4]==1) $tempa[4]=$content->lng["dl_manager_msg"];
-  else $tempa[4]="";
-  if (substr(trim($tempa[3]),0,4)!="http") $tempa[3] = "http://".$tempa[3];
-  $content->set('|value1|', $tempa[0]);			
-  $content->set('|value2|', $tempa[1]);			
-  $content->set('|value3|', $tempa[3]);			
-  $content->set('|value4|', $tempa[2]);			
-  $content->set('|value5|', $tempa[4]);			
-  $content->set('|cs|', $cs);			
-  $content->out_content("_sysvol/_a/theme/donwload_c.html");
-  $cs++;
- }		
+ if (substr($array["link"],0,4)!="http")
+  $array["link"] = "http://".$array["link"];
+
+  $content->set('|value1|', $array["title"]);
+  $content->set('|value2|', $array["desc"]);
+  $content->set('|value3|', $array["link"]);
+  $content->set('|value4|', $array["linkName"]);
+  $content->set('|value5|', $array["aways"]);
+  $content->set('|cs|', $id);
+  $content->out("donwload_c.html");
 }
+
 
 $content->set('|titleZ|', $titleZ);	
 $content->set('|ggiz|', $ggiz);	
 $content->set('|glin|', $glin);	
 $content->set('|linki|', $linki);	
 $content->set('|button|', $button);	
-$content->out_content("_sysvol/_a/theme/donwload_f.html");
-$temp = ob_get_contents();
-ob_end_clean();
+$content->out("donwload_f.html");

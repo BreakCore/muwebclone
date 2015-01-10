@@ -2,18 +2,15 @@
 /*
 * менеджер меню
 */
-global $config;
-global $db;
-global $content;
 
-ob_start();
+
 if (!isset($_GET["mtype"]))//если не выбрано меню
-   $content->out_content("_sysvol/_a/theme/manm_menu.html");
+   $content->out("manm_menu.html");
 else
 {
- if ($_REQUEST["clear_m"] && isset($_GET["mtype"])) //очистить кеш
+ if (isset($_REQUEST["clear_m"]) && isset($_GET["mtype"])) //очистить кеш
  {
-  switch (checknum($_GET["mtype"],0,3))
+  switch ((int)$_GET["mtype"])
   {
    case 1: @unlink("_dat/menus/".$_SESSION["mwclang"]."_mainmenu");break; 
    case 2: @unlink("_dat/menus/".$_SESSION["mwclang"]."_usermenu");break;
@@ -26,7 +23,7 @@ else
 if (isset($_GET["del"]))
 {
 
- switch (checknum($_GET["mtype"],0,3))
+ switch ((int)$_GET["mtype"])
  { 
   case 1: $filemenu = @file("_dat/menu.dat");$fonw = fopen("_dat/menu.dat","w");break; 
   case 2: $filemenu = @file("_dat/umenu.dat");$fonw = fopen("_dat/umenu.dat","w");break;
@@ -35,7 +32,7 @@ if (isset($_GET["del"]))
   default: die('wrong parameter!');
  }
  
-  $position=substr(checknum($_GET["del"]),0,3);
+  $position=(int)$_GET["del"];
   $mcount= count($filemenu);
   unset($filemenu[$position]);
 
@@ -46,7 +43,7 @@ if (isset($_GET["del"]))
 /**
 * добавление модул¤ в меню сайта
 */
-if($_REQUEST["add2menu"])
+if(isset($_REQUEST["add2menu"]))
 {	
  if (isset($_POST["mod_name"]) && isset($_POST["mod_define"]) && strlen($_POST["mod_name"])>1 && strlen($_POST["mod_define"])>1)
  {
@@ -61,7 +58,7 @@ if($_REQUEST["add2menu"])
   if(fwrite($fhandle, validate(substr($_POST["mod_name"],0,20))."::".substr($_POST["mod_define"],0,20)."\r\n")) 
   { 
     //echo "<div align='center' class='succes'>".mm_modul_add_ok."</div><br>"; 
-    WriteLogs ("Adm_","јккаунт ".$_SESSION["user"]." добавил пункт меню ".substr($_POST["mod_name"],0,20)." в _dat\menu.dat ");
+    logs::WriteLogs ("Adm_","јккаунт ".$_SESSION["user"]." добавил пункт меню ".substr($_POST["mod_name"],0,20)." в _dat\menu.dat ");
   }
    fclose($fhandle);
   unset($_REQUEST["add2menu"],$fhandle);
@@ -101,18 +98,8 @@ if (isset($_GET["mu"]))
 
   for ($i=0; $i<=count($filemenu); $i++)
   {
-   /*if($numhandler==0)
-   {
-    if($i!=(count($filemenu)-1))fwrite($fonw,$filemenu[$i+1]);
-    else fwrite($fonw,$filemenu[0]);
-   }
-   else
-   {				
-    if ($numhandler-1==$i) fwrite($fonw,$filemenu[$numhandler]);
-    elseif($numhandler==$i)fwrite($fonw,$filemenu[$numhandler-1]);
-    else fwrite($fonw,$filemenu[$i]);
-   }*/
-   if (strlen($filemenu[$i])>1) fwrite($fonw,$filemenu[$i]);
+   if (strlen($filemenu[$i])>1)
+    fwrite($fonw,$filemenu[$i]);
   }
   flock($fonw, LOCK_UN);
   fclose($fonw);
@@ -158,7 +145,7 @@ elseif (isset($_GET["md"]))
   header("Location:".$config["siteaddress"]."/control.php?page=manmod&mtype=".$_GET["mtype"]);
  }
 }
-$content->out_content("_sysvol/_a/theme/manm_h.html");
+$content->out("manm_h.html");
 
  include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
 $co =0;
@@ -178,11 +165,9 @@ foreach ($filemenu as $m)
  $content->set('|showarr|', $lang[$showarr[1]]);
  $content->set('|mtype|', substr($_GET["mtype"],0,3));
  $content->set('|co|', $co);
- $content->out_content("_sysvol/_a/theme/manm_c.html");
+ $content->out("manm_c.html");
  $co++;
 }
 unset ($filemenu);
-$content->out_content("_sysvol/_a/theme/manm_f.html");
+$content->out("manm_f.html");
 }
-$temp = ob_get_contents();
-ob_end_clean(); 

@@ -1,35 +1,33 @@
 <?php 
 if (!defined('inpanel')) die("no access");
-global $config;
-ob_start();
-global $content;
 
-if ($_POST["chosen"]=="a") unset($_POST["chosen"]);
+if (isset($_POST["chosen"]) && $_POST["chosen"]=="a")
+ unset($_POST["chosen"]);
 
-if ($_REQUEST["delalog"])
+if (isset($_REQUEST["delalog"]))
 {
  $Lhandle = opendir("logZ");
  while ($file = readdir($Lhandle))
  {
   if ($file != "." && $file != ".." && $file !=".htaccess" && substr($file,0,3)!="Adm") unlink("logZ/".$file);
  }
- WriteLogs("Adm_",$_SESSION["sadmin"]." удалил все логи");
+ logs::WriteLogs("Adm_",$_SESSION["sadmin"]." удалил все логи");
 
 }
-if($_REQUEST["dellog"] && $_REQUEST["hvd"]) //удалить лог
+if(isset($_REQUEST["dellog"]) && isset($_REQUEST["hvd"])) //удалить лог
 {
  if(substr($_REQUEST["hvd"],0,3)=="Adm")
- { 
-  WriteLogs("Adm_",$_SESSION["sadmin"]." попытвлся удалить ".htmlspecialchars($_REQUEST["hvd"])." эти логи нельзя удалить через сайт!");
+ {
+  logs::WriteLogs("Adm_",$_SESSION["sadmin"]." попытвлся удалить ".$_REQUEST["hvd"]." эти логи нельзя удалить через сайт!");
  }
  else
  {
   @unlink("logZ/".$_REQUEST["hvd"]);
-  WriteLogs("Adm_",$_SESSION["sadmin"]." удалил ".htmlspecialchars($_REQUEST["hvd"]));
+  logs::WriteLogs("Adm_",$_SESSION["sadmin"]." удалил ".$_REQUEST["hvd"]);
  }
   header("Location: ".$config["siteaddress"]."/control.php?page=lreader");
 }
-if($_REQUEST["downl"] && $_REQUEST["hvd"]) //загрузить лог
+if(isset($_REQUEST["downl"]) && isset($_REQUEST["hvd"])) //загрузить лог
 {
  if (file_exists("logZ/".$_REQUEST["hvd"]))
  {
@@ -50,7 +48,7 @@ while ($file = readdir($Lhandle))
  if ($file != "." && $file != ".." && $file !=".htaccess" ) $opnfilz[] = $file;
 }
 
-if ($_GET["hvd"])
+if (isset($_GET["hvd"]))
 {
  $is = array_search ($_GET["hvd"],$opnfilz);
  if ($is && $id>=0)
@@ -69,7 +67,7 @@ foreach($opnfilz as $k)
 
 $shoZ.= "</select>";
 $content->set('|lreader_list|',  $shoZ);
-$content->out_content("_sysvol/_a/theme/logreader_h.html");
+$content->out("logreader_h.html");
 $content->set('|button|', '');
 $content->set('|dbutton|', '');
 
@@ -101,7 +99,7 @@ if (isset($_POST["chosen"]))
   $content->set('|button|', '<input type="submit" class="button" value="Delete" name="dellog">');
   $content->set('|dbutton|', '<input type="submit" class="button" value="Download" name="downl">');
   $content->set('|hidlog|', $opnfilz[$_POST["chosen"]]);
-  $content->out_content("_sysvol/_a/theme/logreader_c.html");
+  $content->out("logreader_c.html");
  }
  else
  {
@@ -109,7 +107,7 @@ if (isset($_POST["chosen"]))
   $content->set('|dbutton|', '');
   $content->set('|button|', '');
   $content->set('|hidlog|', "");
-  $content->out_content("_sysvol/_a/theme/logreader_c.html");
+  $content->out("logreader_c.html");
  }
 }
 else
@@ -118,7 +116,7 @@ else
  $content->set('|dbutton|', '');
  $content->set('|hidlog|', "");
  $content->set('|button|', '<input type="submit" class="button" value="Delete All" name="delalog">');
- $content->out_content("_sysvol/_a/theme/logreader_c.html");
+ $content->out("logreader_c.html");
  }
 function slogZ($text) 
 {
@@ -133,6 +131,4 @@ function slogZ($text)
  $text = preg_replace(array_keys($code), array_values($code), $text);
  return $text;
 }
-$content->out_content("_sysvol/_a/theme/logreader_f.html");
-$temp = ob_get_contents();
-ob_end_clean(); 
+$content->out("logreader_f.html");

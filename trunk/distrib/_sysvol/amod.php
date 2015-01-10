@@ -77,12 +77,12 @@ function getadmenu($config,$content)
 /*
 * показать модули админа
 */
-function a_modul($mname,$db,$content)
+function a_modul($mname,$db,$content,$config)
 {
  if( strlen($mname)>1)
  {
   $apages = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($mname,0,10));
-  if(get_accesslvl($db)>=checacc($apages)&& strlen($_SESSION["sadmin"])>3)
+  if(get_accesslvl($db) >= checacc($apages) && strlen($_SESSION["sadmin"])>3)
   {
    if(file_exists("_sysvol/_a/".$apages.".php"))
    {

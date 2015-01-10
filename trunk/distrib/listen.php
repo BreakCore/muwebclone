@@ -17,7 +17,7 @@ if (isset($_SESSION["adm"]) && $_SESSION["sadmin"] >0)
  $db = new connect ($config["ctype"], $config["db_host"], $config["db_name"], $config["db_user"], $config["db_upwd"]);
 
  if(isset($_GET["action"]))
-  echo a_modul($_GET["action"],$db,$content);
+  echo a_modul($_GET["action"],$db,$content,$config);
  elseif($_GET["title"])
  {
   show_t($_GET["title"]);
