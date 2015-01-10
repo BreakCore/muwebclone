@@ -42,7 +42,7 @@ if(isset($_SESSION["adm"]))
         }
         else
         {
-            $content->set('|admmodules|',a_modul($_GET["page"],$db,$content));
+            $content->set('|admmodules|',a_modul($_GET["page"],$db,$content,$config));
             $content->set('|admmap|',show_t($_GET["page"],0));
         }
 

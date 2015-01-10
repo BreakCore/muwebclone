@@ -3,37 +3,36 @@
 * модуль изменения параметров доступа к модулям 
 * Mu Web Clone
 **/
-ob_start();
-global $content; 
-global $config;
 $adb = @file("_dat/maccess.db");
-require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
-if($_REQUEST["add_a"])
+
+require "lang/{$_SESSION["mwclang"]}/{$_SESSION["mwclang"]}_titles.php";
+
+if(isset($_REQUEST["add_a"]))
 {
- $neum = checknum(substr($_POST["a_num"],0,3));
- $id = checknum(substr($_POST["aid"],0,3));
- ($neum>100)?$neum=100:true;
+ $neum = (int)$_POST["a_num"];
+ $id = (int)$_POST["aid"];
+ ($neum>100) ? $neum=100 : true;
  $tmp = explode("::",$adb[$id]);
  $adb[$id]=$tmp[0]."::".$neum."\r\n";
  $dhandler = fopen("_dat/maccess.db","w");
  fputs($dhandler, implode("",$adb));
  fclose($dhandler);
- WriteLogs ("Adm_","администратор ".$_SESSION["sadmin"]." изменил уровень доступа у ".$tmp[0]);
+ logs::WriteLogs ("Adm_","администратор ".$_SESSION["sadmin"]." изменил уровень доступа у ".$tmp[0]);
  header("Location: ".$config["siteaddress"]."/control.php?page=acccess");
 }
-elseif($_REQUEST["arefresh"])
+elseif(isset($_REQUEST["arefresh"]))
 {
  $dhandler = fopen("_dat/maccess.db","w");
  fclose($dhandler);
- WriteLogs ("Adm_","администратор ".$_SESSION["sadmin"]." сбросил все разрешения");
+ logs::WriteLogs ("Adm_","администратор ".$_SESSION["sadmin"]." сбросил все разрешения");
  header("Location: ".$config["siteaddress"]."/control.php?page=acccess");
 }
 
-if($_REQUEST["acrefr"]) $adb="";
+if(isset($_REQUEST["acrefr"]))
+ $adb="";
 
-if(strlen($adb)==0 or strlen(trim($adb[0]))==0) //если файла нет
+if(isset($adb) && !empty($adb)) //если файла нет
 {
-
  $whandle = fopen("_dat/maccess.db","w");
  $Lhandle = opendir("_sysvol/_a");
  $noneed = array(".","..",".htaccess");
@@ -49,9 +48,9 @@ if(strlen($adb)==0 or strlen(trim($adb[0]))==0) //если файла нет
  $adb = @file("_dat/maccess.db");
 }
 
-if (strlen($_GET["ed"])<=0)
+if (!isset($_GET["ed"]))
 {
- $content->out_content("_sysvol/_a/theme/access_h.html");
+ $content->out("access_h.html");
  //$array = get_defined_constants(true);
  foreach($adb as $id=>$var)
  {
@@ -60,20 +59,19 @@ if (strlen($_GET["ed"])<=0)
   $content->set('|accs_nnum|',$tmp[1]);
   $content->set('|opt|',$id);
   //$content->set('|accs_ndes|',$array["user"]["title_".$tmp[0]]);
-  $content->set('|accs_ndes|',$lang["title_".$tmp[0]]);
-  $content->out_content("_sysvol/_a/theme/access_c.html");
+  if(isset($lang["title_".$tmp[0]]))
+   $content->set('|accs_ndes|',$lang["title_".$tmp[0]]);
+  else
+   $content->set('|accs_ndes|',"title_".$tmp[0]);
+  $content->out("access_c.html");
  }
 }
 else
 {
- $neum = checknum(substr($_GET["ed"],0,3));
+ $neum = (int)$_GET["ed"];
  $tmp = explode("::",$adb[$neum]);
  $content->set('|nval|',$tmp[1]);
  $content->set('|hval|',$neum);
- $content->out_content("_sysvol/_a/theme/access_form.html");
+ $content->out("access_form.html");
 }
-$content->out_content("_sysvol/_a/theme/access_f.html");
-
-
-$temp = ob_get_contents();
-ob_end_clean();   
+$content->out("access_f.html");

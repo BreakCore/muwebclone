@@ -25,13 +25,13 @@ if(!$time or time() - $time >3600) //update updates list once at day
 $file = @file("_dat/updates/mlist"); 
 $count = @count($file);
 
-ob_start();
+
 
 if($count>0)
 {
  if (isset($_GET["uid"])) //если нажата кнопулька установить/удалить
  {
-   $id = checknum($_GET["uid"]);
+   $id = (int)$_GET["uid"];
    
    foreach ($file as $ii=>$v)
    {
@@ -129,5 +129,4 @@ else $content->set('|error_msg|', "");
 
 $content->out_content("_sysvol/_a/theme/install.html");
 
-$temp = ob_get_contents();
-ob_end_clean(); 
+

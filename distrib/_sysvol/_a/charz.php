@@ -1,19 +1,23 @@
 <?php 
-global $config; 
-global $db;
-global $content;
-ob_start();
+die("under construction");
+//todo пересмотреть и подумать, как реализовать
 require "configs/charz_cfg.php";
-$content->out_content("_sysvol/_a/theme/charz_h.html");
+$content->out("charz_h.html");
 $charz["num_adm_col"] = explode(",",$charz["num_adm_col"]);
 $charz["stats_n"] = explode(",",$charz["stats_n"]);
 
-if ($_REQUEST["edchr"] && strlen($_SESSION["ched"])>2)
+if (isset($_REQUEST["edchr"]) && !empty($_SESSION["ched"]))
 {
  $ololo = $db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.Columns where TABLE_NAME = 'Character'");
- $col_num = $db->fetchrow($db->query("SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_NAME='Character'"));
-  
- for($i=0;$i<$col_num[0];$i++)
+ $col_num = $db->query("SELECT COUNT(*) as cnt FROM information_schema.COLUMNS WHERE TABLE_NAME='Character'")->etchRow();
+
+ while ($res = $ololo->FetchRow())
+ {
+  if (in_array($i,$charz["num_adm_col"]))
+   $colums_inf[]=$result[0];
+ }
+
+ for($i=0;$i<$col_num["cnt"];$i++)
  {
   $result = $db->fetchrow($ololo);
   if (in_array($i,$charz["num_adm_col"]))
@@ -131,5 +135,4 @@ if ($_REQUEST["st1"] or $_GET["char"])
   }
 }	
 }
-$temp = ob_get_contents();
-ob_end_clean(); 	
+
