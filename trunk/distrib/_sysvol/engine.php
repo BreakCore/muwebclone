@@ -364,13 +364,6 @@ function classname($classnum)
   return $classnum;
 }
 
-function q_chr_top($class,$config,$db)
-{
-
-
-	
-}
-
 function classpicture($classpic)
 {
   switch ($classpic)
@@ -686,12 +679,12 @@ function getmenutitles($config,$content)
 {
     $loadfile = @file("_dat/menu.dat");
     $nowitime = time();
-    $cachtime = @filemtime("_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+    $cachtime = load_cache("_dat/menus/{$_SESSION["mwclang"]}_mainmenu",true);
     if (empty($loadfile) or !$loadfile)
         return "error menu loading!";
     else
     {
-        if(!$cachtime || ($nowitime-$cachtime > 3600))
+        if($nowitime-$cachtime > 3600)
         {
             include "./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
             ob_start();
@@ -703,16 +696,19 @@ function getmenutitles($config,$content)
                 $showarr = explode("::",$m);
                 $showarr[1]=trim($showarr[1]);
                 $content->set('|modulename|', $showarr[0]);
-                $content->set('|modulecapt|', $lang[$showarr[1]]);
-                $content->out_content("theme/".$config["theme"]."/them/mainmenu.html");
+                if(isset($lang[$showarr[1]]))
+                    $content->set('|modulecapt|', $lang[$showarr[1]]);
+                else
+                    $content->set('|modulecapt|', $showarr[1]);
+                $content->out("mainmenu.html");
             }
             $bufer = ob_get_contents();
             write_catch("_dat/menus/".$_SESSION["mwclang"]."_mainmenu",$bufer);
-            ob_end_clean();
+            ob_clean();
             return $bufer;
         }
         else
-            return file_get_contents( "_dat/menus/".$_SESSION["mwclang"]."_mainmenu");
+            return load_cache( "_dat/menus/{$_SESSION["mwclang"]}_mainmenu");
     }
 }
 
