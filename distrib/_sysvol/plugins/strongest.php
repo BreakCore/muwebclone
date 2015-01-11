@@ -44,8 +44,8 @@ if(is_array($strongest))
  CONVERT(varchar(max),ms.ConnectTM,120) as ConnectTM,
  CONVERT(varchar(max), ms.DisConnectTM ,120) as DisConnectTM
 FROM [Character] ch
- left join [GuildMember] gm ON gm.Name = ch.Name
- left join Guild gld on gm.G_Name = gld.G_Name
+ left join [GuildMember] gm ON gm.Name DATABASE_DEFAULT = ch.Name DATABASE_DEFAULT
+ left join Guild gld on gm.G_Name DATABASE_DEFAULT = gld.G_Name DATABASE_DEFAULT
  inner join MEMB_STAT ms on ms.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT
 WHERE
  $show_gm CtlCode != 1 $hiden
