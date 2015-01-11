@@ -34,12 +34,18 @@ $getprrem = $_GET["p"];
 
 if(!isset($_SESSION["mwclang"]))
 {
-    switch($_GET["l"])
+    if(isset($_GET["l"]))
     {
-        case 1: $_SESSION["mwclang"]="rus"; break;
-        case 2: $_SESSION["mwclang"]="eng"; break;
-        default:  $_SESSION["mwclang"]="rus";
+        switch($_GET["l"])
+        {
+            case 1: $_SESSION["mwclang"]="rus"; break;
+            case 2: $_SESSION["mwclang"]="eng"; break;
+            default:  $_SESSION["mwclang"]="rus";
+        }
     }
+    else
+        $_SESSION["mwclang"]="rus";
+
 }
 
 if (isset($_SESSION["mwclang"]))
