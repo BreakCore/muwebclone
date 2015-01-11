@@ -68,7 +68,7 @@ FROM
  MEMB_INFO mi
 WHERE
 ch.Name='$show_ch'
-AND mi.memb___id=ch.AccountID")->FetchRow();
+AND mi.memb___id COLLATE DATABASE_DEFAULT = ch.AccountID COLLATE DATABASE_DEFAULT")->FetchRow();
 
 	$guild = (empty($array["G_name"])) ? "-" : $array["G_name"];
 

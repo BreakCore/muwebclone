@@ -328,6 +328,12 @@ END ");
 	[date] [varchar](25) NULL,
 	[slave_id] [int] NULL default((0))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]");
+                        $db->query("CREATE TABLE [dbo].[MWC_invite](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[memb___id] [varchar](10) NULL,
+	[inviter] [varchar](10) NULL,
+    [done][char](1) NULL default('0')
+) ON [PRIMARY]");
                     }
                     catch (Exception $ex)
                     {
