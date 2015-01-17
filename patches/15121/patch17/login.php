@@ -28,11 +28,11 @@ require ("_sysvol/security.php");
 require "_sysvol/fsql.php";
 require ('opt.php');
 require "_sysvol/engine.php";
-require '_sysvol/webv.php';
+
 
 		
  $db = new Connect ($config["ctype"], $config["db_host"], $config["db_name"], $config["db_user"], $config["db_upwd"],$config["odbc_driver"],$config["debug"]); 
-#region проверка ников
+#region пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  if(isset($_GET['acc']))
  {
   $account = validate(substr(trim($_GET['acc']),0,10));
@@ -62,7 +62,7 @@ require '_sysvol/webv.php';
   if ($getUser_sql>0 && $lmail<21){echo "<img src='imgs/x.gif' alt='already exists'/>";}else{echo "<img src='imgs/y.png' alt='all ok'/>";}	
  }
 #end
-#region проверка рефералов
+#region пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  elseif(isset($_GET['ref']))
  {
   $refferal = validate(substr($_GET['ref'],0,10));
@@ -82,5 +82,5 @@ require '_sysvol/webv.php';
  
  $db->close();
 
-	// WriteLogs("ajax_","Aккаунт ".$_SESSION["user"]);
+	// WriteLogs("ajax_","AпїЅпїЅпїЅпїЅпїЅпїЅ ".$_SESSION["user"]);
 }

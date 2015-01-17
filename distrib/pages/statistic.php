@@ -3,7 +3,7 @@
 require "configs/statistic_cfg.php";
 $gettime = time();
 
-if(time() - load_cache("_dat/cach/".$_SESSION["mwclang"]."_statistic",true) > $stat["cach"])
+if(time() - load_cache("_dat/cach/".$_SESSION["mwclang"]."_statistic",true) > $statistic["cach"])
 {
  ob_start();
 
@@ -55,7 +55,7 @@ if(time() - load_cache("_dat/cach/".$_SESSION["mwclang"]."_statistic",true) > $s
 $content->set('|version|', $statistic["version"]);
 $content->set('|exprate|', $statistic["exprate"]);
 $content->set('|drop|', $statistic["drop"]);
-$content->set('|all|',$characters["all"][0]);
+//$content->set('|all|',$characters["all"][0]);
 $content->set('|all_g|', $characters["allg"]);
 $content->out("statistic_h.html");
 
