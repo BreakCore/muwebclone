@@ -65,12 +65,12 @@ else
  require_once "_sysvol/pages.php";
  require_once "_sysvol/boxes.php";
 
+ $content = new content($config["siteaddress"],"site",substr($_SESSION["mwclang"],0,3),0,$config["theme"]);
+
  try
  {
 
   $db = new connect ($config["ctype"], $config["db_host"], $config["db_name"], $config["db_user"], $config["db_upwd"]);
-  $content = new content($config["siteaddress"],"site",substr($_SESSION["mwclang"],0,3),0,$config["theme"]);
-
   autobans($db);
   if ($config["under_rec"]==1)
   {

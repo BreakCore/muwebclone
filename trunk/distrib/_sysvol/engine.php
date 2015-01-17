@@ -689,7 +689,7 @@ function getmenutitles($config,$content)
             include "./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
             ob_start();
 
-            $content->set('|siteaddress|', $config["siteaddress"]);
+            //$content->set('|siteaddress|', $config["siteaddress"]);
 
             foreach ($loadfile as $m)
             {

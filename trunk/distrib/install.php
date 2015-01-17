@@ -350,7 +350,7 @@ END ");
                         $in_write.= '$config["ctype"]= "'.$_SESSION["utype"].'";'.chr(13).chr(10);
                         $in_write.= '$config["db_name"]= "'.$_SESSION["udb"].'";'.chr(13).chr(10);
                         $in_write.= '$config["siteaddress"]= "'.$_SESSION["mwcsaddr"].'";'.chr(13).chr(10);
-                        $in_write.= '$config["forum"]= "'.$_SESSION["mwcsaddr"].'/forum";'.chr(13).chr(10);
+                        $in_write.= '$config["forum"]= "'.$_SESSION["mwcsaddr"].'forum";'.chr(13).chr(10);
                         $in_write.= '$config["def_lang"]= "'.$_SESSION["mwclang"].'";'.chr(13).chr(10);
                         $in_write.= '$config["theme"]="castle";'.chr(13).chr(10);
                         $in_write.= '$config["odbc_driver"]="SQL Server";'.chr(13).chr(10);

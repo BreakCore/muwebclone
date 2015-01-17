@@ -1,6 +1,5 @@
 <?php session_start();
-header("Content-type: text/html; charset=windows-1251");
-if (isset($_SESSION["adm"]) && $_SESSION["sadmin"] >0)
+if (isset($_SESSION["adm"]) && $_SESSION["adm"] >0)
 {
     define ('insite', 1);
     define ('inpanel', 1);
@@ -9,7 +8,6 @@ if (isset($_SESSION["adm"]) && $_SESSION["sadmin"] >0)
  require_once "_sysvol/fsql.php";
  require_once ('opt.php');
  require_once "_sysvol/engine.php";
- require_once '_sysvol/webv.php';
  require_once '_sysvol/them.php';
  require_once "_sysvol/amod.php";
 
