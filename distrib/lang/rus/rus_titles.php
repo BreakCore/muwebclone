@@ -77,3 +77,4 @@ $lang["title_market"]="Магазин GM";
 $lang["title_addcredd"]="Добавить Vip Статус";
 $lang["title_addcred"]="Добавить кредиты";
 $lang["title_npwd"] ="Сменить пароль";
+$lang["title_itemConverter"] ="Импорт вещей";
