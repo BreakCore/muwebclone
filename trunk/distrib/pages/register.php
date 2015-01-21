@@ -23,9 +23,11 @@ else $rules = file_get_contents("lang/".$config["def_lang"]."/".$config["def_lan
 #region вставки в шаблон
 $content->set('|rules|', $rules);
 $content->out_content("theme/".$config["theme"]."/them/reg_form.html");	
-
-$content->set('|refer|',trim($_GET["f"]));
-$content->out_content("theme/".$config["theme"]."/them/reg_refer.html");	
+if(isset($_GET["f"]))
+	$content->set('|refer|',trim($_GET["f"]));
+else
+	$content->set('|refer|',"");
+$content->out_content("theme/".$config["theme"]."/them/reg_refer.html");
 
 
 $content->set('|session_name|', session_name());
