@@ -92,83 +92,86 @@ class readitem
 	/**
 	* Конструктор класса
 	* @file - адрес до файла с вещами
+	* @createphp bool создавать или нет короткий файл с вещами (название и размеры)
 	**/
-	function __construct($file)
+	function __construct($file,$createphp = false)
 	{
+		$content="";
 		if (file_exists($file))
 		{
 			$dataAr = file($file);
 
 			$i=0;
 			$iter = new ArrayIterator($dataAr);
-            $cGroup =0; //группа вещи
-			
+			$cGroup =0; //группа вещи
+
 			foreach($iter as $id=>$value)
 			{
 				$value = trim($value);
 				if (substr($value,0,2)!="//" && strlen($value)>0 && $value!="end")
 				{
 					if (strlen($value)>0 && strlen($value)<3)
-                        $cGroup = $value;
+						$cGroup = $value;
 					else
-					{						
+					{
 						switch ($cGroup)
 						{
-						case 0:
-						case 1:
-						case 2:
-						case 3:
-						case 4:
-						case 5:
-							//$this->item[$i]= self::readWeapons($value);
-							$tmp = self::readWeapons($value);
-							$tmp["name"] = substr(substr($tmp["name"],1),0,-1);
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							break;
-						case 6:
-						case 7:
-						case 8:
-						case 9:
-						case 10:
-						case 11:
-							//$this->item[$i]= self::readArmors($value);
-							$tmp = self::readArmors($value);
-							$tmp["name"] = substr(substr($tmp["name"],1),0,-1);
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							break;
-						case 12:
-							//$this->item[$i]= self::read12($value);
-							$tmp = self::read12($value);
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							break;
-						case 13:
-							$tmp = self::read13($value);
-							if(!isset($tmp["index"]) or empty($tmp["index"]))
-								$tmp["index"]=0;
-							$tmp["name"] = substr(substr($tmp["name"],1),0,-1);
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							//$this->item[$i]= self::read13($value);
-							break;
-						case 14:
-							//$this->item[$i]= self::read14($value);
-							$tmp = self::read14($value);
-							$tmp["name"] = substr(substr($tmp["name"],1),0,-1);
-							if(!isset($tmp["index"]) or empty($tmp["index"]))
-								$tmp["index"]=0;
+							case 0:
+							case 1:
+							case 2:
+							case 3:
+							case 4:
+							case 5:
+								$tmp = self::readWeapons($value);
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
 
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							break;
-						case 15: //$this->item[$i]= self::readSkiils($value);
-							$tmp = self::readSkiils($value);
-							$tmp["name"] = substr(substr($tmp["name"],1),0,-1);
-							$this->item[$cGroup][$tmp["index"]] = $tmp;
-							break;
-						default:
+								break;
+							case 6:
+							case 7:
+							case 8:
+							case 9:
+							case 10:
+							case 11:
+								$tmp = self::readArmors($value);
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
 
-							$this->item["error"] = "Unknown item Group";break;
+								break;
+							case 12:
+								$tmp = self::read12($value);
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
+								break;
+							case 13:
+								$tmp = self::read13($value);
+								if(!isset($tmp["index"]) or empty($tmp["index"]))
+									$tmp["index"]=0;
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
+								break;
+							case 14:
+
+								$tmp = self::read14($value);
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								if(!isset($tmp["index"]) or empty($tmp["index"]))
+									$tmp["index"]=0;
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
+								break;
+							case 15:
+								$tmp = self::readSkiils($value);
+								$tmp["name"] = htmlspecialchars(substr(substr($tmp["name"],1),0,-1));
+								$this->item[$cGroup][$tmp["index"]] = $tmp;
+								$content.='$items['.$cGroup.']['.$tmp["index"].']["name"]="'.$tmp["name"].'";$items['.$cGroup.']['.$tmp["index"].']["x"]='.$tmp["x"].';$items['.$cGroup.']['.$tmp["index"].']["y"]='.$tmp["y"].';'."\r\n";
+								break;
+							default:
+								$this->item["error"] = "Unknown item Group";break;
 						}
-						
-						//$this->item[$i]["group"]= $cGroup; //указываем группу вещи
 						$i++;
 					}
 				}
@@ -176,7 +179,14 @@ class readitem
 		}
 		else
 			$this->item["error"]="Can't found $file";
-		
+
+		if(!empty($content) && $createphp)
+		{
+			$h = fopen("_sysvol/itemBase/items.php","w");
+			fwrite($h,'<?php //itembaseArray(autogenered)'.@date("d.m.Y")."\r\n".$content);
+			fclose($h);
+		}
+
 	}
 
 	/**
@@ -215,7 +225,8 @@ class readitem
 	**/
 	function getReq ($itmar,$num=3)
 	{
-		preg_match_all("/([-]?([0-9]{1,}))|([\"]{1}([A-Za-z0-9\&\(\)']{1,20}([\s]{0,})|[-]?){1,5}[\"]{1})|([\"]{1}([A-Za-z0-9\&\(\)'\\\,.]{1,20}[\"]{1}))/", $itmar, $replaced);
+		preg_match_all("/([-]?([0-9]{1,}))|([\"]{1}([A-Za-z0-9\&\(\)'\\\,.]{1,40}([\s]{0,})|[-]{0,}){1,5}[\"]{1})/", $itmar, $replaced);
+		//preg_match_all("/([-]?([0-9]{1,}))|([\"]{1}([A-Za-z0-9\&\(\)']{1,20}([\s]{0,})|[-]?){1,5}[\"]{1})|([\"]{1}([A-Za-z0-9\&\(\)'\\\,.]{1,20}[\"]{1}))/", $itmar, $replaced);
 		return $replaced[0];
 	}
 
