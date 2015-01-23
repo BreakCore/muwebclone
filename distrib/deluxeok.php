@@ -1,1 +1,0 @@
-<?php  header("Location: ".$config["siteaddress"]."/?up=servis");

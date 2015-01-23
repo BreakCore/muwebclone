@@ -77,7 +77,12 @@ class connect
 
     /**
      * MS SQL подключение к базе данных
-     **/
+     * @param $host
+     * @param $base
+     * @param $user
+     * @param $pwd
+     * @throws Exception
+     */
     private function mmsql($host,$base,$user,$pwd)
     {
         if (function_exists("mssql_connect"))
@@ -92,7 +97,12 @@ class connect
 
     /**
      * ODBC подключение к базе данных
-     **/
+     * @param $host
+     * @param $base
+     * @param $user
+     * @param $pwd
+     * @throws Exception
+     */
     private function odbc_mmsql($host,$base,$user,$pwd)
     {
 
@@ -110,7 +120,12 @@ class connect
 
     /**
      * PDO mssql подключение к базе данных
-     **/
+     * @param $host
+     * @param $base
+     * @param $user
+     * @param $pwd
+     * @throws Exception
+     */
     private function pdo_mssql($host,$base,$user,$pwd)
     {
         $drivers = PDO::getAvailableDrivers();
