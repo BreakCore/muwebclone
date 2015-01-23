@@ -9,12 +9,17 @@ class content
     private $clang; //текущий язык
     private $error = array();
     private $adr ;
+    /**
+     * @var string
+     */
+    private $file;
 
     /**
-     * @file - файл, с массивом значений
-     * @language - язык
-     * @thName - название темы, по дефолту "default"
-     * @dbg - режим дебага
+     * @param $addres
+     * @param string $file
+     * @param string $language
+     * @param int $dbg
+     * @param string $thName
      */
     function __construct($addres,$file="site",$language="rus",$dbg=0,$thName="default")
     {
@@ -25,6 +30,7 @@ class content
         $this->adr = $addres;
         $this->vars["|siteaddress|"]=$this->adr;
         $this->vars["|theme|"]=$this->themName;
+        $this->file = $file;
     }
 
     /**
@@ -51,7 +57,8 @@ class content
 
     /**
      * Добавляем язык к контенту
-     * @param     $file - название файла "словаря"
+     * @param $file - название файла "словаря"
+     * @param string $DELIMITER
      */
     public function add_dict($file,$DELIMITER="|")
     {
@@ -121,6 +128,7 @@ class content
      * массив должен состоять из
      * ["|ключевое_слово|"] = на_Что_заменять
      * @param array $inputAr
+     * @param string $delimiter
      */
     public function setArray($inputAr,$delimiter = "")
     {
@@ -153,11 +161,11 @@ class content
             unset($this->vars[$what]);
         }
     }
+
     /**
      * функция выводит на экран или возвращает строку с содержимым шаблона и скрипта
      * @param string $tpl - название шаблона
      * @param int $type - 0 вывод на экран
-     * @param string $gentime, вывод времени генерации скрипта, если не "no"
      * @return mixed|string
      * @throws Exception
      */
