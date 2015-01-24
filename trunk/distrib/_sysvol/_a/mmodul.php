@@ -1,11 +1,15 @@
 <?php if (!defined('inpanel')) die("no access"); 
 
 /**
-* создание комбобокса
-* @fname = имя формы, в которой находится бокс
-* @valarr массив со значениями значение => что показать на экране
-* @name - имя элемента,@class=ксс класс,@type - делать ли сабмит
-*/
+ * создание комбобокса
+ * @param $fname имя формы, в которой находится бокс
+ * @param $valarr массив со значениями значение => что показать на экране
+ * @param $name имя элемента,@class=ксс класс,@type - делать ли сабмит
+ * @param $class
+ * @param int $type
+ * @param string $selected
+ * @return string
+ */
 function build_mt($fname,$valarr,$name,$class,$type=0,$selected="none")
 {
  $buffer="<select name='".$name."' id='".$name."' class='".$class."'";
@@ -24,6 +28,7 @@ function build_mt($fname,$valarr,$name,$class,$type=0,$selected="none")
 }
 
 
+
 if (isset($_REQUEST["clear_m"]))
 {
  $faqhandle = opendir("_dat/cach");
@@ -36,17 +41,17 @@ if (isset($_REQUEST["clear_m"]))
   } 			
  }
 }
+
 if (isset($_POST["typemanage"]))
 {
- switch ($_POST["typemanage"])
- {
-  case "pm":$_SESSION["typemanage"]="pm";break;
-  case "upm":$_SESSION["typemanage"]="upm";break;
- }
+    switch ($_POST["typemanage"])
+    {
+        case "pm":$_SESSION["typemanage"]="pm";break;
+        case "upm":$_SESSION["typemanage"]="upm";break;
+    }
 }
 else
 {
- if (isset($_SESSION["typemanage"]) && strlen($_SESSION["typemanage"])<2)
     $_SESSION["typemanage"]="pm";
 }
 
