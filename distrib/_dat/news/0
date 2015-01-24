@@ -1,3 +1,8 @@
-&lt;p&gt;Это бета версия Mu Web Clone 1.5.&lt;strong&gt;3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Это &lt;strong&gt;бета-&lt;/strong&gt;версия &lt;span style=&quot;color:#008000&quot;&gt;&lt;strong&gt;M&lt;/strong&gt;&lt;/span&gt;u &lt;span style=&quot;color:#006400&quot;&gt;&lt;strong&gt;W&lt;/strong&gt;&lt;/span&gt;eb &lt;span style=&quot;color:#006400&quot;&gt;&lt;strong&gt;C&lt;/strong&gt;&lt;/span&gt;lone 1.5.&lt;strong&gt;3&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Что нового:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Что нового:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+	&lt;li&gt;проделана огромная работа по исправлению внутри механизмов движка&lt;/li&gt;
+	&lt;li&gt;переработаны все основные модули&lt;/li&gt;
+&lt;/ul&gt;

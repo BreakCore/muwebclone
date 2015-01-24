@@ -3,11 +3,15 @@
 * MuWebClone engine script 1.5.x
 * current 1.5.3
 **/
+
 error_reporting(E_ALL);
 /**
-* отображение панели пользователя 
-*/
-
+ * отображение панели пользователя
+ * @param $config
+ * @param $db
+ * @param $content
+ * @return string
+ */
 function show_login($config,$db,$content)
 {
     if(isset($_SESSION["user"]) && isset($_SESSION["pwd"]) && !isset($_REQUEST["usrout"]))
@@ -21,8 +25,13 @@ function show_login($config,$db,$content)
 }
 
 /**
-* функция аунтивикации
-**/
+ * функция аунтивикации
+ * @param $content
+ * @param $db
+ * @param $config
+ * @param string $type
+ * @return
+ */
 function login($content,$db,$config,$type="open")
 {
     if (isset($_REQUEST["usrout"]))
@@ -145,8 +154,12 @@ function login($content,$db,$config,$type="open")
 }
 
 /**
-* проверяет, песонаж относится к аккаунту
-**/
+ * проверяет, песонаж относится к аккаунту
+ * @param $charnames
+ * @param $accchar
+ * @param $db
+ * @param $config
+ */
 function own_char($charnames,$accchar,$db,$config)
 {
     $char_nameCHK = $db->query("SELECT count(*) as cnt From Character WHERE Name='".substr($charnames,0,10)."' and AccountID='".substr($accchar,0,10)."'")->FetchRow();
@@ -158,8 +171,12 @@ function own_char($charnames,$accchar,$db,$config)
 }
 
 /**
-* проверка логина и пароля у пользователя на валидность
-*/
+ * проверка логина и пароля у пользователя на валидность
+ * @param $config
+ * @param $db
+ * @param int $type
+ * @return int
+ */
 function chk_user($config,$db,$type=0)
 {
     if (isset($_SESSION["user"]) && isset($_SESSION["pwd"]))
@@ -203,8 +220,12 @@ function chk_user($config,$db,$type=0)
 }
 
 /**
-* отображение страниц
-**/
+ * отображение страниц
+ * @param $config
+ * @param $db
+ * @param $content
+ * @return string
+ */
 function pages($config,$db,$content)
 {
     $pmnfile=file("_dat/pm.dat");
@@ -274,6 +295,11 @@ function pages($config,$db,$content)
     }
 }
 
+/**
+ * @param $accname
+ * @param $db
+ * @return array
+ */
 function show_chars($accname,$db)
 {
     $accname = substr($accname,0,10);
@@ -288,6 +314,12 @@ function show_chars($accname,$db)
     return $names;
 }
 
+/**
+ * @param $config
+ * @param $db
+ * @param $content
+ * @return string
+ */
 function userpages($config,$db,$content)
 {
     if(isset($_GET["up"]))
@@ -295,7 +327,7 @@ function userpages($config,$db,$content)
         $upmnfile = file("_dat/upm.dat");
         $userpage = preg_replace("/[^a-zA-Z0-9_-]/i", "", substr($_GET["up"],0,11));
         $pracces=0;
-        if(is_file("_usr/".$userpage.".php"))
+        if(file_exists("_usr/".$userpage.".php"))
         {
             foreach ($upmnfile as $num=>$str)
             {
@@ -333,11 +365,16 @@ function userpages($config,$db,$content)
         {
             logs::WriteLogs("Pages_","несуществующая страница пользователя '".$userpage."', возможно изучают сайт, возможный аккаунт (".$_SESSION["user"].")");
             require("pages/not.php");
-            return $temp;
+            if(!empty($temp))
+                return $temp;
         }
     }
 }
 
+/**
+ * @param $classnum
+ * @return string
+ */
 function classname($classnum)
 {
 	switch($classnum)
@@ -364,6 +401,10 @@ function classname($classnum)
   return $classnum;
 }
 
+/**
+ * @param $classpic
+ * @return string
+ */
 function classpicture($classpic)
 {
   switch ($classpic)
@@ -450,7 +491,12 @@ function titles($config,$type=false)
     return $bufer;
 }
 
-
+/**
+ * @param $db
+ * @param int $admin_name
+ * @param int $type
+ * @return int
+ */
 function adm_check ($db,$admin_name=0,$type=0)
 {
     if (isset($_SESSION["sadmin"]) && $_SESSION["adm"]==1)
@@ -468,6 +514,9 @@ function adm_check ($db,$admin_name=0,$type=0)
         return 0;
 }
 
+/**
+ * @return int
+ */
 function level_check()
 {
     die("under construction level_check");
@@ -489,7 +538,10 @@ function level_check()
  else return 0;
 }
 
-
+/**
+ * @param $params
+ * @return string
+ */
 function print_price($params)
 {
     return number_format($params, 2, ',', ' ');
@@ -648,6 +700,7 @@ function chkc_char($login,$db)
  return 0;
 }
 
+
 /**
  * @param $db
  * @param $login логин
@@ -662,6 +715,10 @@ function chck_online($db,$login)
         return 1;
 }
 
+/**
+ * @param $stat
+ * @return string
+ */
 function mod_status ($stat)
 {
 	if($stat==1)
@@ -713,8 +770,12 @@ function getmenutitles($config,$content)
 }
 
 /**
-* конструктор меню персонажа
-*/
+ * конструктор меню персонажа
+ * @param $config
+ * @param int $type
+ * @param string $name
+ * @return string
+ */
 function getcharmenu($config,$type=0, $name="non")
 {
     $loadfile = @file("_dat/cmenu.dat");
@@ -758,8 +819,12 @@ function getcharmenu($config,$type=0, $name="non")
 }
 
 /**
-* конструктор меню пользователя
-*/
+ * конструктор меню пользователя
+ * @param $content
+ * @param $config
+ * @param $db
+ * @return string
+ */
 function getusrmenu($content,$config,$db)
 {
     $loadfile = @file("_dat/umenu.dat");
@@ -802,14 +867,23 @@ function getusrmenu($content,$config,$db)
 }
 
 /**
-* проверка на поддрежку 65к в стате
-*/
+ * проверка на поддрежку 65к в стате
+ * @param $stat
+ * @return int
+ */
 function stats65 ($stat){ return $stat = ($stat <0) ? 65535+ $stat : $stat; }
+
+/**
+ * @param $var
+ * @return mixed
+ */
 function restats65($var){ return $var =($var>32767) ? $var -65535 : $var;}
 
 /**
-* html-символы - экран
-*/
+ * html-символы - экран
+ * @param $bug
+ * @return string
+ */
 function bugsend($bug)
 {
 	/* $bug = str_replace("<","&lt;",$bug);
@@ -828,8 +902,10 @@ function bugsend($bug)
 }
 
 /**
-* шифруем латинские символы для корректного отображения
-*/
+ * шифруем латинские символы для корректного отображения
+ * @param $in_text
+ * @return mixed|string
+ */
 function cyr_code ($in_text)
 {
     $output="";
@@ -859,8 +935,10 @@ function cyr_code ($in_text)
 }
 
 /**
-* кеширование
-*/
+ * кеширование
+ * @param $file
+ * @param $content
+ */
 function write_catch($file,$content)
 {
 	$handle = fopen($file,"w");
@@ -898,8 +976,10 @@ function load_cache($path,$istime = false)
 }
 
 /**
-* bb-codes catch
-*/
+ * bb-codes catch
+ * @param $text
+ * @return mixed
+ */
 function bbcode($text) {
  $bbcode = array(
  "/\[url\=(.*?)\](.*?)\[\/url\]/is" => "<a target=\"_blank\" href=\"$1\">$2</a>",
@@ -925,8 +1005,10 @@ function bbcode($text) {
 }
 
 /**
-* redecode html
-*/
+ * redecode html
+ * @param $str
+ * @return string
+ */
 function unhtmlentities ($str)
 {
   $trans_tbl = get_html_translation_table (HTML_ENTITIES);
@@ -935,8 +1017,13 @@ function unhtmlentities ($str)
 }
 
 /**
-* guild's logo
-*/
+ * guild's logo
+ * @param $hex
+ * @param $name
+ * @param int $size
+ * @param $livetime
+ * @return string
+ */
 function GuildLogo($hex,$name,$size=64,$livetime) 
 {
     if (substr($hex,0,2)=="0x")
@@ -993,10 +1080,14 @@ function GuildLogo($hex,$name,$size=64,$livetime)
         return "<img border=\"0\" src=\"imgs/guilds/".$name."-".$size.".png\">";
     }
 }
-	
-/*
-* выводит на экран время кеша
-*/
+
+/**
+ * выводит на экран время кеша
+ * @param $toptime
+ * @param $content
+ * @param int $type
+ * @return string
+ */
 function timing($toptime,$content,$type=1)
 {
     $forms=array( $content->getVal("caching_mins1"),  $content->getVal("caching_mins2"),  $content->getVal("caching_mins3"));
@@ -1009,6 +1100,10 @@ function timing($toptime,$content,$type=1)
         return $toptime." ".($toptime%10==1&&$toptime%100!=11?$forms[0]:($toptime%10>=2&&$toptime%10<=4&&($toptime%100<10||$toptime%100>=20)?$forms[1]:$forms[2]));
 }
 
+/**
+ * @param $personaz
+ * @return int
+ */
 function know_level($personaz)
 {
     if(file_exists("configs/res_cfg.php"))
@@ -1034,6 +1129,10 @@ function know_level($personaz)
     return 1000;
 }
 
+/**
+ * @param $personaz
+ * @return mixed
+ */
 function know_gpoints($personaz)
 {
     if(file_exists("configs/gres_cfg.php"))
@@ -1059,6 +1158,10 @@ function know_gpoints($personaz)
         die("not supported classtype!");
 }
 
+/**
+ * @param $value
+ * @return string
+ */
 function swiched_val($value)
 {
     switch ($value)
@@ -1069,9 +1172,11 @@ function swiched_val($value)
     }
 }
 
-/*
-* проверяет, есть ли сундук, если нет возвращает 0
-*/
+/**
+ * проверяет, есть ли сундук, если нет возвращает 0
+ * @param $db
+ * @return int
+ */
 function is_wh($db)
 {
     if (isset($_SESSION["user"]))
@@ -1082,10 +1187,11 @@ function is_wh($db)
     return 0;
 }
 
-/*
-* узнать максимальне число итемов в магазине для акка
-*
-*/
+/**
+ * узнать максимальне число итемов в магазине для акка
+ * @param $db
+ * @return int
+ */
 function knowmaxit($db)
 {
     if (isset($_SESSION["user"]))
@@ -1096,12 +1202,13 @@ function knowmaxit($db)
     return 0;
 }
 
-/*
-* работает с парсом времени со скула
-*@point - данные с базы
-*@tpat - шаблон времени
-*@type - тип 1 - возвратит кол-во секунд, 0 вернет время в нужном шаблоне
-*/
+/**
+ * работает с парсом времени со скула
+ * @param $point
+ * @param int $type тип 1 - возвратит кол-во секунд, 0 вернет время в нужном шаблоне
+ * @param string $tpat шаблон времени
+ * @return bool|int|string
+ */
 function parsetime($point,$type=0,$tpat="none")
 {
     if ($tpat=="none")
@@ -1112,9 +1219,11 @@ function parsetime($point,$type=0,$tpat="none")
         return strtotime($point);
 }
 
-/*
-* цвет цены
-*/
+/**
+ * цвет цены
+ * @param $price
+ * @return string
+ */
 function pod_price ($price)
 {
 		if ($price <1000000) {$color="color:#E0BA14";}
@@ -1126,12 +1235,12 @@ function pod_price ($price)
 		return $price;
 }
 
-
-/*
-* дает краткую информацию о осаде
-* возвращает массив, 0 член - имя владельцев замка, 1 - текущий период, 2 - начало 3- конец
-*/
-
+/**
+ * дает краткую информацию о осаде
+ * @param $db
+ * @param $content
+ * @return array возвращает массив, 0 член - имя владельцев замка, 1 - текущий период, 2 - начало 3- конец
+ */
 function know_csstate($db,$content)
 {
     $info_ar=array();
@@ -1162,13 +1271,18 @@ function know_csstate($db,$content)
     return $info_ar;
 }
 
+/**
+ * @param $s
+ */
 function debug($s)
 {
     print "<pre>";print_r($s);print "</pre>";
 }
+
 /**
-* проверка на администратора
-*/
+ * проверка на администратора
+ * @return int
+ */
 function isadmin()
 {
     if (isset($_SESSION["sadmin"]))
@@ -1185,11 +1299,13 @@ function isadmin()
         }  */
     }
     return 0;
-} 
+}
 
 /**
-* Проверка на баны, разбан в случае, если бан истек
-**/
+ * Проверка на баны, разбан в случае, если бан истек
+ * @param $db
+ * @param bool $nocach
+ */
 function autobans($db,$nocach=false)
 {
     $ntime = @filemtime("_dat/cach/bc");
