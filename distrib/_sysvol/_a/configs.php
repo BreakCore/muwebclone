@@ -76,7 +76,7 @@ if(isset($_REQUEST["aplcfg"]) && isset($_GET["edit"]))
 
        if($pid == "db_upwd" && $mname == "config")
        {
-        $pval = $conrig["db_upwd"];
+        $pval = $config["db_upwd"];
        }
        $pval_ = (int)$pval;
 

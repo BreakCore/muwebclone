@@ -42,15 +42,17 @@ if (isset($_REQUEST["clear_m"]))
  }
 }
 
+
 if (isset($_POST["typemanage"]))
 {
     switch ($_POST["typemanage"])
     {
         case "pm":$_SESSION["typemanage"]="pm";break;
         case "upm":$_SESSION["typemanage"]="upm";break;
+        default: $_SESSION["typemanage"]="pm";
     }
 }
-else
+else if (!isset($_SESSION["typemanage"]))
 {
     $_SESSION["typemanage"]="pm";
 }
@@ -95,7 +97,7 @@ if (isset($_GET["edit"]) && $_GET["edit"]==0)
    for ($i=0;$i<$cnt;$i++)
    {
     $list = explode("||",$pmfile[$i]);
-    $pmfile[$i]= $list[0]."||".checknum($_POST["typmon".$i]).chr(13).chr(10);
+    $pmfile[$i]= $list[0]."||".(int)$_POST["typmon".$i].chr(13).chr(10);
     fwrite($fh,$pmfile[$i]);
    }
    fclose($fh);

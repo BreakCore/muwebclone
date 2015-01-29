@@ -73,7 +73,7 @@ class content
             if (file_exists("lang/{$this->clang}/{$this->clang}_{$file}.php"))
             {
                 /** @var $lang array */
-                require_once "lang/{$this->clang}/{$this->clang}_{$file}.php";
+                require "lang/{$this->clang}/{$this->clang}_{$file}.php";
                 if (isset($lang) && is_array($lang))
                 {
                     $this->lng+=$lang;

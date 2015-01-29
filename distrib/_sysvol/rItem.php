@@ -219,6 +219,7 @@ class rItem {
         }
 
         $itemInfo["equipment"] = self::getEq($itemInfo);
+        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
         $itemInfo["speed"] = (int)$this->items[$itemInfo["group"]][$itemInfo["id"]]["speed"];
 
         if ($itemInfo["ispvp"]>0) //pvp
@@ -278,6 +279,7 @@ class rItem {
             $itemInfo["agi"] = intval($itemInfo["agi"] + $itemInfo["agi"]*0.1);
         }
         $itemInfo["equipment"] = self::getEq($itemInfo);
+        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
 
 
         if ($itemInfo["ispvp"]>0) //pvp
@@ -391,6 +393,7 @@ class rItem {
             $itemInfo["defence"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["def"];
             $itemInfo["Dur"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["dur"];
             $itemInfo["equipment"] = self::getEq($itemInfo);
+            $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
 
 
             if(in_array($itemInfo["id"],$firstwings))
@@ -712,6 +715,7 @@ class rItem {
 
             $itemInfo["Dur"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["dur"];
             $itemInfo["equipment"] = self::getEq($itemInfo);
+            $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
 
             if ($itemInfo["ispvp"]>0) //pvp
                 $itemInfo["pvp"] = "Has PvP options";
@@ -745,6 +749,7 @@ class rItem {
 
             $itemInfo["Dur"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["dur"];
             $itemInfo["equipment"] = self::getEq($itemInfo);
+            $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
             $itemInfo["lvlreq"] = 180+($itemInfo["level"]*4);
 
 
@@ -820,6 +825,7 @@ class rItem {
                     }
 
                     $itemInfo["equipment"] = self::getEq($itemInfo);
+                    $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
 
 
                     if ($itemInfo["ispvp"]>0) //pvp
@@ -987,6 +993,7 @@ class rItem {
                 $itemInfo["name"]= $this->items[$itemInfo["group"]][$itemInfo["id"]]["name"];
                 $itemInfo["img"]="{$itemInfo["group"]}{$itemInfo["id"]}{$itemInfo['level']}"; //group +id+lvl
                 $itemInfo["equipment"] = self::getEq($itemInfo);
+                $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
                 break;
         }
 
@@ -1009,6 +1016,7 @@ class rItem {
         $itemInfo["ene"]= $this->items[$itemInfo["group"]][$itemInfo["id"]]["ereq"];
         $itemInfo["img"]="{$itemInfo["group"]}{$itemInfo["id"]}0"; //group +id+lvl
         $itemInfo["equipment"] = self::getEq($itemInfo);
+        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
         $eqc = count($itemInfo["equipment"]);
         return $itemInfo;
     }
@@ -1067,6 +1075,62 @@ class rItem {
 
         return $req;
     }
+
+    /**
+     * возвращает ассоциативный массив с пометками, какой класс может одевать вещь
+     * @param $itemInfo
+     * @return array
+     */
+    private function getEqAr($itemInfo)
+    {
+        $req = array();
+        if($itemInfo["dw"]==3)
+            $req["dwreq"] = 1;
+        else if($itemInfo["dw"]==2)
+            $req["dwreq"] = 1;
+        else if($itemInfo["dw"]==1)
+            $req["dwreq"] = 1;
+
+        if($itemInfo["dk"]==3)
+            $req["dkreq"] = 1;
+        else if($itemInfo["dw"]==2)
+            $req["dkreq"] = 1;
+        else if($itemInfo["dw"]==1)
+            $req["dkreq"] = 1;
+
+        if($itemInfo["elf"]==3)
+            $req["ereq"] = 1;
+        else if($itemInfo["elf"]==2)
+            $req["ereq"] = 1;
+        else if($itemInfo["elf"]==1)
+            $req["ereq"] = 1;
+
+        if($itemInfo["mg"]==2)
+            $req["mgreq"] = 1;
+        else if($itemInfo["mg"]==1)
+            $req["mgreq"] = 1;
+
+        if($itemInfo["dl"]==2)
+            $req["dlreq"] = 1;
+        else if($itemInfo["dl"]==1)
+            $req["dlreq"] = 1;
+
+        if($itemInfo["sum"]==3)
+            $req["sreq"] = 1;
+        else if($itemInfo["sum"]==2)
+            $req["sreq"] = 1;
+        else if($itemInfo["sum"]==1)
+            $req["sreq"] = 1;
+
+        if($itemInfo["rf"]==2)
+            $req["rfreq"] = 1;
+        else if($itemInfo["rf"]==1)
+            $req["rfreq"] = 1;
+
+        return $req;
+    }
+
+
 
     /**
      * Экселлентные опции

@@ -23,7 +23,8 @@ if(!isset($_SESSION["mwcsaddr"]))
 
     foreach($sname as $v)
     {
-        $_SESSION["mwcsaddr"] .="/".$v;
+        if(!empty($v))
+            $_SESSION["mwcsaddr"] .="/".$v;
     }
 }
 
@@ -72,7 +73,8 @@ if (isset($_REQUEST["finish"]))
     $db->query("UPDATE MWC SET value = '1' WHERE parametr='reinstall'");
     $db->close();
     unset($_SESSION["ulogin"],$_SESSION["upwd"],$_SESSION["udb"], $_SESSION["uhost"],$_SESSION["utype"],$_SESSION["md5"],$_SESSION["user"],$_SESSION["pwd"]);
-    rename("install.php", "_dat/install.php");
+    @unlink("_dat/install.php");
+    @rename("install.php", "_dat/install.php");
     header("location: ".$_SESSION["mwcsaddr"]);
     die();
 }
@@ -109,7 +111,8 @@ if ($info["dms"] == 0 or $info["vals"] == 0)
             $db->query("UPDATE MWC SET value = '1' WHERE parametr='reinstall'");
             $db->close();
             unset($_SESSION["ulogin"],$_SESSION["upwd"],$_SESSION["udb"], $_SESSION["uhost"],$_SESSION["utype"],$_SESSION["md5"],$_SESSION["user"],$_SESSION["pwd"]);
-            rename("install.php", "_dat/install.php");
+            @unlink("_dat/install.php");
+            @rename("install.php", "_dat/install.php");
             header("location: ".$_SESSION["mwcsaddr"]);
             die();
                 //$on_screen.="<tr><td style='font-weight:bold;color:green;'>{$lang["inst_cadm"]}</td></tr>";

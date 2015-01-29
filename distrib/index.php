@@ -39,7 +39,9 @@ else
  {
   if(file_exists("_dat/install.php"))
   {
-   rename("_dat/install.php","install.php");
+   if(file_exists("_dat/install.php"))
+    unlink("_dat/install.php");
+   @rename("_dat/install.php","install.php");
   }
 
   if(file_exists("install.php"))
