@@ -137,10 +137,6 @@ class connect
             throw new Exception("PDO_mssql is NOT supported!");
     }
 
-    public function getMsg()
-    {
-        return $this->resId->lastMessage;
-    }
 
     public function Msg()
     {

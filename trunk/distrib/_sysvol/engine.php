@@ -480,6 +480,9 @@ function titles($config,$type=false)
             else
                 echo " - <a href='".$config["siteaddress"]."/?up=usercp'>".$lang["title_usercp"]."</a>";
         }
+
+        if(!isset($lang["title_".$upagefile]))
+            $lang["title_".$upagefile] = "title_".$upagefile;
         if(isset($type))
             echo " - ".$lang["title_".$upagefile];
         else
@@ -735,18 +738,14 @@ function mod_status ($stat)
 function getmenutitles($config,$content)
 {
     $loadfile = @file("_dat/menu.dat");
-    $nowitime = time();
-    $cachtime = load_cache("_dat/menus/{$_SESSION["mwclang"]}_mainmenu",true);
     if (empty($loadfile) or !$loadfile)
         return "error menu loading!";
     else
     {
-        if($nowitime-$cachtime > 3600)
+        if(time() - load_cache("_dat/menus/{$_SESSION["mwclang"]}_mainmenu",true) > 3600)
         {
-            include "./lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+            include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
             ob_start();
-
-            //$content->set('|siteaddress|', $config["siteaddress"]);
 
             foreach ($loadfile as $m)
             {
@@ -1381,4 +1380,21 @@ function autobans($db,$nocach=false)
             }
         }
     }
+}
+
+/**
+ * Возвращает сундук с аккаунта
+ * @param $db connect
+ * @param $user string аккаунт
+ * @param $length int длина хекса 1 вещи
+ * @return mixed
+ */
+function Warehouse($db,$user,$length)
+{
+    //$q= $db->query("exec MWC_SHOW_WH '$user';")->FetchRow();
+    //$q= $db->query("declare @inv varbinary(3840); set @inv=(SELECT Items FROM warehouse WHERE AccountID='$user');print @inv");
+
+    //return $q;
+   // return "0x".strtoupper(substr(trim($db->Msg()),2));
+
 }
