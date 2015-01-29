@@ -61,7 +61,7 @@ if(isset($_REQUEST["aplcfg"]) && isset($_GET["edit"]))
       }
       else
       {
-       require_once "opt.php";
+       require "opt.php";
        $mname="config";
        $fileZ = "opt.php";
       }
