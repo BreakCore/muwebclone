@@ -29,9 +29,9 @@ class rItem {
      */
     public function readGroup($group)
     {
-        if(file_exists("itemBase/itemGroup".$group))
+        if(file_exists("_sysvol/itemBase/itemGroup".$group))
         {
-            $content = file("itemBase/itemGroup".$group);
+            $content = file("_sysvol/itemBase/itemGroup".$group);
             $it = new ArrayIterator($content);
             foreach($it as $id=>$value)
             {
@@ -218,8 +218,8 @@ class rItem {
             $itemInfo["agi"] = intval($itemInfo["agi"] + $itemInfo["agi"]*0.1);
         }
 
-        $itemInfo["equipment"] = self::getEq($itemInfo);
-        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+        $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+        $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
         $itemInfo["speed"] = (int)$this->items[$itemInfo["group"]][$itemInfo["id"]]["speed"];
 
         if ($itemInfo["ispvp"]>0) //pvp
@@ -278,8 +278,8 @@ class rItem {
             $itemInfo["str"] = intval($itemInfo["str"] + $itemInfo["str"]*0.1);
             $itemInfo["agi"] = intval($itemInfo["agi"] + $itemInfo["agi"]*0.1);
         }
-        $itemInfo["equipment"] = self::getEq($itemInfo);
-        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+        $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+        $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
 
 
         if ($itemInfo["ispvp"]>0) //pvp
@@ -317,13 +317,16 @@ class rItem {
         $itemInfo["x"] = (int)$this->items[$itemInfo["group"]][$itemInfo["id"]]["x"];
         $itemInfo["y"] = (int)$this->items[$itemInfo["group"]][$itemInfo["id"]]["y"];
 
+
+
+
         $wings = array(0,1,2,3,4,5,6,6,36,37,38,39,40,41,42,43,49,50,130,131,132,133,134,135,262,263,264,265); //винги в 12 группе
         $seeds = array(60,61,62,63,64,65,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129); //сокеты
         $elementalSys = array(5,200,201,221,231,241,251); //05 errtal of gale элементальные моменты
         $thirdWings = array(36,37,38,39,40,41,43,50);
         $firstwings = array(0,1,2);
 
-        if($itemInfo["excnum"]>127) //подозрение на винги 2.5
+        if($itemInfo["excnum"]>127 && $itemInfo["id"]>35) //подозрение на винги 2.5
         {
             $itemInfo["excnum"]-=128;
             if ($itemInfo["id"] == 6) // cloack of death
@@ -392,8 +395,8 @@ class rItem {
 
             $itemInfo["defence"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["def"];
             $itemInfo["Dur"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["dur"];
-            $itemInfo["equipment"] = self::getEq($itemInfo);
-            $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+            $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+            $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
 
 
             if(in_array($itemInfo["id"],$firstwings))
@@ -534,7 +537,8 @@ class rItem {
             {
                 $itemInfo["lifeOpt"] = "Automatic HP recovery +".$itemInfo["lifeOpt"];
             }
-
+            $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+            $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
         }
 
         return $itemInfo;
@@ -748,8 +752,8 @@ class rItem {
 
 
             $itemInfo["Dur"] = $this->items[$itemInfo["group"]][$itemInfo["id"]]["dur"];
-            $itemInfo["equipment"] = self::getEq($itemInfo);
-            $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+            $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+            $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
             $itemInfo["lvlreq"] = 180+($itemInfo["level"]*4);
 
 
@@ -824,8 +828,8 @@ class rItem {
                         $itemInfo["agi"] = intval($itemInfo["agi"] + $itemInfo["agi"]*0.1);
                     }
 
-                    $itemInfo["equipment"] = self::getEq($itemInfo);
-                    $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+                    $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+                    $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
 
 
                     if ($itemInfo["ispvp"]>0) //pvp
@@ -992,8 +996,8 @@ class rItem {
             default:
                 $itemInfo["name"]= $this->items[$itemInfo["group"]][$itemInfo["id"]]["name"];
                 $itemInfo["img"]="{$itemInfo["group"]}{$itemInfo["id"]}{$itemInfo['level']}"; //group +id+lvl
-                $itemInfo["equipment"] = self::getEq($itemInfo);
-                $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+                $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+                $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
                 break;
         }
 
@@ -1015,8 +1019,8 @@ class rItem {
 
         $itemInfo["ene"]= $this->items[$itemInfo["group"]][$itemInfo["id"]]["ereq"];
         $itemInfo["img"]="{$itemInfo["group"]}{$itemInfo["id"]}0"; //group +id+lvl
-        $itemInfo["equipment"] = self::getEq($itemInfo);
-        $itemInfo["equipmenta"] = self::getEqAr($itemInfo);
+        $itemInfo["equipment"] = self::getEq($this->items[$itemInfo["group"]][$itemInfo["id"]]);
+        $itemInfo["equipmenta"] = self::getEqAr($this->items[$itemInfo["group"]][$itemInfo["id"]]);
         $eqc = count($itemInfo["equipment"]);
         return $itemInfo;
     }
@@ -1029,49 +1033,63 @@ class rItem {
     private function getEq($itemInfo)
     {
         $req = "";
-        if($itemInfo["dw"]==3)
-            $req.="Can be equipment by Grand Master<br>";
-        else if($itemInfo["dw"]==2)
-            $req.="Can be equipment by Soul Master<br>";
-        else if($itemInfo["dw"]==1)
-            $req.="Can be equipment by Dark Wizard<br>";
+        if(isset($itemInfo["dw"]))
+        {
+            if($itemInfo["dw"]==3)
+                $req.="Can be equipment by Grand Master<br>";
+            else if($itemInfo["dw"]==2)
+                $req.="Can be equipment by Soul Master<br>";
+            else if($itemInfo["dw"]==1)
+                $req.="Can be equipment by Dark Wizard<br>";
+        }
+
+        if(isset($itemInfo["dk"])) {
+            if($itemInfo["dk"]==3)
+                $req.="Can be equipment by Blade Master<br>";
+            else if($itemInfo["dw"]==2)
+                $req.="Can be equipment by Blade Knight<br>";
+            else if($itemInfo["dw"]==1)
+                $req.="Can be equipment by Dark Knight<br>";
+        }
 
 
-        if($itemInfo["dk"]==3)
-            $req.="Can be equipment by Blade Master<br>";
-        else if($itemInfo["dw"]==2)
-            $req.="Can be equipment by Blade Knight<br>";
-        else if($itemInfo["dw"]==1)
-            $req.="Can be equipment by Dark Knight<br>";
+        if(isset($itemInfo["elf"])) {
+            if ($itemInfo["elf"] == 3)
+                $req .= "Can be equipment by High Elf<br>";
+            else if ($itemInfo["elf"] == 2)
+                $req .= "Can be equipment by Muse Elf<br>";
+            else if ($itemInfo["elf"] == 1)
+                $req .= "Can be equipment by Fairy Elf<br>";
+        }
 
-        if($itemInfo["elf"]==3)
-            $req.="Can be equipment by High Elf<br>";
-        else if($itemInfo["elf"]==2)
-            $req.="Can be equipment by Muse Elf<br>";
-        else if($itemInfo["elf"]==1)
-            $req.="Can be equipment by Fairy Elf<br>";
+        if(isset($itemInfo["mg"])) {
+            if ($itemInfo["mg"] == 2)
+                $req .= "Can be equipment by Duel Master<br>";
+            else if ($itemInfo["mg"] == 1)
+                $req .= "Can be equipment by Magic Gladiator<br>";
+        }
 
-        if($itemInfo["mg"]==2)
-            $req.="Can be equipment by Duel Master<br>";
-        else if($itemInfo["mg"]==1)
-            $req.="Can be equipment by Magic Gladiator<br>";
+        if(isset($itemInfo["dl"])) {
+            if ($itemInfo["dl"] == 2)
+                $req .= "Can be equipment by Lord Emperor<br>";
+            else if ($itemInfo["dl"] == 1)
+                $req .= "Can be equipment by Dark Lord<br>";
+        }
 
-        if($itemInfo["dl"]==2)
-            $req.="Can be equipment by Lord Emperor<br>";
-        else if($itemInfo["dl"]==1)
-            $req.="Can be equipment by Dark Lord<br>";
-
-        if($itemInfo["sum"]==3)
-            $req.="Can be equipment by Dimension Master<br>";
-        else if($itemInfo["sum"]==2)
-            $req.="Can be equipment by Bloody Summoner<br>";
-        else if($itemInfo["sum"]==1)
-            $req.="Can be equipment by Summoner<br>";
-
-        if($itemInfo["rf"]==2)
-            $req.="Can be equipment by Fist Master<br>";
-        else if($itemInfo["rf"]==1)
-            $req.="Can be equipment by Rage Fighter<br>";
+        if(isset($itemInfo["sum"])) {
+            if ($itemInfo["sum"] == 3)
+                $req .= "Can be equipment by Dimension Master<br>";
+            else if ($itemInfo["sum"] == 2)
+                $req .= "Can be equipment by Bloody Summoner<br>";
+            else if ($itemInfo["sum"] == 1)
+                $req .= "Can be equipment by Summoner<br>";
+        }
+        if(isset($itemInfo["rf"])) {
+            if ($itemInfo["rf"] == 2)
+                $req .= "Can be equipment by Fist Master<br>";
+            else if ($itemInfo["rf"] == 1)
+                $req .= "Can be equipment by Rage Fighter<br>";
+        }
 
         return $req;
     }
@@ -1084,48 +1102,62 @@ class rItem {
     private function getEqAr($itemInfo)
     {
         $req = array();
-        if($itemInfo["dw"]==3)
-            $req["dwreq"] = 1;
-        else if($itemInfo["dw"]==2)
-            $req["dwreq"] = 1;
-        else if($itemInfo["dw"]==1)
-            $req["dwreq"] = 1;
 
-        if($itemInfo["dk"]==3)
-            $req["dkreq"] = 1;
-        else if($itemInfo["dw"]==2)
-            $req["dkreq"] = 1;
-        else if($itemInfo["dw"]==1)
-            $req["dkreq"] = 1;
+        if(isset($itemInfo["dw"])) {
+            if ($itemInfo["dw"] == 3)
+                $req["dwreq"] = 1;
+            else if ($itemInfo["dw"] == 2)
+                $req["dwreq"] = 1;
+            else if ($itemInfo["dw"] == 1)
+                $req["dwreq"] = 1;
+        }
+        if(isset($itemInfo["dk"])) {
+            if ($itemInfo["dk"] == 3)
+                $req["dkreq"] = 1;
+            else if ($itemInfo["dw"] == 2)
+                $req["dkreq"] = 1;
+            else if ($itemInfo["dw"] == 1)
+                $req["dkreq"] = 1;
+        }
 
-        if($itemInfo["elf"]==3)
-            $req["ereq"] = 1;
-        else if($itemInfo["elf"]==2)
-            $req["ereq"] = 1;
-        else if($itemInfo["elf"]==1)
-            $req["ereq"] = 1;
+        if(isset($itemInfo["elf"])) {
+            if ($itemInfo["elf"] == 3)
+                $req["elfreq"] = 1;
+            else if ($itemInfo["elf"] == 2)
+                $req["elfreq"] = 1;
+            else if ($itemInfo["elf"] == 1)
+                $req["elfreq"] = 1;
+        }
 
-        if($itemInfo["mg"]==2)
-            $req["mgreq"] = 1;
-        else if($itemInfo["mg"]==1)
-            $req["mgreq"] = 1;
+        if(isset($itemInfo["mg"])) {
+            if ($itemInfo["mg"] == 2)
+                $req["mgreq"] = 1;
+            else if ($itemInfo["mg"] == 1)
+                $req["mgreq"] = 1;
+        }
 
-        if($itemInfo["dl"]==2)
-            $req["dlreq"] = 1;
-        else if($itemInfo["dl"]==1)
-            $req["dlreq"] = 1;
+        if(isset($itemInfo["dl"])) {
+            if ($itemInfo["dl"] == 2)
+                $req["dlreq"] = 1;
+            else if ($itemInfo["dl"] == 1)
+                $req["dlreq"] = 1;
+        }
 
-        if($itemInfo["sum"]==3)
-            $req["sreq"] = 1;
-        else if($itemInfo["sum"]==2)
-            $req["sreq"] = 1;
-        else if($itemInfo["sum"]==1)
-            $req["sreq"] = 1;
+        if(isset($itemInfo["sum"])) {
+            if ($itemInfo["sum"] == 3)
+                $req["sreq"] = 1;
+            else if ($itemInfo["sum"] == 2)
+                $req["sreq"] = 1;
+            else if ($itemInfo["sum"] == 1)
+                $req["sreq"] = 1;
+        }
 
-        if($itemInfo["rf"]==2)
-            $req["rfreq"] = 1;
-        else if($itemInfo["rf"]==1)
-            $req["rfreq"] = 1;
+        if(isset($itemInfo["rf"])) {
+            if ($itemInfo["rf"] == 2)
+                $req["rfreq"] = 1;
+            else if ($itemInfo["rf"] == 1)
+                $req["rfreq"] = 1;
+        }
 
         return $req;
     }

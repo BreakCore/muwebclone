@@ -71,26 +71,30 @@ if(isset($_REQUEST["aplcfg"]) && isset($_GET["edit"]))
       $newCfgTick = 0;
       foreach ($_POST as $pid=>$pval)
       {
-       if($pid == "aplcfg")
-        continue;//шоб не запилить кнупку в конфиг о0)
-
-       if($pid == "db_upwd" && $mname == "config")
+       if($pid != "aplcfg")
        {
-        $pval = $config["db_upwd"];
-       }
-       $pval_ = (int)$pval;
+        if($pid != "db_upwd")
+        {
+         $pval_ = (int)$pval;
 
-       if(gettype($pval) == "string" && strlen($pval_)!= strlen($pval))
-        $in_write.='$'.$mname.'["'.$pid.'"] = "'.valid::decode($pval).'";'.chr(13).chr(10);
-       else
-        $in_write.='$'.$mname.'["'.$pid.'"] = '.$pval.';'.chr(13).chr(10);
-       $newCfgTick++;
+         if(gettype($pval) == "string" && strlen($pval_)!= strlen($pval))
+          $in_write.='$'.$mname.'["'.$pid.'"] = "'.valid::decode($pval).'";'.chr(13).chr(10);
+         else
+          $in_write.='$'.$mname.'["'.$pid.'"] = '.$pval.';'.chr(13).chr(10);
+        }
+
+        if($newCfgTick == 3)//пароль от скула в конфиг все же надо вписать
+        {
+         $in_write.='$'.$mname.'["db_upwd"] = "'.$config["db_upwd"].'";'.chr(13).chr(10);
+        }
+        $newCfgTick++;
+       }
       }
       if($newCfgTick>0)
       {
        if($fileZ == "opt.php")
        {
-        rename("opt.php","configs/bkps/opt.php");//бекапим напрочь
+        @rename("opt.php","configs/bkps/opt.php");//бекапим напрочь
         $h = fopen("opt.php","w");
        }
        else
