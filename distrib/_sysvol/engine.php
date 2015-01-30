@@ -1391,10 +1391,6 @@ function autobans($db,$nocach=false)
  */
 function Warehouse($db,$user,$length)
 {
-    //$q= $db->query("exec MWC_SHOW_WH '$user';")->FetchRow();
-    //$q= $db->query("declare @inv varbinary(3840); set @inv=(SELECT Items FROM warehouse WHERE AccountID='$user');print @inv");
-
-    //return $q;
-   // return "0x".strtoupper(substr(trim($db->Msg()),2));
-
+    $q = $db->query("SELECT CONVERT(VARCHAR(max), Items,2) as Items FROM warehouse WHERE AccountID = '$user';")->FetchRow();
+    return substr($q["Items"],0,$length*120);
 }
