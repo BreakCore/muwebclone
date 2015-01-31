@@ -30,6 +30,7 @@ switch($errnum)
  case 18: $content->set("|text|",$lang["register_warr"]); break;
  case 19:  $content->set("|text|",$lang["notdone"]); break;
  case 20:  $content->set("|text|",$lang["online"]); break;
+ case 21:  $content->set("|text|",$lang["wshlvl"]); break;
  case 404: $content->set("|text|",$lang["error_no404"]); break;
  default: $content->set("|text|",$lang["error_no404"]);
 }

@@ -1,0 +1,88 @@
+
+<table>
+    <form method="POST" id="wshopfiltr">
+    <thead>
+    <th>
+        <input type="text" placeholder="в названии" id="iname" name="iname" style="width:120px;">
+        Уровни от <select name="lvlfr" id="lvlfr">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+    </select> до <select name="lvlto" id="lvlto">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+    </select>
+        Для класса: <select id="cls" name="cls">
+        <option value="0">Все</option>
+        <option value="1">DW/SM/GrM</option>
+        <option value="2">DK/BK/BM</option>
+        <option value="3">ELF/ME/HE</option>
+        <option value="4">MG/DM</option>
+        <option value="5">DL/LE</option>
+        <option value="6">S/BS/DMS</option>
+        <option value="7">RF/FM</option>
+    </select>
+        PVP <input type="checkbox" value="1" name="ispvp" id="ispvp">
+        Harmony <input type="checkbox" value="1" name="isharmony" id="isharmony">
+        Excellent <input type="checkbox" value="1" name="isexc" id="isexc">
+        Sockets <input type="checkbox" value="1" name="issock" id="issock">
+        Life Options <input type="checkbox" value="1" name="isopt" id="isopt">
+        Ancient Options <input type="checkbox" value="1" name="isanc" id="isanc">
+        <input type="button" value="->" onclick="filtr()">
+    </th>
+    </thead>
+    </form>
+    <tbody id="wshopbd"></tbody>
+</table>
+<script type="text/javascript">
+function filtr()
+{
+    var data = $("#wshopfiltr").serialize();
+    $.ajax({
+        url:	"|siteaddress|/webshop.php?act=1&"+data,
+        type:	 'GET',
+        cache: false,
+        success: function(response){
+            if(response.trim().length>0)
+            {
+                document.getElementById("wshopbd").style.display = "none";
+                $("#wshopbd").empty();
+                $("#wshopbd").append(response).fadeIn('fast');
+            }
+        },
+        error:  function(){
+            alert("Произошла непредвиденная ошибка, ожалуйста, попробуйте еще раз");
+        }
+    });
+}
+    $(document).ready(function(){
+        filtr();
+    });
+</script>
