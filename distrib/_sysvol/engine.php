@@ -1394,3 +1394,41 @@ function Warehouse($db,$user,$length)
     $q = $db->query("SELECT CONVERT(VARCHAR(max), Items,2) as Items FROM warehouse WHERE AccountID = '$user';")->FetchRow();
     return substr($q["Items"],0,$length*120);
 }
+
+/**
+ * положить вещь в сундук
+ * @param $db connect
+ * @param $user string аккаунт
+ * @param $wh string сундук
+ * @param $itmHex string хекс вещи
+ * @param $place int место, куда класть
+ */
+function putToWh($db,$user,$wh,$itmHex,$place)
+{
+    $len = strlen($itmHex);
+    $wh = "0x".$wh;
+    $wh = substr_replace($wh,$itmHex,($place*$len + 2),$len); //+2 Из-за 0x
+    $db->query("UPDATE warehouse SET Items = {$wh} WHERE AccountID='{$user}'");
+}
+
+/**
+ * функция строит выпадающий список
+ * @param $agrs - массив со значениями: <option value=id>array[id]</option>
+ * @param $selected - выбранная позиция (по ключу массива)
+ * @param string $name название
+ * @param string $sttlass ксс класс или стиль
+ * @param string $events эвенты
+ * @return string HTML-код
+ */
+function bSel($agrs,$selected=-1,$name="",$sttlass="",$events="")
+{
+    $text = "<select name=\"{$name}\" id=\"{$name}\" {$sttlass} {$events}>";
+    foreach ($agrs as $id=>$val)
+    {
+        $text.="<option value=\"$id\"";
+        if ($selected==$id) $text.=" SELECTED ";
+        $text.=">$val</option>";
+    }
+    $text.="</select>";
+    return $text;
+}
