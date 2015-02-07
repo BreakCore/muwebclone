@@ -196,6 +196,7 @@ if ($info["dms"] == 0 or $info["vals"] == 0)
                     IF OBJECT_ID('dbo.mwc_vote_list', 'U') IS NOT NULL DROP TABLE dbo.mwc_vote_list;
                     IF OBJECT_ID('dbo.MWC_messages', 'U') IS NOT NULL DROP TABLE dbo.MWC_messages;
                     IF OBJECT_ID('dbo.smsdeluxe', 'U') IS NOT NULL DROP TABLE dbo.smsdeluxe;
+                    IF OBJECT_ID('dbo.MWC_WEBSHOP', 'U') IS NOT NULL DROP TABLE dbo.MWC_WEBSHOP;
                     IF OBJECT_ID('dbo.MWC_invite', 'U') IS NOT NULL DROP TABLE dbo.MWC_invite;");
 
 
@@ -261,27 +262,32 @@ if ($info["dms"] == 0 or $info["vals"] == 0)
 	[county] [nchar](10) NULL,
 	[credits] [nchar](10) NULL
 ) ON [PRIMARY]");
-                        $db->query("CREATE TABLE [dbo].[web_shop](
-	[code] [int] IDENTITY(1,1) NOT NULL,
-	[memb___id] [varchar](10) NULL,
-	[class] [varchar](35) NULL,
-	[price] [bigint] NULL,
-	[cprice] [bigint] NULL,
-	[sdate] [varchar](10) NULL,
-	[item] [varchar](32) NULL,
-	[igroup] [int] NULL,
-	[iid] [int] NULL,
-	[ilevel] [int] NULL,
-	[iexc] [int] NULL,
-	[ianc] [int] NULL,
-	[ipvp] [int] NULL,
-	[ihar] [int] NULL,
-	[isock] [int] NULL,
-	[typepay] [char](2) NULL,
-	[typesave] [char](2) NULL,
-	[item_name] [char](30) NULL,
-	[was_dropd] [int]  NULL default('0')
-        ) ON [PRIMARY]");
+                        $db->query("CREATE TABLE [dbo].[MWC_WEBSHOP](
+	[col_shopID] [int] IDENTITY(1,1) NOT NULL,
+	[col_itemName] [varchar](50) NOT NULL,
+	[col_Level] [tinyint] NULL,
+	[col_hex] [varchar](64) NULL,
+	[col_optLevel] [tinyint] NULL,
+	[col_excellent] [tinyint] NULL,
+	[col_pvp] [tinyint] NULL,
+	[col_harmony] [tinyint] NULL,
+	[col_socket] [tinyint] NULL,
+	[col_anc] [tinyint] NULL,
+	[col_costType] [tinyint] NULL,
+	[col_cost] [bigint] NULL,
+	[dk] [tinyint] NULL,
+	[dw] [tinyint] NULL,
+	[elf] [tinyint] NULL,
+	[mg] [tinyint] NULL,
+	[dl] [tinyint] NULL,
+	[sum] [tinyint] NULL,
+	[rf] [tinyint] NULL,
+	[col_user] [varchar](10) NULL,
+ CONSTRAINT [PK_MWC_WEBSHOP] PRIMARY KEY CLUSTERED
+(
+	[col_shopID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]");
                         $db->query("CREATE TABLE [dbo].[mwc_vote_top](
 							[id] [int] IDENTITY (1, 1) NOT NULL,
 							[memb___id] [varchar](10) NOT NULL,
