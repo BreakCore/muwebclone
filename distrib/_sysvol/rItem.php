@@ -431,12 +431,16 @@ class rItem {
         else
         {
             $itemInfo["img"]="{$itemInfo["group"]}{$itemInfo["id"]}{$itemInfo['level']}"; //group +id+lvl
+
+            if(isset($itemInfo["isLuck"]))
+                unset($itemInfo["isLuck"]);
+
             switch ($itemInfo["id"])
             {
                 case 11:
                     switch ($itemInfo["level"])
                     {
-                        case 0 or "": $opt["name"]="Summoning Goblin";break;
+                        case 0 or "": $opt["name"]="Summoning Goblin"; break;
                         case 1: $itemInfo["name"]="Summoning Stone Golim";break;
                         case 2: $itemInfo["name"]="Summoning Assasin";break;
                         case 3: $itemInfo["name"]="Summoning Bali";break;
