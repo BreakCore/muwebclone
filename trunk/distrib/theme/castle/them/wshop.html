@@ -75,6 +75,29 @@ function filtr()
                 document.getElementById("wshopbd").style.display = "none";
                 $("#wshopbd").empty();
                 $("#wshopbd").append(response).fadeIn('fast');
+                $('#wshopbd a').each(function() { // Grab all elements with a title attribute,and set "this"
+                    $(this).qtip({ //
+                        style: { classes: 'qtip-dark' },
+                        content: {
+                            text: //"test"//$(this).next() // WILL work, because .each() sets "this" to refer to each element
+                                    function(event, api) {
+                                        $.ajax({
+                                            url: this.attr("rel") // Use data-url attribute for the URL
+                                        })
+                                                .then(function(content) {
+                                                    // Set the tooltip content upon successful retrieval
+                                                    api.set('content.text', content);
+                                                }, function(xhr, status, error) {
+                                                    // Upon failure... set the tooltip content to the status and error value
+                                                    api.set('content.text', status + ': ' + error);
+                                                });
+
+                                        return 'Loading...'; // Set some initial text
+                                    }
+                            //,title : "тлололо"
+                        }
+                    });
+                });
             }
         },
         error:  function(){
