@@ -744,7 +744,7 @@ function getmenutitles($config,$content)
     {
         if(time() - load_cache("_dat/menus/{$_SESSION["mwclang"]}_mainmenu",true) > 3600)
         {
-            include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+            require_once "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_main_titles.php";
             ob_start();
 
             foreach ($loadfile as $m)
@@ -789,7 +789,7 @@ function getcharmenu($config,$type=0, $name="non")
             $namel = "";
 
         unset($name);
-        include ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
+        require_once ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_char_titles.php");
         $let_num = count($loadfile);
         $j=0;
         $show = '<table width="100%" align="center" class="lighter1">';
@@ -837,7 +837,7 @@ function getusrmenu($content,$config,$db)
         if(!$cachtime || ($nowitime-$cachtime > 3600))
         {
             ob_start();
-            include("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php");
+            require_once("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_user_titles.php");
             foreach ($loadfile as $m)
             {
                 $showarr = explode("::",$m);
