@@ -38,7 +38,26 @@ if(isset($_GET["act"]))
         //отображение инфы по вещи
         case 2:
             $itm = $iObj->read($_GET["itmh"]);
-            itemShow::show($itm);
+            $out = itemShow::show($itm);
+            $tm = "";
+            foreach($out as $id => $val_)
+            {
+                $content->set("|customStyle|",$id);
+
+                if($id == "exc")
+                {
+                    $tmp = "";
+                    foreach($val_ as $excval){
+                        $tmp.="<p>$excval</p>";
+                    }
+                    $val_ = $tmp;
+                }
+
+                $content->set("|whcontent|",$val_);
+                $tm.=$content->out("webshopItem_c.html",1);
+            }
+            $content->out("webshopItem.html");
+
             break;
         default:
             die();
