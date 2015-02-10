@@ -39,6 +39,7 @@ if(isset($_GET["act"]))
         case 2:
             $itm = $iObj->read($_GET["itmh"]);
             $out = itemShow::show($itm);
+
             $tm = "";
             foreach($out as $id => $val_)
             {
@@ -56,6 +57,7 @@ if(isset($_GET["act"]))
                 $content->set("|whcontent|",$val_);
                 $tm.=$content->out("webshopItem_c.html",1);
             }
+            $content->set("|centerz|",$tm);
             $content->out("webshopItem.html");
 
             break;
