@@ -30,11 +30,13 @@ else
         if(!isset($_REQUEST["selbtn"])) //список вещей для выставления на продажу
         {
 
-            if(isset($_GET["itms"]))
-                $si = (int)$_GET["itms"];
-
             $content->add_dict("webshop");
-            $content->set("|msg|",$content->getVal("itmz").$si." ".$content->getVal("itmzb"));
+            if(isset($_GET["itms"]))
+            {
+                $si = (int)$_GET["itms"];
+                $content->set("|msg|",$content->getVal("itmz").$si." ".$content->getVal("itmzb"));
+            }
+
 
             $itemList = array();
 

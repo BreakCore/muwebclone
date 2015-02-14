@@ -10,6 +10,7 @@
 class rItem {
 
     private $items = array();
+    private $itmlen;
     private $gW = array("index", "slot", "skill","x","y","serial","option","drop","name","level","dMin","dMax","speed","dur","mdur","mpow","lreq","sreq","areq","ereq","vreq","creq","sattr","dw","dk","elf","mg","dl","sum","rf");//weap
     private $gA = array("index","slot","skill","x","y","serial","option","drop","name","level","def","block","dur","lreq","sreq","areq","ereq","vreq","creq","sattr","dw","dk","elf","mg","dl","sum","rf"); //arm
     private $gWn = array("index","slot","skill","x","y","serial","option","drop","name","level","def","dur","lreq","ereq","sreq","areq","creq","buymoney","dw","dk","elf","mg","dl","sum","rf");//12 ICGN
@@ -93,11 +94,14 @@ class rItem {
         {
             case 16: //season 0-1
                 $res = self::read16(strtoupper($hex));
+                $this->itmlen = 16;
                 break;
             case 32: //season 2-6
                 $res = self::read32(strtoupper($hex));
+                $this->itmlen = 32;
                 break;
             case 64: //season 6-x?
+                $this->itmlen = 64;
                 $res = self::read64(strtoupper($hex));
                 break;
             default:
@@ -163,7 +167,6 @@ class rItem {
         $result["serial2"] = substr($hex,32,8);;//хекс код
         return $result;
     }
-
 
     /**
      * рассчет уровня, наличия скилла, лака на вещи
@@ -688,7 +691,6 @@ class rItem {
         return $itemInfo;
     }
 
-
     /**
      * чтение 13 группы (peng& rings)
      * @param $itemInfo
@@ -898,7 +900,6 @@ class rItem {
         return $itemInfo;
     }
 
-
     /**
      * чтение 14 группы
      * @param $itemInfo
@@ -1008,7 +1009,6 @@ class rItem {
 
         return $itemInfo;
     }
-
 
     /**
      * чтение 15 группы  скруллы
@@ -1165,8 +1165,6 @@ class rItem {
 
         return $req;
     }
-
-
 
     /**
      * Экселлентные опции
@@ -2419,5 +2417,191 @@ class rItem {
     static public function dehex($hex,$begin,$length)
     {
         return hexdec(substr($hex,$begin,$length));
+    }
+
+    public function search($item_hex,$x,$y)
+    {
+
+        self::getItemBase();
+        if($this->itmlen == 32)
+            return self::smartsearch32($item_hex,$x,$y);
+        else if($this->itmlen == 64)
+            return self::smartsearch64($item_hex,$x,$y);
+        else
+            return -1;
+    }
+
+    public function smartsearch64($item_hex,$x,$y)
+    {
+
+        if(empty($x) || empty($y) || $x<=0 || $y<=0)
+            return -1;
+        $item_hex=strtoupper($item_hex);
+        $col_i = (int)strlen($item_hex)/64;
+        //$col_i = 120;
+
+        $itemarr = array();
+        for ($i=0;$i<$col_i;$i++)
+        {
+            if (!isset($itemarr[$i]) || strlen($itemarr[$i])==64)
+                $itemarr[$i] = substr($item_hex,$i*64, 64);
+
+            if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==64)
+            {
+                $it["id"] = hexdec(substr($itemarr[$i],0,2)); // ID
+                $it["group"] = hexdec(substr($itemarr[$i],18,1)); // group
+
+                /*if ($it["group"] == 7 || ($it["group"]>=9 && $it["group"]<=11 && $it["id"]!=128) || $it["group"]==15)
+                {
+                    $xin = substr($itembd[$it["group"]][0][1],0,1);
+                    $yin = substr($itembd[$it["group"]][0][1],1,1);
+                }
+                else
+                {
+                    $xin = substr($itembd[$it["group"]][$it["id"]][1],0,1);
+                    $yin = substr($itembd[$it["group"]][$it["id"]][1],1,1);
+                }*/
+
+                $xin = $this->items[$it["group"]][$it["id"]]["x"];
+                $yin = $this->items[$it["group"]][$it["id"]]["y"];
+                $j=$xin*$yin;
+                $str=$i;
+                $x1=0;
+                while($j>0)
+                {
+                    if($x1<=$xin)
+                    {
+                        $itemarr[$str]="not_empty";
+                        $str++;
+                        $x1++;
+                        if($x1==$xin)
+                        {
+                            $str +=(8-$xin);
+                            $x1=0;
+                        }
+                    }
+                    $j--;
+                }
+            }
+        }
+        $c=0;
+
+        for ($i=0;$i<$col_i;$i++)
+        {
+            $j = $x * $y;
+            $str = $i;
+            $x1=0;
+            $found=0;
+            $ind = ((floor($i/8)+1)*8)-1; // правый конец строки
+            $raz = $i+($x-1);
+
+            while($j>0)
+            {
+                if($x1<=$x)
+                {
+                    if (strlen($itemarr[$str])==64 && $str<$col_i && $raz<=$ind) $found++; else {$j=0;$found=0;}
+                    $str++;
+                    $x1++;
+                    if($x1==$x)
+                    {
+                        $str +=(8-$x);
+                        $ind+=8;
+                        $x1=0;
+                    }
+                }
+                $j--;
+            }
+            if ($found == $x*$y && ($i-$col_i)>0)
+            {
+                // unset($itemarr);
+                return $i;
+            }
+        }
+        unset($itemarr);
+        return -1;
+    }
+
+    public function smartsearch32($item_hex,$x,$y)
+    {
+        if(empty($x) || empty($y) || $x<=0 || $y<=0)
+            return -1;
+
+        $item_hex=strtoupper($item_hex);
+        $col_i = strlen($item_hex)/32-1;
+
+        $itemarr = array();
+        for ($i=0;$i<$col_i;$i++)
+        {
+            if (!isset($itemarr[$i]) || strlen($itemarr[$i])==32)$itemarr[$i] = substr($item_hex,$i*32, 32);
+            if ($itemarr[$i]!="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" && strlen($itemarr[$i])==32)
+            {
+                $it["id"] = hexdec(substr($itemarr[$i],0,2)); // ID
+                $it["group"] = hexdec(substr($itemarr[$i],18,1)); // group
+/*
+                if ($it["group"] == 7 || ($it["group"]>=9 && $it["group"]<=11 && $it["id"]!=128) || $it["group"]==15)
+                {
+                    $xin = substr($itembd[$it["group"]][0][1],0,1);
+                    $yin = substr($itembd[$it["group"]][0][1],1,1);
+                }
+                else
+                {
+                    $xin = substr($itembd[$it["group"]][$it["id"]][1],0,1);
+                    $yin = substr($itembd[$it["group"]][$it["id"]][1],1,1);
+                }*/
+                $xin = $this->items[$it["group"]][$it["id"]]["x"];
+                $yin = $this->items[$it["group"]][$it["id"]]["y"];
+
+                $j=$xin*$yin;
+                $str=$i;
+                $x1=0;
+                while($j>0)
+                {
+                    if($x1<=$xin)
+                    {
+                        $itemarr[$str]="not_empty";
+                        $str++;
+                        $x1++;
+                        if($x1==$xin)
+                        {
+                            $str +=(8-$xin);
+                            $x1=0;
+                        }
+                    }
+                    $j--;
+                }
+            }
+        }
+        $c=0;
+
+        for ($i=0;$i<$col_i;$i++)
+        {
+            $j = $x * $y;
+            $str = $i;
+            $x1=0;
+            $found=0;
+            $ind = ((floor($i/8)+1)*8)-1; // правый конец строки
+            $raz = $i+($x-1);
+
+            while($j>0)
+            {
+                if($x1<=$x)
+                {
+                    if (strlen($itemarr[$str])==32 && $str<$col_i && $raz<=$ind) $found++; else {$j=0;$found=0;}
+                    $str++;
+                    $x1++;
+                    if($x1==$x)
+                    {
+                        $str +=(8-$x);
+                        $ind+=8;
+                        $x1=0;
+                    }
+                }
+                $j--;
+            }
+            if ($found == $x*$y )
+                return $i;
+        }
+
+        return -1;
     }
 }

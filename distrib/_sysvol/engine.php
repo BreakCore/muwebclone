@@ -547,7 +547,7 @@ function level_check()
  */
 function print_price($params)
 {
-    return number_format($params, 2, ',', ' ');
+    return number_format($params, 0, ',', ' ');
 }
 
 /**
@@ -789,7 +789,7 @@ function getcharmenu($config,$type=0, $name="non")
             $namel = "";
 
         unset($name);
-        require_once ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_char_titles.php");
+        require ("lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_char_titles.php");
         $let_num = count($loadfile);
         $j=0;
         $show = '<table width="100%" align="center" class="lighter1">';
