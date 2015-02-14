@@ -1,7 +1,7 @@
 ﻿<?php if (!defined('insite')){die('11');} 
 $lang["coin_title"] = "Пополнить кредиты";
 $lang["cred2zen"] = "Продажа кредитов";
-$lang["lang_nav_wsell"] = "Высьавить на продажу";
+$lang["lang_nav_wsell"] = "Выставить на продажу";
 $lang["lang_nav_Zen"] = "Веб - Банк";
 $lang["title_chinfo"] = "О персонажах";
 $lang["title_vote"] = "Госоловать за сервер";

@@ -47,7 +47,7 @@ if(isset($_REQUEST["add2menu"]))
 {	
  if (isset($_POST["mod_name"]) && isset($_POST["mod_define"]) && strlen($_POST["mod_name"])>1 && strlen($_POST["mod_define"])>1)
  {
-  switch (checknum($_GET["mtype"],0,3))
+  switch ((int)$_GET["mtype"])
   { 
    case 1: $fhandle = fopen("_dat/menu.dat","a");break; 
    case 2: $fhandle = fopen("_dat/umenu.dat","a");break;
@@ -55,14 +55,14 @@ if(isset($_REQUEST["add2menu"]))
    case 4: $fhandle = fopen("_dat/cmenu.dat","a");break;
    default:die();
   }			
-  if(fwrite($fhandle, validate(substr($_POST["mod_name"],0,20))."::".substr($_POST["mod_define"],0,20)."\r\n")) 
+  if(fwrite($fhandle, substr($_POST["mod_name"],0,20)."::".substr($_POST["mod_define"],0,20)."\r\n"))
   { 
     //echo "<div align='center' class='succes'>".mm_modul_add_ok."</div><br>"; 
     logs::WriteLogs ("Adm_","јккаунт ".$_SESSION["user"]." добавил пункт меню ".substr($_POST["mod_name"],0,20)." в _dat\menu.dat ");
   }
    fclose($fhandle);
   unset($_REQUEST["add2menu"],$fhandle);
-  header("Location:".$config["siteaddress"]."/control.php?page=manmod&mtype=".checknum($_GET["mtype"],0,3));
+  header("Location:".$config["siteaddress"]."/control.php?page=manmod&mtype=".(int)$_GET["mtype"]);
  }
 }
 /**
@@ -147,7 +147,10 @@ elseif (isset($_GET["md"]))
 }
 $content->out("manm_h.html");
 
- include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+ require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_titles.php";
+ require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_main_titles.php";
+ require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_char_titles.php";
+ require "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_user_titles.php";
 $co =0;
 switch ($_GET["mtype"])
 { 
