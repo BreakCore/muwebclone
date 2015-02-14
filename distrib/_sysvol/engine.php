@@ -797,6 +797,9 @@ function getcharmenu($config,$type=0, $name="non")
         {
             $showarr = explode("::",$m);
             $showarr[1]=trim($showarr[1]);
+
+            if(!isset($lang[$showarr[1]]))
+                $lang[$showarr[1]] = $showarr[1];
             if ($type == 0)
                 $show .= "<tr><td height='15' align='center' ><a href='".$config["siteaddress"]."/?up=".$showarr[0].$namel."' >".$lang[$showarr[1]]."</a></td></tr>";
             else if ($type==1)
@@ -841,12 +844,16 @@ function getusrmenu($content,$config,$db)
             foreach ($loadfile as $m)
             {
                 $showarr = explode("::",$m);
+                $showarr[1] = trim($showarr[1]);
+                if(!isset($lang[$showarr[1]]))
+                    $lang[$showarr[1]] = $showarr[1];
                 $content->set('|modulename|', $showarr[0]);
-                $content->set('|modulecapt|', $lang[trim($showarr[1])]);
+                $content->set('|modulecapt|', $lang[$showarr[1]]);
                 $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
             }
             $content->set('|modulename|', "usercp");
-            $content->set('|modulecapt|', $lang["title_usercp"]);
+            if(isset( $lang["title_usercp"]))
+                $content->set('|modulecapt|', $lang["title_usercp"]);
             $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
             $bufer = ob_get_contents();
             write_catch("_dat/menus/".$_SESSION["mwclang"]."_usermenu",$bufer);
