@@ -845,15 +845,18 @@ function getusrmenu($content,$config,$db)
             {
                 $showarr = explode("::",$m);
                 $showarr[1] = trim($showarr[1]);
-                if(!isset($lang[$showarr[1]]))
-                    $lang[$showarr[1]] = $showarr[1];
-                $content->set('|modulename|', $showarr[0]);
-                $content->set('|modulecapt|', $lang[$showarr[1]]);
-                $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
+                $showarr[0] = trim($showarr[0]);
+                if(!empty($showarr[1]) && !empty($showarr[0]))
+                {
+                    if(!isset($lang[$showarr[1]]))
+                        $lang[$showarr[1]] = $showarr[1];
+                    $content->set('|modulename|', $showarr[0]);
+                    $content->set('|modulecapt|', $lang[$showarr[1]]);
+                    $content->out("usermenu.html");
+                }
             }
             $content->set('|modulename|', "usercp");
-            if(isset( $lang["title_usercp"]))
-                $content->set('|modulecapt|', $lang["title_usercp"]);
+            $content->set('|modulecapt|', $lang["title_usercp"]);
             $content->out_content("theme/".$config["theme"]."/them/usermenu.html");
             $bufer = ob_get_contents();
             write_catch("_dat/menus/".$_SESSION["mwclang"]."_usermenu",$bufer);

@@ -5,3 +5,4 @@ $lang["title_chinfo"] = "О персонажах";
 $lang["title_amail"] ="Написать администраторам";
 $lang["title_npwd"] ="Сменить пароль";
 $lang["lang_nav_wsell"] = "Выставить на продажу";
+$lang["title_usercp"] = "Личный кабинет";
