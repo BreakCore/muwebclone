@@ -3,36 +3,29 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="|description|">
-<meta name="keywords" content="|keywords|">
-<link rel="alternate" type="application/rss+xml" href="|siteaddress|/rss.php" />
-<title>|titles|</title>
-<link href="|siteaddress|/theme/|theme|/favicon.ico" rel="shortcut icon">
-<link rel="shortcut icon" href="|siteaddress|/theme/|theme|/favicon.ico">
-<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.js"></script>
-
-
-
- 
-<script src="|siteaddress|/theme/|theme|/js/core_global.js" language="javascript" type="text/javascript"></script>
-<link href="|siteaddress|/theme/|theme|/m2.css" type="text/css" rel="stylesheet">
-
-<link rel="stylesheet" type="text/css" media="all" href="|siteaddress|/scripts/toolbox.css">
-<link href="|siteaddress|/theme/|theme|/engine.css" type="text/css" rel="stylesheet">
-
-<!-- Clocks Script -->
-<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/clock.js"></script>
-<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/smithy.js" ></script>
-<script type="text/javascript" language="javascript" src="|siteaddress|/scripts/events.js" ></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="|description|">
+    <meta name="keywords" content="|keywords|">
+    <link rel="alternate" type="application/rss+xml" href="|siteaddress|/rss.php" />
+    <title>|titles|</title>
+    <link href="|siteaddress|/theme/|theme|/favicon.ico" rel="shortcut icon">
+    <link rel="shortcut icon" href="|siteaddress|/theme/|theme|/favicon.ico">
+    <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.js"></script>
+    <script src="|siteaddress|/theme/|theme|/js/core_global.js" language="javascript" type="text/javascript"></script>
+    <link href="|siteaddress|/theme/|theme|/m2.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="all" href="|siteaddress|/scripts/toolbox.css">
+    <link href="|siteaddress|/theme/|theme|/engine.css" type="text/css" rel="stylesheet">
+    <!-- Clocks Script -->
+    <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/clock.js"></script>
+    <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/smithy.js" ></script>
+    <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/events.js" ></script>
     <link type="text/css" rel="stylesheet" href="|siteaddress|/scripts/qtip/jquery.qtip.css" />
     <script type="text/javascript" src="|siteaddress|/scripts/qtip/jquery.qtip.js"></script>
     <script type="text/javascript" src="|siteaddress|/scripts/qtip/imagesloaded.pkg.min.js"></script>
-<!-- Flash Download button Scripts -->
-<script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsGetHttp.js" ></script>
-<script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsMenuLink.js" ></script>
- <script type="text/javascript">  			
+    <!-- Flash Download button Scripts -->
+    <script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsGetHttp.js" ></script>
+    <script type="text/javascript" src="|siteaddress|/theme/|theme|/js/jsMenuLink.js" ></script>
+<script type="text/javascript">
 			var blnSSL = (location.href.toLowerCase().split("://", 1)[0] == 'https');
 var blnLocal = (location.href.indexOf("http://local-") == 0 || location.href.indexOf("https://local-") == 0);
 var blnDev = (location.href.indexOf("http://dev-") == 0 || location.href.indexOf("https://dev-") == 0);
@@ -88,15 +81,14 @@ var Http = {
 }
 
 </script>
-<script type="text/javascript">Embed.Flash('theme/|theme|/Battle/images/startbtn.swf', '304', '195', 'transparent', 'GameDownload', 'GameDownload', '');</script>
-
-
+    <script type="text/javascript">Embed.Flash('theme/|theme|/Battle/images/startbtn.swf', '304', '195', 'transparent', 'GameDownload', 'GameDownload', '');</script>
 <!-- Standart Scripts SITEADRESS -->
 
 <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/toolbox.js"></script>
 <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/jquery.tooltip.js"></script>
 <script type="text/javascript" language="javascript" src="|siteaddress|/scripts/apprise-1.5.min.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="|siteaddress|/scripts/apprise.min.css">
+</head>
 <script type="text/javascript" >
 $(function() {
 $("[title]").tooltip({
@@ -110,7 +102,64 @@ var ct = '|dateZtm|';
 var sd = new Date(ct);
 setInterval('srvtime()', 1000);
 </script>
+<style>
+    /* Пагинатор*/
+    #pagination-flickr ul{border:0; margin:0; padding:0;}
 
+    #pagination-flickr li{
+
+        border:0; margin:0; padding:0;
+        font-size:18px;
+        list-style:none;
+
+    }
+    #pagination-flickr a{
+
+        border:solid 1px #DDDDDD;
+        margin-right:2px;
+    }
+    #pagination-flickr .previous-off,
+    #pagination-flickr .next-off {
+
+        color:#666666;
+        display:block;
+        float:left;
+        font-weight:bold;
+        padding:3px 4px;
+    }
+    #pagination-flickr .next a,
+    #pagination-flickr .previous a {
+
+        font-weight:bold;
+        border:solid 1px #FFFFFF;
+    }
+    #pagination-flickr .active{
+
+        color:#ff0084;
+        font-weight:bold;
+        display:block;
+        float:left;
+        padding:6px 8px;
+    }
+    #pagination-flickr a:link,
+    #pagination-flickr a:visited {
+
+        color:#0063e3;
+        display:block;
+        float:left;
+        padding:6px 12px;
+        text-decoration:none;
+    }
+    #pagination-flickr a:hover{
+
+        border:solid 1px #666666;
+    }
+
+    .zagolovok{
+        height: 0px;
+    }
+    /*пагинатор end*/
+</style>
 
 
 <body>
