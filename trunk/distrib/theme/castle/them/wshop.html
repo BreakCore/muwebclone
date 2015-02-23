@@ -4,6 +4,7 @@
     <th>
         <input type="text" placeholder="в названии" id="iname" name="iname" style="width:120px;">
         Уровни от <select name="lvlfr" id="lvlfr">
+        <option value="-1">--</option>
         <option value="0">0</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -21,6 +22,7 @@
         <option value="14">14</option>
         <option value="15">15</option>
     </select> до <select name="lvlto" id="lvlto">
+        <option value="-1">--</option>
         <option value="0">0</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -61,11 +63,13 @@
     <tbody id="wshopbd"></tbody>
 </table>
 <script type="text/javascript">
+    var page = 0;
+
 function filtr()
 {
     var data = $("#wshopfiltr").serialize();
     $.ajax({
-        url:	"|siteaddress|/webshop.php?act=1&"+data,
+        url:	"|siteaddress|/webshop.php?act=1&page_=" + page + "&"+data,
         type:	 'GET',
         cache: false,
         success: function(response){

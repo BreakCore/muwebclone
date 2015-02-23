@@ -746,21 +746,23 @@ function getmenutitles($config,$content)
         {
             require_once "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_main_titles.php";
             ob_start();
-
             foreach ($loadfile as $m)
             {
                 $showarr = explode("::",$m);
-                $showarr[1]=trim($showarr[1]);
-                $content->set('|modulename|', $showarr[0]);
-                if(isset($lang[$showarr[1]]))
+                $showarr[1] = trim($showarr[1]);
+                $showarr[0] = trim($showarr[0]);
+                if(!empty($showarr[1]) && !empty($showarr[0]))
+                {
+                    $content->set('|modulename|', $showarr[0]);
+                    if(!isset($lang[$showarr[1]]))
+                        $lang[$showarr[1]] = $showarr[1];
                     $content->set('|modulecapt|', $lang[$showarr[1]]);
-                else
-                    $content->set('|modulecapt|', $showarr[1]);
+                }
                 $content->out("mainmenu.html");
             }
-            $bufer = ob_get_contents();
-            write_catch("_dat/menus/".$_SESSION["mwclang"]."_mainmenu",$bufer);
+            $bufer = trim(ob_get_contents());
             ob_clean();
+            write_catch("_dat/menus/".$_SESSION["mwclang"]."_mainmenu",$bufer);
             return $bufer;
         }
         else
@@ -1441,4 +1443,26 @@ function bSel($agrs,$selected=-1,$name="",$sttlass="",$events="")
     }
     $text.="</select>";
     return $text;
+}
+
+/**
+ * пагинатор, то есть возвращает значения для выборки,сколько страниц (min,max,count)
+ * @param int $count поличество записей в общем
+ * @param int $perpage сколько записей на страницу
+ * @param int $curpage текущая страница
+ * @return array min,max,count
+ */
+function paginate($count,$perpage,$curpage=1)
+{
+    $total = floor($count/$perpage); //сколько страниц
+    $ost = $count % $perpage; //сколько страниц в остатке
+
+    if ($ost>0)
+        $total++; // если есть еще страницы
+
+    $return["min"] = ($curpage-1)*$perpage;
+    $return["max"] = $curpage*$perpage ;
+    $return["count"] = $total;
+
+    return $return;
 }

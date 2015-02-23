@@ -4,3 +4,4 @@ $webshop["minres"] = 1;
 $webshop["maxItemsCnt"] = 20;
 $webshop["hexlength"] = 32;
 $webshop["resColumn"] = "resets";
+$webshop["itmPerPage"] = 2;
