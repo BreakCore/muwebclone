@@ -283,7 +283,7 @@ if ($info["dms"] == 0 or $info["vals"] == 0)
 	[sum] [tinyint] NULL,
 	[rf] [tinyint] NULL,
 	[col_user] [varchar](10) NULL,
-	[col_isMy] [char](1) DEFAULT ('0'),
+	[col_isMy] [char](1) DEFAULT ('0') NULL,
  CONSTRAINT [PK_MWC_WEBSHOP] PRIMARY KEY CLUSTERED
 (
 	[col_shopID] ASC
