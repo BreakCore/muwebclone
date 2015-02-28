@@ -1,0 +1,16 @@
+<form name="payment" method="post" action="https://sci.interkassa.com/" accept-charset="UTF-8">
+    <table border="0">
+        <caption>|step2|</caption>
+        <tr>
+            <td>
+                <input type="hidden" name="ik_co_id" value="|s_id|">
+                <input type="hidden" name="ik_am" value="|sum|">
+                <input type="hidden" name="ik_pm_no" value="|pid|">
+                <input type="hidden" name="ik_desc" value="|desc|">
+                <input type="hidden" name="ik_x_server" value="|servernum|">
+                |ik1| |sum| |ik2|
+            </td>
+        </tr>
+        <tr><td align="center"><input type="submit" value="|btnpay|" class="t-button"></td></tr>
+    </table>
+</form>

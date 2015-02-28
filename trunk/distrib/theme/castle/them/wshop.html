@@ -57,6 +57,7 @@
         Life Options <input type="checkbox" value="1" name="isopt" id="isopt">
         Ancient Options <input type="checkbox" value="1" name="isanc" id="isanc">
         <input type="button" value="->" onclick="filtr()">
+        <div style="|stl|">Мои вещи <input type="checkbox" value="1" name="myitm" id="myitm"></div>
     </th>
     </thead>
     </form>
@@ -68,6 +69,7 @@
 function filtr()
 {
     var data = $("#wshopfiltr").serialize();
+
     $.ajax({
         url:	"|siteaddress|/webshop.php?act=1&page_=" + page + "&"+data,
         type:	 'GET',

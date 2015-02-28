@@ -79,3 +79,4 @@ $lang["title_addcred"]="Добавить кредиты";
 $lang["title_npwd"] ="Сменить пароль";
 $lang["title_itemConverter"] ="Импорт вещей";
 $lang["title_webshop"] ="Выложить в веб-магазин";
+$lang["title_donate"] ="Пожертвование серверу";

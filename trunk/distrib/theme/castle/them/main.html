@@ -101,6 +101,27 @@ fade: 200
 var ct = '|dateZtm|';
 var sd = new Date(ct);
 setInterval('srvtime()', 1000);
+
+function getPg(divid,addr,params)
+{
+    $.ajax({
+        url:	 addr+'?'+params,
+        type:	 'GET',
+        cache: false,
+        success: function(response){
+            if(response.trim().length>0)
+            {
+
+                document.getElementById(divid).style.display = "none";
+                $("#"+divid).empty();
+                $("#"+divid).append(response.replace("/<br\s*\/?>/mg", "\r\n")).fadeIn('fast');
+            }
+        },
+        error:  function(){
+            alert("Произошла непредвиденная ошибка, ожалуйста, попробуйте еще раз");
+        }
+    });
+}
 </script>
 <style>
     /* Пагинатор*/

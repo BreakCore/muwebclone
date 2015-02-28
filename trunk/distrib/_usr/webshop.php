@@ -120,7 +120,7 @@ else
                     else
                         $q = "0,0,0,0,0,0,0";
 
-                    $query = "INSERT INTO [MWC_WEBSHOP] ([col_itemName],[col_Level],[col_hex],[col_optLevel],[col_excellent],[col_pvp],[col_harmony],[col_socket],[col_anc],[col_costType],[col_cost],[dk],[dw],[elf],[mg],[dl],[sum],[rf],col_user) VALUES('".htmlspecialchars($ii["name"])."',{$ii["level"]},'{$item}',{$ii["lifeLvl"]},{$ii["exc"]},{$ii["pvp"]},{$ii["harmony"]},{$ii["sockHex"]},{$ii["anc"]},1,$valuta,$q,'{$_SESSION["user"]}')";
+                    $query = "INSERT INTO [MWC_WEBSHOP] ([col_itemName],[col_Level],[col_hex],[col_optLevel],[col_excellent],[col_pvp],[col_harmony],[col_socket],[col_anc],[col_costType],[col_cost],[dk],[dw],[elf],[mg],[dl],[sum],[rf],col_user,col_isMy) VALUES('".htmlspecialchars($ii["name"])."',{$ii["level"]},'{$item}',{$ii["lifeLvl"]},{$ii["exc"]},{$ii["pvp"]},{$ii["harmony"]},{$ii["sockHex"]},{$ii["anc"]},1,$valuta,$q,'{$_SESSION["user"]}','1')";
                     $db->query($query);
                     $lid = $db->lastId("MWC_WEBSHOP");
                     putToWh($db,$_SESSION["user"],$wh,$emptyItem,$itm);
