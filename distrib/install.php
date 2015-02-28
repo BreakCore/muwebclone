@@ -197,6 +197,7 @@ if ($info["dms"] == 0 or $info["vals"] == 0)
                     IF OBJECT_ID('dbo.MWC_messages', 'U') IS NOT NULL DROP TABLE dbo.MWC_messages;
                     IF OBJECT_ID('dbo.smsdeluxe', 'U') IS NOT NULL DROP TABLE dbo.smsdeluxe;
                     IF OBJECT_ID('dbo.MWC_WEBSHOP', 'U') IS NOT NULL DROP TABLE dbo.MWC_WEBSHOP;
+                    IF OBJECT_ID('dbo.MWC_ikpay', 'U') IS NOT NULL DROP TABLE dbo.MWC_ikpay;
                     IF OBJECT_ID('dbo.MWC_invite', 'U') IS NOT NULL DROP TABLE dbo.MWC_invite;");
 
 
@@ -343,6 +344,18 @@ END ");
 	[memb___id] [varchar](10) NULL,
 	[inviter] [varchar](10) NULL,
     [done][char](1) NULL default('0')
+) ON [PRIMARY]");
+                        $db->query("CREATE TABLE [dbo].[MWC_ikpay](
+	[col_ik_id] [int] IDENTITY(1,1) NOT NULL,
+	[col_memb_id] [varchar](50) NOT NULL,
+	[col_state] [char](1) DEFAULT ('0') NULL,
+	[col_sum] [float] NULL,
+	[col_DateCreate] [datetime] DEFAULT (getdate()) NULL,
+	[col_DateCoplete] [datetime] NULL,
+ CONSTRAINT [PK_MWC_ikpay] PRIMARY KEY CLUSTERED
+(
+	[col_ik_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]");
                     }
                     catch (Exception $ex)

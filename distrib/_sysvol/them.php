@@ -29,6 +29,7 @@ class content
         $this->add_dict($file);
         $this->adr = $addres;
         $this->vars["|siteaddress|"]=$this->adr;
+        $this->vars["|site|"]=$this->adr;
         $this->vars["|theme|"]=$this->themName;
         $this->file = $file;
     }

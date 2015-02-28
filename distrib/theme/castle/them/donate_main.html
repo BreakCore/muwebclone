@@ -1,0 +1,35 @@
+<table style="min-width: 500px;margin: 0 auto;">
+    <tr>
+        <td style="text-align: center">
+            <select id="paytype" onchange="getPg('worktd','|site|/pays.php','act=1&type='+this.value);">
+                <option value="-1">Выберите тип оплаты</option>
+                <option value="1">Через ikpayments</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td id="worktd">|msgg|</td>
+    </tr>
+</table>
+<script type="text/javascript">
+
+    function calc()
+    {
+        var rate = |rate|;
+        var sum = parseInt(document.getElementById('sum').value);
+        if (sum<0) sum=0;
+        total = sum * rate;
+        if (total!="NaN" && total>0) document.getElementById('summa').innerHTML ="*Для получения вам потребуется пожертвовать "+ total.toFixed(2)+" WMZ";
+        else document.getElementById('summa').innerHTML = "";
+    }
+
+    /*function goval()
+    {
+        var sum = parseInt(document.getElementById("sum").value);
+        if(sum > 0)
+        {
+            getPg("worktd","|site|pays.php","act=1&sum="+sum);
+        }
+    }
+*/
+</script>

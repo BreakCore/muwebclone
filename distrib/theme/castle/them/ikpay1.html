@@ -1,0 +1,17 @@
+<div style="border: 1px solid grey; margin-bottom: 20px;" class="payment">
+<div style="border: 1px solid grey; margin: 1px; text-align: center;">Приобрести кредиты через сервис Интеркассы</div>
+    <form method="POST" action="">
+        <table align="center" border="0">
+            <tr>
+                <td>Введите сколько кредитов вы хотите получить</td>
+                <td><input type="text" name="sum" value="" id="sum" onKeyUp='calc();'></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><div id="summa" style="font-style:italic"></div></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="button" class='t-button' value="Далее" onclick="getPg('worktd','|site|/pays.php','act=2&type='+$('#paytype').val()+'&sum='+$('#sum').val());"></td>
+            </tr>
+        </table>
+    </form>
+</div>

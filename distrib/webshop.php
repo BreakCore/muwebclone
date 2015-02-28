@@ -66,6 +66,13 @@ if(isset($_GET["act"]))
                 }
             }
 
+            if(isset($_GET["myitm"]) && isset($_SESSION["user"]))
+            {
+                if(strlen($filtr)>0)
+                    $filtr.=" AND ";
+                $filtr.=" col_isMy='1'";
+            }
+
             if(isset($_GET["ispvp"]) && $_GET["ispvp"] == "1")
             {
                 if(strlen($filtr)>0)
@@ -245,7 +252,6 @@ if(isset($_GET["act"]))
             break;
         //дроп вещи
         case 3:
-
             if($_GET["do"] == 1 && isset($_SESSION["user"]) && chck_online($db,$_SESSION["user"]) == 0)//дропнуть своб вещь
             {
                 $itm = $db->query("SELECT col_hex FROM MWC_WEBSHOP WHERE col_user='{$_SESSION["user"]}' AND col_shopID = ".(int)$_GET["itm"])->FetchRow();
