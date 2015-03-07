@@ -72,6 +72,12 @@ if(isset($_GET["act"]))
                     $filtr.=" AND ";
                 $filtr.=" col_isMy='1'";
             }
+            else
+            {
+                if(strlen($filtr)>0)
+                    $filtr.=" AND ";
+                $filtr.=" was_drop != '1'";
+            }
 
             if(isset($_GET["ispvp"]) && $_GET["ispvp"] == "1")
             {
@@ -138,7 +144,6 @@ if(isset($_GET["act"]))
             ROW_NUMBER() OVER (ORDER BY col_ShopID DESC) AS RowNum
              FROM MWC_WEBSHOP $filtr )
             SELECT * FROM CTEwResults WHERE RowNum BETWEEN {$arr["min"]} AND {$arr["max"]} ORDER BY col_IsMy DESC $ordb;");
-
 
             $bank = bankZ_show($db,0,1);
             //region "пагинатор"
@@ -307,7 +312,7 @@ if(isset($_GET["act"]))
             }
             else if($_GET["do"] == 3 && isset($_SESSION["adm"]))//админ дропает вещь
             {
-                $db->query("UPDATE  MWC_WEBSHOP SET col_isMy = 1 WHERE col_shopID = ".(int)$_GET["itm"]);
+                $db->query("UPDATE  MWC_WEBSHOP SET was_drop = 1 WHERE col_shopID = ".(int)$_GET["itm"]);
                 echo "done";
             }
             //isset($_SESSION["adm"])

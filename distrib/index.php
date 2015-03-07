@@ -66,6 +66,8 @@ else
 
  require_once "_sysvol/pages.php";
  require_once "_sysvol/boxes.php";
+ require_once "_sysvol/rItem.php";
+ require_once "_sysvol/itemShow.php";
 
  $content = new content($config["siteaddress"],"site",substr($_SESSION["mwclang"],0,3),0,$config["theme"]);
 

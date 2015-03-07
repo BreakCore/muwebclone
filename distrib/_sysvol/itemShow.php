@@ -7,6 +7,7 @@
 class itemShow
 {
     private static $luck = "Luck(succes rate of Jewel of soul +25%)<br>Luck(critical damage rate +5%)";
+
     public static function show($rItem)
     {
         //debug($rItem);
@@ -106,6 +107,31 @@ class itemShow
                 return "no such image {$rItem["img"]}";
         }
         return false;
+    }
+
+    /**
+     * вывод вещи
+     * @param $rItem array
+     * @param $type integer
+     * 1 - просто изображение
+     * 2 - просто с информацией
+     * @return string
+     */
+    public static function showImg($rItem,$type)
+    {
+        $result = self::show($rItem);
+        if($type == 1)
+        {
+            if(isset($result["image"]))
+                return $result["image"];
+            return "no image";
+        }
+        else
+        {
+
+        }
+
+
     }
 
 }
