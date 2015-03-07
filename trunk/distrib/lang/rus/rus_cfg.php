@@ -125,3 +125,4 @@ $lang["blessprice"]="Цена за 1 bless(если 0, то не видно)";
 $lang["soulprice"]="Цена за 1 soul(если 0, то не видно)";
 $lang["lifeprice"]="Цена за 1 life(если 0, то не видно)";
 $lang["harprice"]="Цена за 1 harmony(если 0, то не видно)";
+$lang["crate"] ="за 1 кредит зен";

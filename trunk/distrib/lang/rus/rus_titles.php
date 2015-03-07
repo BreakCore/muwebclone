@@ -80,3 +80,4 @@ $lang["title_npwd"] ="Сменить пароль";
 $lang["title_itemConverter"] ="Импорт вещей";
 $lang["title_webshop"] ="Выложить в веб-магазин";
 $lang["title_donate"] ="Пожертвование серверу";
+$lang["title_scred"] =" редиты на зен";

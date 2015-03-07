@@ -842,7 +842,7 @@ function getusrmenu($content,$config,$db)
         echo "error menu loading!";
     else
     {
-        if(!$cachtime || ($nowitime-$cachtime > 3600))
+        if(!$cachtime)
         {
             ob_start();
             @include "lang/".$_SESSION["mwclang"]."/".$_SESSION["mwclang"]."_user_titles.php";
