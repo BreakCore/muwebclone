@@ -1,0 +1,37 @@
+# Recommended software #
+
+  * php 5.2(or hight)
+  * any web server that supports php
+  * the presence of curl-library (**_desirable_**)
+  * opportunity to work with sockets in php(**_desirable_**)
+
+## Настройки веб сервера ##
+  1. mod\_rewrite on
+  1. register\_globals = off in php.ini
+
+## The installation ##
+If you install site first time for database, just specify the address of the server where the site is
+> _**Importantly!**_ if you install site in your computer for test and do not want to public you server in LAN or Internet,
+> you can write http://locallhost in other case http://somedomain.ru or server's IP
+
+> if you decided public you site(server) and do not want reinstall it just
+> edit adress in admin-panel end clean cach (`_dat/menus` or throw button in site)
+
+> So, first stap is choose language.
+> second, you will see table with settings:
+
+  * COnnection type ODBC/SQL
+  * Login SQL
+  * Password SQL
+  * Database name (default: muonline)
+  * adress SQL server
+
+> fill line and click on check button
+> If all ok - you will see next button, click it.
+
+> Third stap - creating table in sql. The site provides all automatic.
+
+> And last step  - create you admin account.
+> _**Note!**_ Admin acc for site, in server you not found it. You can write exests account, but different passwords or create completely identical account on your choice
+> > admin nick is for admin chat [0-9A-z]
+
